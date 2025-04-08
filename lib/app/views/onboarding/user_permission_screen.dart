@@ -455,7 +455,7 @@ class UserPermissionScreen extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: CustomText(
-                    title: "Reference: Sunan Ibn Majah 224\nIn book reference: Introduction, Hadith 224",
+                    title: "Reference Sunan Ibn Majah 224\nIn book reference: Introduction, Hadith 224",
                     fontSize: 12.sp,
                     fontFamily: 'quicksand',
                     textAlign: TextAlign.start,

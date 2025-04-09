@@ -17,7 +17,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 class AppHomeScreenController extends GetxController with GetSingleTickerProviderStateMixin {
   final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
-  final UserPermissionScreenController locationController = Get.put(UserPermissionScreenController()); // Initialize Location Controller
+  final UserPermissionController locationController = Get.put(UserPermissionController()); // Initialize Location Controller
 
   var city = "Locating...".obs;
   final isLoading = false.obs;

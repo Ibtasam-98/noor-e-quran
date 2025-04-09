@@ -82,6 +82,7 @@ class AllGoalsScreen extends StatelessWidget {
                           maxLines: 1,
                           textAlign: TextAlign.end,
                           textOverflow: TextOverflow.ellipsis,
+                          textColor: textColor,
                         ),
                       )
                     ],

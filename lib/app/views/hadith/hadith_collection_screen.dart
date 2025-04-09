@@ -46,7 +46,7 @@ class HadithCollectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
     final AppHomeScreenController homeScreenController = Get.find<AppHomeScreenController>();
-    final UserPermissionScreenController locationPermissionScreenController = Get.find<UserPermissionScreenController>();
+    final UserPermissionController locationPermissionScreenController = Get.find<UserPermissionController>();
     bool isDarkMode = themeController.isDarkMode.value;
     final textColor = isDarkMode ? AppColors.white : AppColors.black;
 

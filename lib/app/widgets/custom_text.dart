@@ -88,7 +88,7 @@ class CustomText extends StatelessWidget {
 
     if (title != null) {
       textWidget = Text(
-        capitalize && title != null ? capitalizeText(title!) : title ?? '', // Added null check and default to empty string
+        capitalize && title != null ? capitalizeText(title!) : title ?? '',
         overflow: textOverflow,
         maxLines: maxLines,
         textAlign: textAlign,
@@ -126,30 +126,28 @@ class CustomText extends StatelessWidget {
         ],
       );
     } else {
-      textWidget = const SizedBox.shrink(); // Return empty widget if neither title nor first/second text are provided
+      textWidget = const SizedBox.shrink();
     }
 
     if (isGlass) {
-      return IntrinsicWidth(
-        child: GlassContainer(
-          blur: 2,
-          border: Border.all(
-            color: AppColors.lightGrey.withOpacity(0.1),
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(10.r),
-          child: Padding(
-            padding: glassPadding,
-            child: Text(
-              capitalize && title != null ? capitalizeText(title!) : title ?? '', // Added null check and default to empty string
-              textAlign: textAlign,
-              style: baseStyle.copyWith(
-                fontSize: fontSize,
-                fontWeight: fontWeight,
-                color: textColor,
-              ),
-              maxLines: 2,
+      return GlassContainer(
+        blur: 2,
+        border: Border.all(
+          color: AppColors.lightGrey.withOpacity(0.1),
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(10.r),
+        child: Padding(
+          padding: glassPadding,
+          child: Text(
+            capitalize && title != null ? capitalizeText(title!) : title ?? '',
+            textAlign: textAlign,
+            style: baseStyle.copyWith(
+              fontSize: fontSize,
+              fontWeight: fontWeight,
+              color: textColor,
             ),
+            maxLines: 2,
           ),
         ),
       );
@@ -158,5 +156,3 @@ class CustomText extends StatelessWidget {
     return textWidget;
   }
 }
-
-

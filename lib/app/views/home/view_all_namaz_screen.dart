@@ -118,25 +118,30 @@ class ViewAllNamazScreen extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  CustomText(
-                                    title: formattedTime,
-                                    fontSize: 16.sp,
-                                    fontWeight: isNextNamaz ? FontWeight.bold : FontWeight.normal,
-                                    textColor: isDarkMode ? AppColors.grey : AppColors.black,
-                                  ),
-                                  // if (isNextNamaz)
-                                  //   Container(
-                                  //     padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                                  //     decoration: BoxDecoration(
-                                  //       color: AppColors.primary,
-                                  //       borderRadius: BorderRadius.circular(4.r),
-                                  //     ),
-                                  //     child: CustomText(
-                                  //       title: "Now",
-                                  //       textColor: AppColors.white,
-                                  //       fontSize: 12.sp,
-                                  //     ),
-                                  //   ),
+                                  Row(
+                                    children: [
+                                      CustomText(
+                                        title: formattedTime,
+                                        fontSize: 16.sp,
+                                        fontWeight: isNextNamaz ? FontWeight.bold : FontWeight.normal,
+                                        textColor: isDarkMode ? AppColors.grey : AppColors.black,
+                                      ),
+                                      AppSizedBox.space10w,
+                                      if (isNextNamaz)
+                                        Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.primary,
+                                            borderRadius: BorderRadius.circular(8.r),
+                                          ),
+                                          child: CustomText(
+                                            title: "Now",
+                                            textColor: AppColors.white,
+                                            fontSize: 12.sp,
+                                          ),
+                                        ),
+                                    ],
+                                  )
                                 ],
                               ),
                             ),

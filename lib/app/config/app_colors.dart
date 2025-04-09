@@ -5,6 +5,7 @@ class AppColors {
   static const black = Color(0xff030303);
   // static const blackShade = Color(0xff171717);
   static const primary = Color(0xffb08e63);
+  static const specia = Color(0xfffff6e8);
   static const secondry = Color(0xff9f631d);
   static const tertary = Color(0xffc9a87f);
   static const transparent = Colors.transparent;

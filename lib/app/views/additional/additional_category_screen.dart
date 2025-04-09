@@ -35,7 +35,7 @@ class AdditionalCategoryScreen extends StatelessWidget {
     final box = GetStorage();
     final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
     final AppHomeScreenController homeScreenController = Get.put(AppHomeScreenController());
-    final UserPermissionScreenController locationPermissionScreenController = Get.find<UserPermissionScreenController>();
+    final UserPermissionController locationPermissionScreenController = Get.find<UserPermissionController>();
     bool isDarkMode = themeController.isDarkMode.value;
     final textColor = isDarkMode ? AppColors.white : AppColors.black;
 
@@ -488,19 +488,7 @@ class AdditionalCategoryScreen extends StatelessWidget {
                         return const SizedBox.shrink(); // Don't show Marquee if location access is denied
                       }
                     }),
-                    AppSizedBox.space15h,
-                    CustomText(
-                      title: "Continue Reading",
-                      textColor: isDarkMode
-                          ? AppColors.white
-                          : AppColors.black,
-                      fontSize: 18.sp,
-                      fontFamily: 'grenda',
-                      maxLines: 1,
-                      textAlign: TextAlign.start,
-                      textOverflow: TextOverflow.ellipsis,
-                    ),
-                    AppSizedBox.space15h,
+                    AppSizedBox.space10h,
                     CustomText(
                       title: "Divine Wisdom",
                       textColor: isDarkMode ? AppColors.white : AppColors.black,

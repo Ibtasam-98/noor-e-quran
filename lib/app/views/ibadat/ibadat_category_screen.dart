@@ -32,7 +32,7 @@ class IbadatCategoryScreen extends StatelessWidget {
 
   final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
   final AppHomeScreenController homeScreenController = Get.find<AppHomeScreenController>();
-  final UserPermissionScreenController locationPermissionScreenController = Get.find<UserPermissionScreenController>();
+  final UserPermissionController locationPermissionScreenController = Get.find<UserPermissionController>();
   final IbadatCategoryController controller = Get.put(IbadatCategoryController());
   final GetStorage box = GetStorage();
   @override

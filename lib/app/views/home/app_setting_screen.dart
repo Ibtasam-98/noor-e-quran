@@ -31,6 +31,7 @@ class AppSettingsScreen extends StatelessWidget {
       title: "Export Prayer Time",
       icon: Icons.picture_as_pdf_outlined,
       destinationScreen: ExportPrayerTime(),
+
     ),
      MiscItem(
       title: "FAQ",
@@ -53,8 +54,8 @@ class AppSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppThemeSwitchController themeController = Get.find<
         AppThemeSwitchController>();
-    final UserPermissionScreenController locationController = Get.find<
-        UserPermissionScreenController>();
+    final UserPermissionController locationController = Get.find<
+        UserPermissionController>();
 
     return Obx(() {
       final bool isDarkMode = themeController.isDarkMode.value;
@@ -154,8 +155,13 @@ class AppSettingsScreen extends StatelessWidget {
                           inactiveThumbColor: AppColors.primary,
                           activeColor: AppColors.primary,
                           inactiveTrackColor: AppColors.white,
-                          onChanged: (value) {
-                            locationController.toggleLocation(value);
+                          onChanged: (newValue) async {
+                            // Set the UI to reflect the change immediately
+                            locationController.locationAccessed(newValue);
+                            // If the switch is turned on, try to access location again
+                            if (newValue) {
+                              await locationController.accessLocation();
+                            }
                           },
                         ),
                       ),

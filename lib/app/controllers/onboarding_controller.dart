@@ -8,19 +8,9 @@ class OnboardingScreenController extends GetxController with SingleGetTickerProv
   final PageController pageController = PageController(initialPage: 0);
   RxInt currentPage = 0.obs;
 
-
-
   late AnimationController animationController;
   late Animation<Offset> slideAnimation;
-
   var showGuestButton = false.obs;
-
-  var isLoading = false.obs;
-  var loadingMessage = "Setting up, please wait a minute".obs;
-
-
-
-
 
   @override
   void onInit() {
@@ -45,14 +35,12 @@ class OnboardingScreenController extends GetxController with SingleGetTickerProv
     });
   }
 
-
   @override
   void onClose() {
     animationController.dispose();
     pageController.dispose();
     super.onClose();
   }
-
 
   void toggleTheme(bool isDarkMode) {
     if (themeController.isDarkMode.value != isDarkMode) {

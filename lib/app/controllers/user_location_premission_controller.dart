@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 
 import 'app_theme_switch_controller.dart';
 
-class UserPermissionScreenController extends GetxController {
+class UserPermissionController extends GetxController {
   var cityName = ''.obs;
-  var countryName = ''.obs; // Observable for full country name
+  var countryName = ''.obs;
   var isLoading = false.obs;
   var locationAccessed = false.obs;
   var latitude = 0.0.obs;
@@ -30,9 +30,8 @@ class UserPermissionScreenController extends GetxController {
   final themeController = Get.put(AppThemeSwitchController());
   final enableSwipeForLocation = false.obs;
   final enableSwipeForTheme = false.obs;
-  final enableSwipe = true.obs; // Define enableSwipe here
+  final enableSwipe = true.obs;
 
-  /// Toggle Location Access
   Future<void> toggleLocation(bool value) async {
     locationAccessed.value = value;
 
@@ -42,16 +41,14 @@ class UserPermissionScreenController extends GetxController {
       latitude.value = 0.0;
       longitude.value = 0.0;
       cityName.value = "N/A";
-      countryName.value = "N/A"; // Reset country name
+      countryName.value = "N/A";
       allowSwipe.value = false;
       update();
     }
   }
 
-  /// Access Device Location
   Future<void> accessLocation() async {
     isLoading(true);
-
     try {
       bool isServiceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!isServiceEnabled) {
@@ -62,7 +59,6 @@ class UserPermissionScreenController extends GetxController {
         update();
         return;
       }
-
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
@@ -75,7 +71,6 @@ class UserPermissionScreenController extends GetxController {
           return;
         }
       }
-
       if (permission == LocationPermission.deniedForever) {
         cityName.value = 'Enable location from device settings.';
         countryName.value = 'Enable location from device settings.';
@@ -84,22 +79,15 @@ class UserPermissionScreenController extends GetxController {
         update();
         return;
       }
-
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
       latitude.value = position.latitude;
       longitude.value = position.longitude;
-
-      List<Placemark> placemarks =
-      await placemarkFromCoordinates(position.latitude, position.longitude);
+      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
       if (placemarks.isNotEmpty) {
         String? locality = placemarks.first.locality;
-        String? completeCountryName = placemarks.first.country; // Get full country name
-
+        String? completeCountryName = placemarks.first.country;
         cityName.value = locality ?? 'Unknown City';
-        countryName.value = completeCountryName ?? 'Unknown Country'; // Set full country name
-
+        countryName.value = completeCountryName ?? 'Unknown Country';
         locationAccessed(true);
         allowSwipe.value = true;
         enableSwipeForLocation.value = true;
@@ -128,3 +116,4 @@ class UserPermissionScreenController extends GetxController {
     enableSwipeForTheme.value = value;
   }
 }
+

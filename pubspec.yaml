@@ -56,6 +56,7 @@ dependencies:
   flutter_compass:
   flutter_map:
   latlong2:
+  adhan:
 
 
 

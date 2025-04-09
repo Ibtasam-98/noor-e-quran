@@ -152,6 +152,7 @@ class HadithCollectionDetailScreen extends StatelessWidget {
                                   maxLines: 1,
                                   fontFamily: 'quicksand',
                                   fontWeight: FontWeight.w600,
+                                  color: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
                                 ),
                               },
                             ),
@@ -162,7 +163,7 @@ class HadithCollectionDetailScreen extends StatelessWidget {
                             //   textColor: AppColors.primary,
                             //   textAlign: TextAlign.start,
                             // ),
-                            trailing: Icon(Icons.arrow_forward_ios_rounded, size: 10.h),
+                            trailing: Icon(Icons.arrow_forward_ios_rounded, size: 10.h,color: themeController.isDarkMode.value ? AppColors.white : AppColors.black,),
                             onTap: () {
                               Get.to(HadithCollectionSpecificBookDetailScreen(
                                 collection: collection,

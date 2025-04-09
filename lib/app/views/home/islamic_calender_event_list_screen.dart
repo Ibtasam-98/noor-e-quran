@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:line_icons/line_icons.dart';
 
 import '../../config/app_colors.dart';
 import '../../config/app_sizedbox.dart';
@@ -79,18 +80,20 @@ class IslamicCalenderEventsListScreen extends StatelessWidget {
                               fontSize: 17.sp,
                               textColor: textColor,
                               textAlign: TextAlign.start,
+                              capitalize: true,
                             ),
                             subtitle: CustomText(
                               title: event['description'],
                               fontSize: 13.sp,
                               textColor: textColor,
                               textAlign: TextAlign.start,
+                              capitalize: true,
                             ),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 IconButton(
-                                  icon: Icon(Icons.edit,
+                                  icon: Icon(LineIcons.edit,
                                       color: isDarkMode
                                           ? AppColors.white
                                           : AppColors.black),

@@ -49,7 +49,7 @@ class CustomButton extends StatelessWidget {
           gradient: useGradient && gradient != null ? gradient : null,
           border: Border.all(
             color: btnBorderColor ?? Colors.transparent,
-            width: 1,
+            width: 0.5,
           ),
           borderRadius: BorderRadius.circular(borderRadius),
         ),

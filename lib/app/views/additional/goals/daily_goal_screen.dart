@@ -279,7 +279,7 @@ class _DailyGoalScreenState extends State<DailyGoalScreen> {
                       : AppColors.grey.withOpacity(0.2),
                   filled: true,
                   hintStyle: GoogleFonts.quicksand(
-                    color: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
+                    color: AppColors.black,
                   ),
                 ),
                 onChanged: (value) {
@@ -383,11 +383,11 @@ class _DailyGoalScreenState extends State<DailyGoalScreen> {
         ),
         actions: [
           IconButton(
-            icon: Icon(LineIcons.plus, size: 16.h),
+            icon: Icon(LineIcons.plus, size: 16.h,color: themeController.isDarkMode.value ? AppColors.white : AppColors.black,),
             onPressed: _showAddGoalBottomSheet,
           ),
           IconButton(
-            icon: Icon(LineIcons.list, size: 16.h),
+            icon: Icon(LineIcons.list, size: 16.h,color: themeController.isDarkMode.value ? AppColors.white : AppColors.black,),
             onPressed: _showAllGoalsScreen,
           ),
         ],
@@ -552,14 +552,17 @@ class _DailyGoalScreenState extends State<DailyGoalScreen> {
                                 : null,
                             child: Column(
                               children: [
-                                Text(
-                                  DateFormat('dd').format(date),
-                                  style: TextStyle(fontSize: 16.0),
+                                CustomText(
+                                  title:DateFormat('dd').format(date),
+                                  fontSize: 12.sp,
+                                  textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
                                 ),
-                                Text(
-                                  DateFormat('E').format(date),
-                                  style: TextStyle(fontSize: 12.0),
+                                CustomText(
+                                  title:DateFormat('E').format(date),
+                                  fontSize: 12.sp,
+                                  textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
                                 ),
+
                               ],
                             ),
                           ),
@@ -584,6 +587,7 @@ class _DailyGoalScreenState extends State<DailyGoalScreen> {
                 title: 'Selected: ${DateFormat('EEEE, MMM d, y').format(selectedDate)}',
                 fontSize: 13.sp,
                 textAlign: TextAlign.start,
+                textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
               ),
             ),
           ),
@@ -630,6 +634,7 @@ class _DailyGoalScreenState extends State<DailyGoalScreen> {
                         title: dailyGoals[index],
                         fontSize: 13.sp,
                         textAlign: TextAlign.start,
+                        textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
                       ),
                     ),
                   );

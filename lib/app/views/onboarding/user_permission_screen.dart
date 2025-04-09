@@ -19,16 +19,16 @@ import '../home/home_screen_bottom_navigation.dart';
 
 class UserPermissionScreen extends StatelessWidget {
   final AppThemeSwitchController themeSwitchController = Get.put(AppThemeSwitchController());
-  final UserPermissionScreenController userPermissionController = Get.put(UserPermissionScreenController());
+  final UserPermissionController userPermissionController = Get.put(UserPermissionController());
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       bool isDarkMode = themeSwitchController.isDarkMode.value;
       return Scaffold(
-        backgroundColor: isDarkMode ? Colors.black : AppColors.white,
+        backgroundColor: isDarkMode ? AppColors.black : AppColors.specia,
         appBar: AppBar(
-          backgroundColor: isDarkMode ? Colors.black : AppColors.white,
+          backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
           centerTitle: false,
           title: CustomText(
             firstText: "Noor e",
@@ -38,7 +38,7 @@ class UserPermissionScreen extends StatelessWidget {
             secondTextColor: AppColors.primary,
           ),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: isDarkMode ? AppColors.white : AppColors.black),
+            icon: Icon(LineIcons.arrowLeft, color: isDarkMode ? AppColors.white : AppColors.black),
             onPressed: () => Get.back(),
           ),
         ),
@@ -523,3 +523,4 @@ class UserPermissionScreen extends StatelessWidget {
     );
   }
 }
+

@@ -49,111 +49,121 @@ class IslamicCalendarController extends GetxController {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                CustomText(
-                  textColor: AppColors.primary,
-                  title:
-                  'Add Event for ${DateFormat('dd-MM-yyyy').format(selectedDate)}',
-                  textAlign: TextAlign.start,
-                  fontSize: 20.sp,
-                  fontFamily: 'grenda',
+        return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return SizedBox(
+              height: constraints.maxHeight * 0.9,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                  left: 16.w,
+                  right: 16.w,
+                  top: 16.h,
                 ),
-                AppSizedBox.space10h,
-                TextField(
-                  controller: titleController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      borderSide: BorderSide.none,
-                    ),
-                    labelText: 'Title',
-                    labelStyle: GoogleFonts.quicksand(
-                      color: AppColors.black,
-                    ),
-                    fillColor: AppColors.grey.withOpacity(0.2),
-                    filled: true,
-                    hintStyle: GoogleFonts.quicksand(
-                      color: AppColors.black,
-                    ),
-                  ),
-                ),
-                AppSizedBox.space10h,
-                TextField(
-                  controller: descriptionController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      borderSide: BorderSide.none,
-                    ),
-                    labelText: 'Description',
-                    labelStyle: GoogleFonts.quicksand(
-                      color: AppColors.black,
-                    ),
-                    hintStyle: GoogleFonts.quicksand(
-                      color: AppColors.black,
-                    ),
-                    fillColor: AppColors.grey.withOpacity(0.2),
-                    filled: true,
-                  ),
-                ),
-                AppSizedBox.space10h,
-                CustomButton(
-                  haveBgColor: true,
-                  btnTitle: "Add Event",
-                  btnTitleColor: AppColors.white,
-                  bgColor: AppColors.primary,
-                  borderRadius: 45.r,
-                  onTap: () {
-                    if (titleController.text.isEmpty ||
-                        descriptionController.text.isEmpty) {
-                      CustomSnackbar.show(
-                        title: "Error",
-                        subtitle: "Both title and description are required.",
-                        icon: const Icon(Icons.error),
-                        backgroundColor: AppColors.red,
-                      );
-                      return;
-                    }
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      CustomText(
+                        textColor: AppColors.primary,
+                        title:
+                        'Add Event for ${DateFormat('dd-MM-yyyy').format(selectedDate)}',
+                        textAlign: TextAlign.start,
+                        fontSize: 20.sp,
+                        fontFamily: 'grenda',
+                      ),
+                      AppSizedBox.space10h,
+                      TextField(
+                        controller: titleController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                            borderSide: BorderSide.none,
+                          ),
+                          labelText: 'Title',
+                          labelStyle: GoogleFonts.quicksand(
+                            color: AppColors.black,
+                          ),
+                          fillColor: AppColors.grey.withOpacity(0.2),
+                          filled: true,
+                          hintStyle: GoogleFonts.quicksand(
+                            color: AppColors.black,
+                          ),
+                        ),
+                      ),
+                      AppSizedBox.space10h,
+                      TextField(
+                        controller: descriptionController,
+                        maxLines: 3, // Allows for multiple lines of description
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                            borderSide: BorderSide.none,
+                          ),
+                          labelText: 'Description',
+                          labelStyle: GoogleFonts.quicksand(
+                            color: AppColors.black,
+                          ),
+                          hintStyle: GoogleFonts.quicksand(
+                            color: AppColors.black,
+                          ),
+                          fillColor: AppColors.grey.withOpacity(0.2),
+                          filled: true,
+                        ),
+                      ),
+                      AppSizedBox.space20h,
+                      CustomButton(
+                        haveBgColor: true,
+                        btnTitle: "Add Event",
+                        btnTitleColor: AppColors.white,
+                        bgColor: AppColors.primary,
+                        borderRadius: 45.r,
+                        onTap: () {
+                          if (titleController.text.isEmpty ||
+                              descriptionController.text.isEmpty) {
+                            CustomSnackbar.show(
+                              title: "Error",
+                              subtitle: "Both title and description are required.",
+                              icon: const Icon(Icons.error),
+                              backgroundColor: AppColors.red,
+                            );
+                            return;
+                          }
 
-                    final now = DateTime.now();
-                    final newEvent = {
-                      'date': selectedDate.toIso8601String(),
-                      'title': titleController.text,
-                      'description': descriptionController.text,
-                      'addedTime': now.toIso8601String(),
-                    };
-                    if (events.any((event) =>
-                    event['date'] == selectedDate.toIso8601String())) {
-                      CustomSnackbar.show(
-                        title: "Warning",
-                        subtitle: "An event already exists for this date.",
-                        icon: const Icon(Icons.warning),
-                        backgroundColor: AppColors.red,
-                      );
-                      Navigator.pop(context);
-                      return;
-                    }
-                    events.add(newEvent);
-                    titleController.clear();
-                    descriptionController.clear();
-                    saveEvents();
-                    Navigator.pop(context);
-                  },
-                  height: 45.h,
+                          final now = DateTime.now();
+                          final newEvent = {
+                            'date': selectedDate.toIso8601String(),
+                            'title': titleController.text,
+                            'description': descriptionController.text,
+                            'addedTime': now.toIso8601String(),
+                          };
+                          if (events.any((event) =>
+                          event['date'] == selectedDate.toIso8601String())) {
+                            CustomSnackbar.show(
+                              title: "Warning",
+                              subtitle: "An event already exists for this date.",
+                              icon: const Icon(Icons.warning),
+                              backgroundColor: AppColors.red,
+                            );
+                            Navigator.pop(context);
+                            return;
+                          }
+                          events.add(newEvent);
+                          titleController.clear();
+                          descriptionController.clear();
+                          saveEvents();
+                          Navigator.pop(context);
+                        },
+                        height: 45.h,
+                      ),
+                      AppSizedBox.space20h,
+                    ],
+                  ),
                 ),
-                AppSizedBox.space20h,
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );

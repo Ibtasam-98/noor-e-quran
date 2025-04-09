@@ -60,3 +60,14 @@ List<String> getUniqueStrings(String prayerName) {
       return ['No unique strings available.'];
   }
 }
+
+class AppConstants {
+  static const String bismillah = '﷽';
+  static const String appWelcomeTagLine = 'Discover the Beauty of the Quran';
+  static const String appWelcomeHeaderLine = 'Illuminate your heart with the light of the Quran. Explore, learn, and connect with the divine words of Allah.';
+  static const String appWelcomeQuranicVerse = 'طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ وَوَاضِعُ الْعِلْمِ عِنْدَ غَيْرِ أَهْلِهِ كَمُقَلِّدِ الْخَنَازِيرِ الْجَوْهَرَ وَاللُّؤْلُؤَ وَالذَّهَبَ';
+  static const String appWelcomeQuranicVerseTranslation = 'Seeking knowledge is a duty upon every Muslim, and he who imparts knowledge to those who do not deserve it, is like one who puts a necklace of jewels, pearls and gold around the neck of swines';
+  static const String appWelcomeQuranicVerseReference = 'Reference: Sunan Ibn Majah 224\nIn book reference: Introduction, Hadith 224';
+  static const String hasSeenOnboardingKey = 'hasSeenOnboarding';
+  static const String hasCompletedPermissionsKey = 'hasCompletedPermissions';
+}

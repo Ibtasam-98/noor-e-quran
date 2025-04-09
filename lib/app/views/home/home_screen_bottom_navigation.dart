@@ -8,13 +8,14 @@ import 'package:line_icons/line_icons.dart';
 import 'package:noor_e_quran/app/views/home/app_home_screen.dart';
 import '../../config/app_colors.dart';
 import '../../controllers/app_home_screen_bottom_navigation.dart';
+import '../../controllers/app_home_screen_controller.dart';
 import '../../controllers/app_theme_switch_controller.dart';
 import '../additional/additional_category_screen.dart';
 import '../hadith/hadith_collection_screen.dart';
 import '../ibadat/ibadat_category_screen.dart';
 
 class BottomNavigationHomeScreen extends StatelessWidget {
-  // Register the controller
+
   final BottomNavigationController controller = Get.put(BottomNavigationController());
 
   static final List<Widget> widgetOptions = <Widget>[
@@ -41,7 +42,6 @@ class BottomNavigationHomeScreen extends StatelessWidget {
           padding: EdgeInsets.only(bottom: 10.h),
           decoration: BoxDecoration(
             color: isDarkMode ? AppColors.black : AppColors.white,
-            // borderRadius: BorderRadius.circular(15.r),
             boxShadow: [
               BoxShadow(
                 color: AppColors.primary.withOpacity(0.1),
@@ -65,22 +65,10 @@ class BottomNavigationHomeScreen extends StatelessWidget {
                 iconSize: 20.sp,
                 color: isDarkMode ? AppColors.white : AppColors.black,
                 tabs: [
-                  GButton(
-                    icon: LineIcons.home,
-                    text: 'Home',
-                  ),
-                  GButton(
-                    icon: LineIcons.quran,
-                    text: 'Hadith',
-                  ),
-                  GButton(
-                    icon: LineIcons.prayingHands,
-                    text: 'Ibadat',
-                  ),
-                  GButton(
-                    icon: Icons.pending_outlined,
-                    text: 'Insights',
-                  ),
+                  GButton(icon: LineIcons.home, text: 'Home'),
+                  GButton(icon: LineIcons.quran, text: 'Hadith'),
+                  GButton(icon: LineIcons.prayingHands, text: 'Ibadat'),
+                  GButton(icon: Icons.pending_outlined, text: 'Insights'),
                 ],
                 selectedIndex: controller.currentIndex,
                 onTabChange: controller.updateSelectedIndex,

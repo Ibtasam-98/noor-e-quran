@@ -197,7 +197,7 @@ class _QiblaScreenState extends State<QiblaScreen> {
 
   final AppHomeScreenController homeScreenController = Get.put(AppHomeScreenController());
   final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
-  final UserPermissionScreenController locationPermissionScreenController = Get.find<UserPermissionScreenController>();
+  final UserPermissionController locationPermissionScreenController = Get.find<UserPermissionController>();
 
   @override
   Widget build(BuildContext context) {

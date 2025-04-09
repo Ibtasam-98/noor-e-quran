@@ -379,7 +379,9 @@ class _QuranSurahDetailScreenState extends State<QuranSurahDetailScreen>
                           _isSavingAyah = true;
                         });
 
-                        if (_storage.read('savedAyah_$verseNumber') != null) {
+                        final uniqueAyahKey = 'savedAyah_${widget.surahNumber}_$verseNumber';
+
+                        if (_storage.read(uniqueAyahKey) != null) {
                           CustomSnackbar.show(
                             title: "Error",
                             subtitle: "This Ayah is already saved!",
@@ -394,10 +396,10 @@ class _QuranSurahDetailScreenState extends State<QuranSurahDetailScreen>
                         }
 
                         final audioUrl = await quran.getAudioURLByVerse(widget.surahNumber, verseNumber);
-                        final currentDate = DateFormat('dd MMMMantoor').format(DateTime.now());
+                        final currentDate = DateFormat('dd MMMM yyyy').format(DateTime.now()); // Added year for more uniqueness
                         final currentTime = DateFormat('hh:mm a').format(DateTime.now());
 
-                        await _storage.write('savedAyah_$verseNumber', {
+                        await _storage.write(uniqueAyahKey, {
                           'timestamp': currentTime,
                           'date': currentDate,
                           'surahIndex': widget.surahNumber,

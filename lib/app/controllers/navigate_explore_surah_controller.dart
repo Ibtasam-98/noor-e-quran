@@ -25,6 +25,7 @@ class NavigteExploreSurahsController extends GetxController with SingleGetTicker
     showModalBottomSheet(
       backgroundColor: AppColors.white,
       context: context,
+      isScrollControlled: true, // Set this to true for full height
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),

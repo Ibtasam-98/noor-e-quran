@@ -507,12 +507,12 @@ class _QuranSurahDetailScreenState extends State<QuranSurahDetailScreen>
           );
         },
         child: Container(
+          margin: EdgeInsets.only(top: 10.h),
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withOpacity(0.6), // Shadow color
-                blurRadius: 20, // Softening the shadow
-                offset: Offset(0, -2), // Positioning the shadow above the BottomAppBar
+                color: AppColors.primary.withOpacity(0.2),
+                blurRadius: 10,
               ),
             ],
           ),

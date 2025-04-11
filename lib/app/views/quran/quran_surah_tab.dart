@@ -65,8 +65,7 @@ class QuranSurahTab extends StatelessWidget {
               textAlign: TextAlign.start,
             ),
             subtitle: CustomText(
-              title:
-              '${quran.getPlaceOfRevelation(surahNumber) == "Makkiyah" ? "Makkah" : "Madina"} | ${quran.getVerseCount(surahNumber)} Ayahs',
+              title: '${quran.getPlaceOfRevelation(surahNumber) == "Makkiyah" ? "Makkah" : "Madina"} | ${quran.getVerseCount(surahNumber)} Ayahs',
               fontSize: 12.sp,
               textColor: AppColors.primary,
               textAlign: TextAlign.start,

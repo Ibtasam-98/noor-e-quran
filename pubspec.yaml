@@ -57,6 +57,7 @@ dependencies:
   flutter_map:
   latlong2:
   adhan:
+  image_editor_plus:
 
 
 
@@ -78,6 +79,7 @@ flutter:
     - assets/pdf/
     - assets/audios/
     - assets/anim/
+    - assets/editor/
 
 
   fonts:

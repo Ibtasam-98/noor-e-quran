@@ -51,10 +51,13 @@ class QuranSajdahListScreen extends StatelessWidget {
         backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(4.h),
-          child: Obx(() => LinearProgressIndicator(
-            value: controller.scrollProgress.value,
-            backgroundColor: Colors.grey.withOpacity(0.3),
-            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+          child: Obx(() => Padding(
+            padding: EdgeInsets.only(left: 10.w, right: 10.w),
+            child: LinearProgressIndicator(
+              value: controller.scrollProgress.value,
+              backgroundColor: Colors.grey.withOpacity(0.3),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+            ),
           )),
         ),
       ),
@@ -86,6 +89,7 @@ class QuranSajdahListScreen extends StatelessWidget {
                       color: (index % 2 == 1)
                           ? AppColors.primary.withOpacity(0.29)
                           : AppColors.primary.withOpacity(0.1),
+
                     ),
                     child: ListTile(
                       onTap: () {
@@ -122,12 +126,9 @@ class QuranSajdahListScreen extends StatelessWidget {
                         ),
                       ),
                       subtitle: CustomText(
-                        title: "Surah " +
-                            quran.getSurahName(surahNumber) +
-                            " | " +
-                            '${quran.getPlaceOfRevelation(surahNumber) == "Makkiyah" ? "Makkah" : "Madina"} | ${quran.getVerseCount(surahNumber)} Ayahs',
+                        title: "Surah " + quran.getSurahName(surahNumber) + " | " + '${quran.getPlaceOfRevelation(surahNumber) == "Makkiyah" ? "Makkah" : "Madina"} | ${quran.getVerseCount(surahNumber)} Ayahs',
                         fontSize: 13.sp,
-                        textColor: textColor,
+                        textColor: AppColors.primary,
                         textAlign: TextAlign.end,
                         textOverflow: TextOverflow.ellipsis,
                         fontWeight: FontWeight.w500,
@@ -136,10 +137,10 @@ class QuranSajdahListScreen extends StatelessWidget {
                       title: CustomText(
                         title: quran.getVerse(surahNumber, verseNumber),
                         fontSize: 22.sp,
-                        textColor: AppColors.primary,
+                        textColor: textColor,
                         fontWeight: FontWeight.w500,
                         textOverflow: TextOverflow.ellipsis,
-                        maxLines: 100,
+                        maxLines: 1,
                         textAlign: TextAlign.end,
                       ),
                     ),

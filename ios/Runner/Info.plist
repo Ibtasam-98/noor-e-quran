@@ -60,5 +60,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>This app needs access to your photo library to select background images for your Islamic cards.</string>
 </dict>
 </plist>

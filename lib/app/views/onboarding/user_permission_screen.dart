@@ -26,9 +26,9 @@ class UserPermissionScreen extends StatelessWidget {
     return Obx(() {
       bool isDarkMode = themeSwitchController.isDarkMode.value;
       return Scaffold(
-        backgroundColor: isDarkMode ? AppColors.black : AppColors.specia,
+        backgroundColor: isDarkMode ? Colors.black : AppColors.white,
         appBar: AppBar(
-          backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
+          backgroundColor: isDarkMode ? Colors.black : AppColors.white,
           centerTitle: false,
           title: CustomText(
             firstText: "Noor e",

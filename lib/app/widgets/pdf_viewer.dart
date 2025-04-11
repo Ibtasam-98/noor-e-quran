@@ -92,24 +92,23 @@ class PdfViewer extends StatelessWidget {
             AppSizedBox.space10h,
             Expanded(
               child: PDFView(
-                backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
-                filePath: pdfViewerController.pdfPath.value,
-                enableSwipe: false,
-                fitEachPage: true,
-                swipeHorizontal: false,
-                autoSpacing: false,
-                pageFling: true,
-                onRender: (pages) {
-                  pdfViewerController.totalPages.value = pages ?? 0;
-                },
-                onViewCreated: (PDFViewController controller) {
-                  pdfViewerController.pdfController = controller;
-                },
-                onPageChanged: (page, _) {
-                  pdfViewerController.currentPage.value = page ?? 0;
-                  //No get storage save.
-                },
-              ),
+                  backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
+                  filePath: pdfViewerController.pdfPath.value,
+                  enableSwipe: true,
+                  fitEachPage: true,
+                  swipeHorizontal: false,
+                  autoSpacing: false,
+                  pageFling: true,
+                  onRender: (pages) {
+                    pdfViewerController.totalPages.value = pages ?? 0;
+                  },
+                  onViewCreated: (PDFViewController controller) {
+                    pdfViewerController.pdfController = controller;
+                  },
+                  onPageChanged: (page, _) {
+                    pdfViewerController.currentPage.value = page ?? 0;
+                  },
+                ),
             ),
           ],
         ),

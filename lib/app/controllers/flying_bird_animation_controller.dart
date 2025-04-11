@@ -97,7 +97,7 @@ class FlyingBirdAnimationControllerForIbadat extends GetxController with SingleG
 }
 
 
-class FlyingBirdAnimationControllerForHistory extends GetxController with SingleGetTickerProviderMixin {
+class FlyingBirdAnimationControllerForAdditional extends GetxController with SingleGetTickerProviderMixin {
   late AnimationController animationController;
   late Animation<double> positionAnimation;
   late Animation<double> opacityAnimation;

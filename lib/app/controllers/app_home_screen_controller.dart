@@ -17,7 +17,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 class AppHomeScreenController extends GetxController with GetSingleTickerProviderStateMixin {
   final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
-  final UserPermissionController locationController = Get.put(UserPermissionController()); // Initialize Location Controller
+  final UserPermissionController locationController = Get.put(UserPermissionController());
 
   var city = "Locating...".obs;
   final isLoading = false.obs;
@@ -27,6 +27,7 @@ class AppHomeScreenController extends GetxController with GetSingleTickerProvide
   var icons = <String>["fajr.svg", "fajr.svg", "dhuhr.svg", "asr.svg", "asr.svg", "maghrib.svg", "isha.svg", "isha.svg", "isha.svg", "isha.svg", "isha.svg"].obs;
   var nextNamazTime = Rx<DateTime?>(null);
   var nextNamazName = "".obs;
+  RxString timeRemaining = "".obs; // RxString to hold the formatted remaining time
   bool isIconOpen = false;
   var currentFontSize = 24.0.obs;
   var randomVerse = RandomVerse().obs;
@@ -35,14 +36,14 @@ class AppHomeScreenController extends GetxController with GetSingleTickerProvide
   late Animation<double> scaleAnimation;
   final GetStorage _box = GetStorage();
   List<Map<String, dynamic>> lastAccessedSurahs = [];
+  RxString marqueeText = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
+    updateMarqueeText();
     startRandomVerseTimer();
-    timer = Timer.periodic(const Duration(minutes: 1), (Timer t) {
-      _calculateNextNamaz();
-    });
+    _startRemainingTimeTimer(); // Start the timer for updating remaining time
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
@@ -54,11 +55,10 @@ class AppHomeScreenController extends GetxController with GetSingleTickerProvide
     _initialize();
   }
 
-
-
   @override
   void onClose() {
     animationController.dispose();
+    _namazTimer?.cancel();
     timer?.cancel();
     super.onClose();
   }
@@ -91,7 +91,6 @@ class AppHomeScreenController extends GetxController with GetSingleTickerProvide
     update(['lastAccessedSurahs']);
     print("Controller updated.");
   }
-
 
   String getSurahName(int surahNumber) {
     return quran.getSurahName(surahNumber);
@@ -160,7 +159,7 @@ class AppHomeScreenController extends GetxController with GetSingleTickerProvide
     Map<String, DateTime> namazTimes = {};
 
     namazTimings.forEach((namazName, timeStr) {
-      if (timeStr != "--/--") {
+      if (timeStr != "--") {
         try {
           DateTime prayerTime = DateFormat("HH:mm").parse(timeStr);
           namazTimes[namazName] = DateTime(
@@ -196,6 +195,26 @@ class AppHomeScreenController extends GetxController with GetSingleTickerProvide
     }
   }
 
+  void _startRemainingTimeTimer() {
+    _namazTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (nextNamazTime.value != null) {
+        final remaining = nextNamazTime.value!.difference(DateTime.now());
+        if (remaining.isNegative) {
+          timeRemaining.value = "Namaz Started";
+          // Optionally, recalculate next namaz here if needed
+          _calculateNextNamaz();
+        } else {
+          final hours = remaining.inHours.toString().padLeft(2, '0');
+          final minutes = (remaining.inMinutes % 60).toString().padLeft(2, '0');
+          final seconds = (remaining.inSeconds % 60).toString().padLeft(2, '0');
+          timeRemaining.value = "$hours:$minutes:$seconds";
+        }
+      } else {
+        timeRemaining.value = "No Namaz Today";
+      }
+    });
+  }
+
   bool get is24HourFormat {
     if (Get.context != null) {
       return MediaQuery.of(Get.context!).alwaysUse24HourFormat;
@@ -204,8 +223,8 @@ class AppHomeScreenController extends GetxController with GetSingleTickerProvide
   }
 
   String formatTime(String timeStr, bool is24HourFormat) {
-    if (timeStr == "--/--") {
-      return timeStr;
+    if (timeStr == "--") {
+      return "--/--";
     }
     try {
       DateTime prayerTime = DateFormat("HH:mm").parse(timeStr);
@@ -214,7 +233,7 @@ class AppHomeScreenController extends GetxController with GetSingleTickerProvide
           : DateFormat("h:mm a").format(prayerTime);
     } catch (e) {
       print('Error formatting time: $e');
-      return timeStr;
+      return "--/--";
     }
   }
 
@@ -252,5 +271,12 @@ class AppHomeScreenController extends GetxController with GetSingleTickerProvide
       city.value = "Location Permission Denied";
       locationController.locationAccessed.value = false;
     }
+  }
+
+  void updateMarqueeText() {
+    final cityName = Get.find<UserPermissionController>().cityName.value;
+    final islamicDate = getIslamicDate();
+    final currentDate = getCurrentDate();
+    marqueeText.value = 'As of $currentDate, in $cityName, the Islamic date is $islamicDate';
   }
 }

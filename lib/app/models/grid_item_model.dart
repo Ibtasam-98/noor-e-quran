@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../views/additional/goals/daily_goal_screen.dart';
+import '../views/additional/islamic_design_studio.dart';
 import '../views/additional/prophet_miracles_screen.dart';
 import '../views/common/dua_details_screen.dart';
 import '../views/ibadat/fasting_menu_screen.dart';
@@ -152,20 +153,26 @@ final List<GridItem> IbadatCategoryMenu = [
 
 
 
-final List<GridItem> deedsCategoryMenu = [
+final List<GridItem> additionalCategoryMenu = [
   GridItem(
     title: "Daily",
     subtitle: "Goals",
     destination: DailyGoalScreen(),
   ),
   GridItem(
-    title: "Prophetic",
-    subtitle: "Miracles", // Unique subtitle for Umrah
+    title: "Islamic",
+    subtitle: "Design Studio",
+    destination: IslamicDesignStudio(),
+  ),
+
+  GridItem(
+    title: "Prophet",
+    subtitle: "Muhammad",
     destination: ProphetMiraclesScreen(),
   ),
   GridItem(
     title: "Hajj",
-    subtitle: "Pilgrimage", // Unique subtitle for Hajj
+    subtitle: "Pilgrimage",
     destination: PdfViewer(
       assetPath: 'assets/pdf/hajj_guide.pdf',
       firstTitle: 'Hajj',

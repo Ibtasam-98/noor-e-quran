@@ -68,7 +68,7 @@ class BottomNavigationHomeScreen extends StatelessWidget {
                   GButton(icon: LineIcons.home, text: 'Home'),
                   GButton(icon: LineIcons.quran, text: 'Hadith'),
                   GButton(icon: LineIcons.prayingHands, text: 'Ibadat'),
-                  GButton(icon: Icons.pending_outlined, text: 'Insights'),
+                  GButton(icon: Icons.pending_outlined, text: 'More'),
                 ],
                 selectedIndex: controller.currentIndex,
                 onTabChange: controller.updateSelectedIndex,

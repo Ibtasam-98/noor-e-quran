@@ -296,7 +296,7 @@ class _QiblaScreenState extends State<QiblaScreen> {
                                         maxLines: 2,
                                       ),
                                       CustomText(
-                                        title: homeScreenController.getTimeRemaining(),
+                                        title: homeScreenController.timeRemaining.value,
                                         textColor: AppColors.white,
                                         fontSize: 24.sp,
                                         fontFamily: 'grenda',
@@ -341,6 +341,7 @@ class _QiblaScreenState extends State<QiblaScreen> {
                             : 'Calibrating Compass...',
                         fontSize: 14.sp,
                         textAlign: TextAlign.center,
+                        textColor: textColor,
                       ),
                       AppSizedBox.space10h,
                       CustomText(

@@ -249,7 +249,7 @@ class _QuranSurahAyatDetailsScreenState extends State<QuranSurahAyatDetailsScree
             splashColor: AppColors.transparent,
             highlightColor: AppColors.transparent,
             onTap: (){
-              Share.share('Check out this Ayah: ${widget.arabicText} ${widget.translation} ${widget.surahLatinName}');
+              Share.share('Check out this Ayah: ${widget.arabicText} ${widget.translation ?? ""} ${widget.surahLatinName}');
             },
             child: Padding(
               padding:  EdgeInsets.only(right:5.w),

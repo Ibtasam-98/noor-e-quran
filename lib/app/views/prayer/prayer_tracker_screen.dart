@@ -410,6 +410,14 @@ class _PrayerTrackerScreenState extends State<PrayerTrackerScreen> {
               decoration: BoxDecoration(
                 color: AppColors.primary,
                 borderRadius: BorderRadius.circular(10.r),
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.primary,
+                    AppColors.secondry.withOpacity(0.9),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -56,7 +56,13 @@ class TasbeehController extends GetxController {
     String tasbeehName = '';
     Get.bottomSheet(
       Container(
-        color: Colors.white,
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(15.r),
+            topLeft: Radius.circular(15.r),
+          )
+        ),
         padding: EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -88,6 +94,15 @@ class TasbeehController extends GetxController {
             CustomButton(
               haveBgColor: true,
               btnTitle: "Add Dhikr",
+              useGradient: true,
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.primary,
+                  AppColors.secondry.withOpacity(0.9),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
               btnTitleColor: AppColors.white,
               bgColor: AppColors.primary,
               borderRadius: 50.r,

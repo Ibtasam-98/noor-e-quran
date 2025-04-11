@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:noor_e_quran/app/config/app_colors.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
+import 'package:noor_e_quran/app/config/contants.dart';
 import 'package:noor_e_quran/app/controllers/app_theme_switch_controller.dart';
 import 'package:noor_e_quran/app/widgets/custom_button.dart';
 import 'package:noor_e_quran/app/widgets/custom_text.dart';
@@ -26,9 +27,9 @@ class UserPermissionScreen extends StatelessWidget {
     return Obx(() {
       bool isDarkMode = themeSwitchController.isDarkMode.value;
       return Scaffold(
-        backgroundColor: isDarkMode ? Colors.black : AppColors.white,
+        backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
         appBar: AppBar(
-          backgroundColor: isDarkMode ? Colors.black : AppColors.white,
+          backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
           centerTitle: false,
           title: CustomText(
             firstText: "Noor e",
@@ -72,10 +73,8 @@ class UserPermissionScreen extends StatelessWidget {
   }
 
   Widget _buildConnectionscreen(bool isDarkMode) {
-    final OnboardingScreenController controller =
-    Get.find<OnboardingScreenController>();
 
-    final ConnectivitiyController connectivitiyController = Get.find<ConnectivitiyController>();
+    final ConnectivityController connectivitiyController = Get.find<ConnectivityController>();
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w),
@@ -91,8 +90,7 @@ class UserPermissionScreen extends StatelessWidget {
           ),
           CustomText(
             fontSize: 15.sp,
-            title:
-            "Internet is required to download Quran, Hadith and Prayer timings.",
+            title: "Internet is required to download Quran, Hadith and Prayer timings.",
             textAlign: TextAlign.start,
             textColor: isDarkMode ? AppColors.white : AppColors.black,
             maxLines: 2,
@@ -392,7 +390,7 @@ class UserPermissionScreen extends StatelessWidget {
   }
 
   Widget _buildWelcomeScreen(bool isDarkMode) {
-    final ConnectivitiyController connectivitiyController = Get.put(ConnectivitiyController());
+    final ConnectivityController connectivitiyController = Get.put(ConnectivityController());
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w),
       child: Column(
@@ -416,12 +414,12 @@ class UserPermissionScreen extends StatelessWidget {
                     fontSize: 30.sp,
                     textAlign: TextAlign.end,
                     textColor: isDarkMode ? AppColors.white : AppColors.primary,
-                    title: '﷽',
+                    title: AppConstants.bismillah
                   ),
                 ),
                 AppSizedBox.space15h,
                 CustomText(
-                  title: "Illuminate your heart with the light of the Quran. Explore, learn, and connect with the divine words of Allah.",
+                  title: AppConstants.appWelcomeHeaderLine,
                   textAlign: TextAlign.start,
                   textColor: isDarkMode ? AppColors.white : AppColors.black,
                   fontSize: 15.sp,
@@ -434,8 +432,7 @@ class UserPermissionScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10.r),
                   ),
                   child: CustomText(
-                    title:
-                    "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ وَوَاضِعُ الْعِلْمِ عِنْدَ غَيْرِ أَهْلِهِ كَمُقَلِّدِ الْخَنَازِيرِ الْجَوْهَرَ وَاللُّؤْلُؤَ وَالذَّهَبَ",
+                    title: AppConstants.appWelcomeQuranicVerseArabic,
                     fontSize: 15.sp,
                     fontFamily: 'quicksand',
                     textAlign: TextAlign.end,
@@ -444,8 +441,7 @@ class UserPermissionScreen extends StatelessWidget {
                 ),
                 AppSizedBox.space15h,
                 CustomText(
-                  title:
-                  "Seeking knowledge is a duty upon every Muslim, and he who imparts knowledge to those who do not deserve it, is like one who puts a necklace of jewels, pearls and gold around the neck of swines",
+                  title: AppConstants.appWelcomeQuranicVerseTranslation,
                   fontSize: 14.sp,
                   fontFamily: 'quicksand',
                   textAlign: TextAlign.start,
@@ -455,7 +451,7 @@ class UserPermissionScreen extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: CustomText(
-                    title: "Reference Sunan Ibn Majah 224\nIn book reference: Introduction, Hadith 224",
+                    title:  AppConstants.appWelcomeQuranicVerseReference,
                     fontSize: 12.sp,
                     fontFamily: 'quicksand',
                     textAlign: TextAlign.start,

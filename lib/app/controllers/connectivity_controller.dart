@@ -10,7 +10,7 @@ import 'package:noor_e_quran/app/widgets/custom_snackbar.dart';
 import 'package:noor_e_quran/app/widgets/custom_text.dart';
 
 
-class ConnectivitiyController extends GetxController with SingleGetTickerProviderMixin {
+class ConnectivityController extends GetxController with SingleGetTickerProviderMixin {
   final RxBool isConnected = false.obs;
   final RxBool isLoading = false.obs;
   final RxBool internetCheckCompleted = false.obs;

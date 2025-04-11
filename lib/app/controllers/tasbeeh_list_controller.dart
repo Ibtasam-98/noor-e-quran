@@ -6,21 +6,21 @@ import 'package:get_storage/get_storage.dart';
 class TasbeehListController extends GetxController {
   final _storage = GetStorage();
   RxList<String> defaultTasbeehs = <String>[
-    "SubhanAllah",
-    "Alhamdulillah",
-    "Allahu Akbar",
-    "La ilaha illallah",
-    "Astaghfirullah",
-    "SubhanAllahi wa bihamdihi",
-    "SubhanAllahi l-azim",
-    "La hawla wa la quwwata illa billah",
-    "Allahumma salli ala Muhammad",
-    "HasbunAllahu wa ni'mal wakil",
-    "Ya Hayyu Ya Qayyum",
-    "Ya Dhal Jalali wal Ikram",
-    "Rabbana atina fid-dunya hasanah",
-    "Rabbana la tuzigh qulubana",
-    "Allahumma innaka afuwwun tuhibbul afwa fa'fu anni"
+    "سُبْحَانَ ٱللَّٰهِ",
+    "ٱلْحَمْدُ لِلَّٰهِ",
+    "ٱللَّٰهُ أَكْبَرُ",
+    "لَا إِلَٰهَ إِلَّا ٱللَّٰهُ",
+    "أَسْتَغْفِرُ ٱللَّٰهَ",
+    "سُبْحَانَ ٱللَّٰهِ وَبِحَمْدِهِ",
+    "سُبْحَانَ ٱللَّٰهِ ٱلْعَظِيمِ",
+    "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِٱللَّٰهِ",
+    "ٱللَّٰهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ",
+    "حَسْبُنَا ٱللَّٰهُ وَنِعْمَ ٱلْوَكِيلُ",
+    "يَا حَيُّ يَا قَيُّومُ",
+    "يَا ذَا ٱلْجَلَالِ وَٱلْإِكْرَامِ",
+    "رَبَّنَا آتِنَا فِي ٱلدُّنْيَا حَسَنَةً",
+    "رَبَّنَا لَا تُزِغْ قُلُوبَنَا",
+    "ٱللَّٰهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ ٱلْعَفْوَ فَٱعْفُ عَنِّي"
   ].obs;
 
   RxList<String> userTasbeehs = <String>[].obs;

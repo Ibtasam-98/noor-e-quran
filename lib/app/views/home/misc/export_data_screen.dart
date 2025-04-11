@@ -277,8 +277,7 @@ class _ExportPrayerTimeState extends State<ExportPrayerTime> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: CustomText(
-                              title: DateFormat('MMMM')
-                                  .format(DateTime(selectedYear, item)),
+                              title: DateFormat('MMMM').format(DateTime(selectedYear, item)),
                               fontSize: 12.sp,
                               capitalize: true,
                               textAlign: TextAlign.center,
@@ -316,6 +315,7 @@ class _ExportPrayerTimeState extends State<ExportPrayerTime> {
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
                       textAlign: TextAlign.start,
+                      textColor: AppColors.primary,
                     ),
                     subtitle: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
@@ -332,12 +332,18 @@ class _ExportPrayerTimeState extends State<ExportPrayerTime> {
                               CustomText(
                                 title: entry.key,
                                 fontSize: 12.sp,
+                                textColor: themeController.isDarkMode.value
+                                    ? AppColors.white
+                                    : AppColors.black,
                               ),
                               CustomText(
                                 title: controller.formatTime(
                                     entry.value,
                                     controller.is24HourFormat),
                                 fontSize: 10.sp,
+                                textColor: themeController.isDarkMode.value
+                                    ? AppColors.white
+                                    : AppColors.black,
                               ),
                               SizedBox(height: 4),
                             ],

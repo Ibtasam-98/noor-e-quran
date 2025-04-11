@@ -25,14 +25,14 @@ class NavigteExploreSurahsController extends GetxController with SingleGetTicker
     showModalBottomSheet(
       backgroundColor: AppColors.white,
       context: context,
-      isScrollControlled: true, // Set this to true for full height
+      isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
         return SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(top: 20.w, left: 10.w, right: 5.w),
+            padding: EdgeInsets.only(top: 20.w, left: 10.w, right: 5.w,bottom: 25.h),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,

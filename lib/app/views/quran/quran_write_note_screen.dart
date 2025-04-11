@@ -296,6 +296,15 @@ class QuranNotesScreen extends StatelessWidget {
                   borderRadius: 45.r,
                   onTap: controller.saveNote,
                   height: 45.h,
+                  useGradient: true,
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.primary,
+                      AppColors.secondry.withOpacity(0.9),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
                 ),
                 AppSizedBox.space20h,
               ],

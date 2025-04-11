@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:noor_e_quran/app/config/contants.dart';
 import 'package:noor_e_quran/app/views/onboarding/user_permission_screen.dart';
 import 'package:noor_e_quran/app/widgets/custom_button.dart';
 import '../../config/app_colors.dart';
@@ -12,7 +13,7 @@ import '../../widgets/custom_text.dart';
 import '../home/home_screen_bottom_navigation.dart';
 
 class OnBoardingScreen extends StatelessWidget {
-  final OnboardingScreenController onBoardingController = Get.put(OnboardingScreenController()); // Initialize the controller
+  final OnboardingScreenController onBoardingController = Get.put(OnboardingScreenController());
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +107,7 @@ class OnBoardingScreen extends StatelessWidget {
                   children: [
                     CustomText(
                       fontSize: 30.sp,
-                      title: "Embracing the Light of the Quran",
+                      title: AppConstants.onboardingTitle,
                       textColor: AppColors.white,
                       textAlign: TextAlign.start,
                       fontFamily: 'grenda',
@@ -115,8 +116,7 @@ class OnBoardingScreen extends StatelessWidget {
                     AppSizedBox.space5h,
                     CustomText(
                       fontSize: 16.sp,
-                      title:
-                      "Discover the Quran’s wisdom, lighting your path with peace and guidance.",
+                      title: AppConstants.onboardingSubtitle,
                       textAlign: TextAlign.start,
                       textColor: AppColors.white,
                       maxLines: 5,

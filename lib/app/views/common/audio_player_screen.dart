@@ -81,18 +81,18 @@ class AudioPlayerScreen extends StatelessWidget {
               height: 30,
               width: Get.width,
               child: Marquee(
-                text: "Playing ${controller.title} ${controller.latinName}",
-                style: TextStyle(color: AppColors.white, fontSize: 17.sp, fontFamily: 'grenda'),
+                text: "Playing  ${controller.title} " " ${controller.latinName}",
+                style: TextStyle(color: AppColors.white, fontSize: 17.sp,),
                 scrollAxis: Axis.horizontal,
-                numberOfRounds: 5,
+                numberOfRounds: null, // Infinite scrolling
                 crossAxisAlignment: CrossAxisAlignment.start,
                 blankSpace: 200.0,
                 velocity: 50.0,
-              ),
+              )
             )
                 : CustomText(
-              title: controller.latinName,
-              fontSize: 25.sp,
+              title: "${controller.title} ${controller.latinName}",
+              fontSize: 20.sp,
               textColor: AppColors.white,
             ),
           ),

@@ -1,17 +1,22 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:noor_e_quran/app/config/app_colors.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import 'package:noor_e_quran/app/controllers/app_theme_switch_controller.dart';
 import 'package:noor_e_quran/app/controllers/prayer_record_monthly_controller.dart';
 import 'package:noor_e_quran/app/widgets/custom_text.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
-
+import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class PrayerRecordMonthly extends StatelessWidget {
   final String monthKey;
@@ -19,109 +24,198 @@ class PrayerRecordMonthly extends StatelessWidget {
 
   PrayerRecordMonthly({required this.monthKey, required this.monthName});
 
-
-  Future<void> _generateYearPdf(PrayerRecordMonthlyController controller) async {
+  Future<void> _generatePdf(PrayerRecordMonthlyController controller) async {
     final pdf = pw.Document();
 
-    // Group data by month
-    Map<String, List<Map<String, dynamic>>> monthlyData = {};
-    for (var dayData in controller.dailyData) {
-      String month = controller.formatDate(dayData['date']).substring(3, 10);
-      if (!monthlyData.containsKey(month)) {
-        monthlyData[month] = [];
-      }
-      monthlyData[month]!.add(dayData);
-    }
+    pdf.addPage(
+      pw.MultiPage(
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) {
+          return [
+            _buildPdfHeader(controller.monthName),
+            pw.SizedBox(height: 20),
+            _buildOverallSummary(controller),
+            pw.SizedBox(height: 20),
+            _buildDailyPrayerDetailsTable(controller),
+            pw.SizedBox(height: 20),
+            _buildPrayerSpecificSummaryTable(controller),
+          ];
+        },
+      ),
+    );
 
-    // Generate PDF pages for each month
-    monthlyData.forEach((month, data) {
-      pdf.addPage(
-        pw.Page(
-          build: (pw.Context context) {
-            // Calculate monthly summary
-            int totalPrayers = data.length * 5;
-            int offeredPrayers = 0;
-            int latePrayers = 0;
-            int missedPrayers = 0;
+    final bytes = await pdf.save();
+    final tempDir = await getTemporaryDirectory();
+    final file = File('${tempDir.path}/prayer_record_${controller.monthKey}.pdf');
+    await file.writeAsBytes(bytes);
 
-            for (var dayData in data) {
-              dayData['prayers'].forEach((key, value) {
-                if (value == 'Prayed') {
-                  offeredPrayers++;
-                } else if (value == 'Late') {
-                  latePrayers++;
-                } else {
-                  missedPrayers++;
-                }
-              });
-            }
+    OpenFile.open(file.path);
+  }
 
-            return pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.start,
-              children: [
-                pw.Text('$month Prayer Summary',
-                    style: pw.TextStyle(fontSize: 20)),
-                pw.SizedBox(height: 10),
-                pw.Table.fromTextArray(
-                  context: context,
-                  data: <List<String>>[
-                    <String>['Date', 'Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'],
-                    for (var dayData in data)
-                      <String>[
-                        controller.formatDate(dayData['date']),
-                        _getColoredText(dayData['prayers']['Fajr'] ?? ''),
-                        _getColoredText(dayData['prayers']['Dhuhr'] ?? ''),
-                        _getColoredText(dayData['prayers']['Asr'] ?? ''),
-                        _getColoredText(dayData['prayers']['Maghrib'] ?? ''),
-                        _getColoredText(dayData['prayers']['Isha'] ?? ''),
-                      ],
-                  ],
-                  border: pw.TableBorder.all(),
-                  headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                  cellAlignment: pw.Alignment.center,
-                ),
-                pw.SizedBox(height: 20),
-                pw.Text('Summary:', style: pw.TextStyle(fontSize: 18)),
-                pw.Text('Total Prayers: $totalPrayers',
-                    style: pw.TextStyle(fontSize: 14)),
-                pw.Text('Offered: $offeredPrayers',
-                    style: pw.TextStyle(fontSize: 14)),
-                pw.Text('Late: $latePrayers',
-                    style: pw.TextStyle(fontSize: 14)),
-                pw.Text('Missed: $missedPrayers',
-                    style: pw.TextStyle(fontSize: 14)),
-              ],
-            );
-          },
+  pw.Widget _buildPdfHeader(String monthName) {
+    return pw.Center(
+      child: pw.Text(
+        '$monthName Prayer Summary',
+        style: pw.TextStyle(
+          fontSize: 24,
+          fontWeight: pw.FontWeight.bold,
         ),
-      );
-    });
-
-    await Printing.layoutPdf(
-      onLayout: (PdfPageFormat format) async => pdf.save(),
+      ),
     );
   }
 
-  String _getColoredText(String status) {
-    return status;
+  pw.Widget _buildOverallSummary(PrayerRecordMonthlyController controller) {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text(
+          'Overall Summary:',
+          style: pw.TextStyle(
+            fontSize: 18,
+            fontWeight: pw.FontWeight.bold,
+          ),
+        ),
+        pw.SizedBox(height: 10),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+          children: [
+            _buildSummaryCell('Total Prayers', controller.totalPrayers.toString()),
+            _buildSummaryCell('Offered', controller.offeredPrayers.toString()),
+            _buildSummaryCell('Late', controller.latePrayers.toString()),
+            _buildSummaryCell('Missed', controller.missedPrayers.toString()),
+          ],
+        ),
+      ],
+    );
   }
 
-  pw.Widget _getColoredWidget(String status) {
-    pw.TextStyle textStyle;
-    if (status == 'Prayed') {
-      textStyle = pw.TextStyle(color: PdfColors.green);
-    } else if (status == 'Late') {
-      textStyle = pw.TextStyle(color: PdfColors.orange);
-    } else {
-      textStyle = pw.TextStyle(color: PdfColors.red);
-    }
-    return pw.Text(status, style: textStyle);
+  pw.Widget _buildDailyPrayerDetailsTable(PrayerRecordMonthlyController controller) {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text(
+          'Daily Prayer Details:',
+          style: pw.TextStyle(
+            fontSize: 18,
+            fontWeight: pw.FontWeight.bold,
+          ),
+        ),
+        pw.SizedBox(height: 10),
+        pw.Table(
+          border: pw.TableBorder.all(),
+          columnWidths: {
+            0: const pw.FixedColumnWidth(80),
+            1: const pw.FixedColumnWidth(80),
+            2: const pw.FixedColumnWidth(80),
+            3: const pw.FixedColumnWidth(80),
+            4: const pw.FixedColumnWidth(80),
+            5: const pw.FixedColumnWidth(80),
+          },
+          children: [
+            pw.TableRow(
+              children: [
+                _buildTableHeaderCell('Date'),
+                _buildTableHeaderCell('Fajr'),
+                _buildTableHeaderCell('Dhuhr'),
+                _buildTableHeaderCell('Asr'),
+                _buildTableHeaderCell('Maghrib'),
+                _buildTableHeaderCell('Isha'),
+              ],
+            ),
+            for (var dayData in controller.dailyData)
+              pw.TableRow(
+                children: [
+                  _buildTableCell(controller.formatDate(dayData['date'])),
+                  _buildTableCell(dayData['prayers']['Fajr'] ?? ''),
+                  _buildTableCell(dayData['prayers']['Dhuhr'] ?? ''),
+                  _buildTableCell(dayData['prayers']['Asr'] ?? ''),
+                  _buildTableCell(dayData['prayers']['Maghrib'] ?? ''),
+                  _buildTableCell(dayData['prayers']['Isha'] ?? ''),
+                ],
+              ),
+          ],
+        ),
+      ],
+    );
   }
+
+  pw.Widget _buildPrayerSpecificSummaryTable(PrayerRecordMonthlyController controller) {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text(
+          'Prayer Specific Summary:',
+          style: pw.TextStyle(
+            fontSize: 18,
+            fontWeight: pw.FontWeight.bold,
+          ),
+        ),
+        pw.SizedBox(height: 10),
+        pw.Table(
+          border: pw.TableBorder.all(),
+          columnWidths: {
+            0: const pw.FixedColumnWidth(100),
+            1: const pw.FixedColumnWidth(80),
+            2: const pw.FixedColumnWidth(80),
+            3: const pw.FixedColumnWidth(80),
+          },
+          children: [
+            pw.TableRow(
+              children: [
+                _buildTableHeaderCell('Prayer'),
+                _buildTableHeaderCell('Prayed'),
+                _buildTableHeaderCell('Late'),
+                _buildTableHeaderCell('Missed'),
+              ],
+            ),
+            for (var entry in controller.prayerStats.entries)
+              pw.TableRow(
+                children: [
+                  _buildTableCell(entry.key),
+                  _buildTableCell(controller.dailyData.fold<int>(0, (sum, data) => sum + ((data['prayers'][entry.key] == 'Prayed') ? 1 : 0)).toString()),
+                  _buildTableCell(controller.dailyData.fold<int>(0, (sum, data) => sum + ((data['prayers'][entry.key] == 'Late') ? 1 : 0)).toString()),
+                  _buildTableCell(controller.dailyData.fold<int>(0, (sum, data) => sum + ((data['prayers'][entry.key] == null || data['prayers'][entry.key] == 'Missed') ? 1 : 0)).toString()),
+                ],
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  pw.Widget _buildTableHeaderCell(String text) {
+    return pw.Padding(
+      padding: const pw.EdgeInsets.all(8.0),
+      child: pw.Text(
+        text,
+        style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+        textAlign: pw.TextAlign.center,
+      ),
+    );
+  }
+
+  pw.Widget _buildTableCell(String text) {
+    return pw.Padding(
+      padding: const pw.EdgeInsets.all(8.0),
+      child: pw.Text(text, textAlign: pw.TextAlign.center),
+    );
+  }
+
+  pw.Widget _buildSummaryCell(String title, String value) {
+    return pw.Column(
+      children: [
+        pw.Text(title, style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+        pw.Text(value),
+      ],
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    final PrayerRecordMonthlyController controller = Get.put(
-        PrayerRecordMonthlyController(monthKey, monthName));
+    final PrayerRecordMonthlyController controller =
+    Get.put(PrayerRecordMonthlyController(monthKey, monthName));
+
     final AppThemeSwitchController themeController = Get.find();
     bool isDarkMode = themeController.isDarkMode.value;
     final iconColor = isDarkMode ? AppColors.white : AppColors.black;
@@ -149,7 +243,7 @@ class PrayerRecordMonthly extends StatelessWidget {
           actions: [
             IconButton(
               icon: Icon(Icons.picture_as_pdf, color: iconColor),
-              onPressed: () => _generateYearPdf(controller),
+              onPressed: () => _generatePdf(controller),
             ),
           ],
           bottom: TabBar(
@@ -188,8 +282,8 @@ class PrayerRecordMonthly extends StatelessWidget {
             itemCount: controller.dailyData.length,
             itemBuilder: (context, index) {
               controller.dailyData.sort((a, b) =>
-                  DateTime.parse(b['date']).compareTo(
-                      DateTime.parse(a['date'])));
+                  DateTime.parse(b['date'])
+                      .compareTo(DateTime.parse(a['date'])));
               final dayData = controller.dailyData[index];
               return ListTile(
                 title: Padding(
@@ -207,16 +301,17 @@ class PrayerRecordMonthly extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      for (int index = 0; index <
-                          dayData['prayers'].keys.length; index++)
+                      for (int index = 0;
+                      index < dayData['prayers'].keys.length;
+                      index++)
                         Container(
                           padding: EdgeInsets.all(15.h),
                           margin: EdgeInsets.only(bottom: 5, top: 5.h),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15.r),
-                            color: (index % 2 == 1) ? AppColors.primary
-                                .withOpacity(0.29) : AppColors.primary
-                                .withOpacity(0.1),
+                            color: (index % 2 == 1)
+                                ? AppColors.primary.withOpacity(0.29)
+                                : AppColors.primary.withOpacity(0.1),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -234,17 +329,18 @@ class PrayerRecordMonthly extends StatelessWidget {
                               AppSizedBox.space15w,
                               Expanded(
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceBetween,
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: CustomText(
                                         title: dayData['prayers'].keys
                                             .elementAt(index),
                                         fontSize: 16.sp,
-                                        textColor: themeController.isDarkMode
-                                            .value ? AppColors.white : AppColors
-                                            .black,
+                                        textColor: themeController
+                                            .isDarkMode.value
+                                            ? AppColors.white
+                                            : AppColors.black,
                                         fontWeight: FontWeight.w600,
                                         textOverflow: TextOverflow.ellipsis,
                                         maxLines: 1,
@@ -366,8 +462,9 @@ class PrayerRecordMonthly extends StatelessWidget {
                   padding: EdgeInsets.all(12.w),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: (index % 2 == (index ~/ 2) % 2) ? AppColors.primary
-                        .withOpacity(0.29) : AppColors.primary.withOpacity(0.1),
+                    color: (index % 2 == (index ~/ 2) % 2)
+                        ? AppColors.primary.withOpacity(0.29)
+                        : AppColors.primary.withOpacity(0.1),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -382,8 +479,9 @@ class PrayerRecordMonthly extends StatelessWidget {
                       CustomText(
                         title: subtitles[index].toString(),
                         fontSize: 18.sp,
-                        textColor: themeController.isDarkMode.value ? AppColors
-                            .white : AppColors.black,
+                        textColor: themeController.isDarkMode.value
+                            ? AppColors.white
+                            : AppColors.black,
                       ),
                     ],
                   ),
@@ -404,13 +502,13 @@ class PrayerRecordMonthly extends StatelessWidget {
     int missedCount = 0;
 
     controller.dailyData.forEach((data) {
-      String status = data['prayers'][prayerName] ?? "";
+      String? status = data['prayers'][prayerName];
       if (status == "Prayed") {
         prayedCount++;
       } else if (status == "Late") {
         lateCount++;
       } else {
-        missedCount++;
+missedCount++;
       }
     });
 
@@ -423,8 +521,8 @@ class PrayerRecordMonthly extends StatelessWidget {
         : AppColors.primary.withOpacity(0.05);
 
     Color expandedBackgroundColor = themeController.isDarkMode.value
-        ? AppColors.white
-        : AppColors.black;
+        ? AppColors.black.withOpacity(0.8)
+        : AppColors.white;
 
     return Container(
       margin: EdgeInsets.all(10),
@@ -441,8 +539,9 @@ class PrayerRecordMonthly extends StatelessWidget {
               : AppColors.black,
           collapsedBackgroundColor: backgroundColor,
           shape: Border.all(color: AppColors.transparent),
-          collapsedIconColor: themeController.isDarkMode.value ? AppColors
-              .primary : AppColors.white,
+          collapsedIconColor: themeController.isDarkMode.value
+              ? AppColors.primary
+              : AppColors.black,
           title: Padding(
             padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.h),
             child: Row(
@@ -482,38 +581,49 @@ class PrayerRecordMonthly extends StatelessWidget {
                   children: [
                     Column(
                       children: [
-                        CustomText(title: "Prayed",
+                        CustomText(
+                            title: "Prayed",
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w600,
                             textColor: AppColors.paleGreen,
                             maxLines: 2),
                         CustomText(
-                          textColor: themeController.isDarkMode.value ? AppColors.black :AppColors.white,
-                            fontSize: 18.sp,
-                            title: prayedCount.toString(),
+                          textColor: themeController.isDarkMode.value
+                              ? AppColors.white
+                              : AppColors.black,
+                          fontSize: 18.sp,
+                          title: prayedCount.toString(),
                         )
                       ],
                     ),
                     Column(
                       children: [
-                        CustomText(title: "Missed",
+                        CustomText(
+                            title: "Missed",
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w600,
                             textColor: AppColors.red,
                             maxLines: 2),
-                        CustomText( textColor: themeController.isDarkMode.value ? AppColors.black :AppColors.white,
+                        CustomText(
+                            textColor: themeController.isDarkMode.value
+                                ? AppColors.white
+                                : AppColors.black,
                             fontSize: 18.sp,
                             title: missedCount.toString())
                       ],
                     ),
                     Column(
                       children: [
-                        CustomText(title: "Late",
+                        CustomText(
+                            title: "Late",
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w600,
                             textColor: AppColors.orange,
                             maxLines: 2),
-                        CustomText( textColor: themeController.isDarkMode.value ? AppColors.black :AppColors.white,
+                        CustomText(
+                            textColor: themeController.isDarkMode.value
+                                ? AppColors.white
+                                : AppColors.black,
                             fontSize: 18.sp,
                             title: lateCount.toString())
                       ],
@@ -526,5 +636,96 @@ class PrayerRecordMonthly extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+
+class PrayerRecordMonthlyController extends GetxController {
+  final GetStorage _storage = GetStorage();
+  late String monthKey;
+  late String monthName;
+  late List<Map<String, dynamic>> dailyData;
+  late int totalPrayers;
+  late int offeredPrayers;
+  late int latePrayers;
+  late int missedPrayers;
+  late Map<String, int> prayerStats;
+
+  PrayerRecordMonthlyController(this.monthKey, this.monthName) {
+    dailyData = getDailyPrayerData(monthKey);
+    aggregateStats();
+  }
+
+  List<Map<String, dynamic>> getDailyPrayerData(String monthKey) {
+    List<Map<String, dynamic>> dailyData = [];
+
+    for (int day = 1; day <= 31; day++) {
+      String dateKey = '$monthKey-${day.toString().padLeft(2, '0')}';
+      if (_storage.hasData(dateKey)) {
+        Map<String, String> prayers =
+        Map<String, String>.from(_storage.read(dateKey));
+        int offeredCount =
+            prayers.values.where((status) => status == "Prayed").length;
+        int lateCount =
+            prayers.values.where((status) => status == "Late").length;
+
+        dailyData.add({
+          "date": dateKey,
+          "offered": offeredCount,
+          "late": lateCount,
+          "prayers": prayers,
+        });
+      }
+    }
+
+    return dailyData;
+  }
+
+  void aggregateStats() {
+    totalPrayers = 0;
+    offeredPrayers = 0;
+    latePrayers = 0;
+    missedPrayers = 0;
+
+    prayerStats = {
+      'Fajr': 0,
+      'Dhuhr': 0,
+      'Asr': 0,
+      'Maghrib': 0,
+      'Isha': 0,
+    };
+
+    dailyData.forEach((data) {
+      totalPrayers += 5;
+      offeredPrayers += (data['offered'] as int);
+      latePrayers += (data['late'] as int);
+      missedPrayers += (5 - (data['offered'] as int) - (data['late'] as int));
+
+      data['prayers'].forEach((prayer, status) {
+        if (status == "Prayed") {
+          prayerStats[prayer] = prayerStats[prayer]! + 1;
+        } else if (status == "Late") {
+          prayerStats[prayer] = prayerStats[prayer]! + 1;
+        }
+      });
+    });
+  }
+
+  Color getPrayerColor(String? status, bool isDarkMode) {
+    switch (status) {
+      case 'Prayed':
+        return AppColors.paleGreen;
+      case 'Missed':
+        return AppColors.red;
+      case 'Late':
+        return AppColors.orange;
+      default:
+        return AppColors.transparent;
+    }
+  }
+
+  String formatDate(String dateString) {
+    DateTime date = DateTime.parse(dateString.split('-').take(3).join('-'));
+    return DateFormat('d MMMM yyyy').format(date);
   }
 }

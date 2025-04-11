@@ -8,6 +8,6 @@ enum PrayerType {
   funeral,
   hajat,
   istikhara,
-  tracker, // Added Tracker
-  guide,   // Added Guide
+  tracker,
+  guide,
 }

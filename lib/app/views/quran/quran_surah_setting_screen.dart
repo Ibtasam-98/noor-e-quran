@@ -444,8 +444,17 @@ class QuranSurahSettingScreen extends StatelessWidget {
                   btnTitle: "Set Quran to Default",
                   btnTitleColor: AppColors.white,
                   bgColor: AppColors.primary,
-                  borderRadius: 10.r,
+                  borderRadius: 40.r,
                   height: 45.h,
+                  useGradient: true,
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.primary,
+                      AppColors.secondry.withOpacity(0.9),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
                   onTap: controller.resetToDefault,
                 ),
               ),

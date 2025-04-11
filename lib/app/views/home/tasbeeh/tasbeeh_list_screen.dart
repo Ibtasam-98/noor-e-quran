@@ -124,7 +124,7 @@ class TasbeehListScreen extends StatelessWidget {
                                   fontWeight: FontWeight.w500,
                                   textOverflow: TextOverflow.ellipsis,
                                   maxLines: 1,
-                                  textAlign: TextAlign.start,
+                                  textAlign: TextAlign.end,
                                 ),
                                 trailing: controller.userTasbeehs
                                     .contains(allTasbeehs[index])

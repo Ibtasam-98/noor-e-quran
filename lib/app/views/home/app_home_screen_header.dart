@@ -28,7 +28,7 @@ class HomeScreenHeader extends StatelessWidget {
               Obx(() => CustomText(
                 title: "Location",
                 textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-                fontSize: 18.sp,
+                fontSize: 15.sp,
                 fontFamily: 'grenda',
                 maxLines: 1,
                 textOverflow: TextOverflow.ellipsis,
@@ -37,7 +37,7 @@ class HomeScreenHeader extends StatelessWidget {
                   ? CustomText(
                 title: "${locationPermissionScreenController.cityName}, ${locationPermissionScreenController.countryName}",
                 textColor: AppColors.primary,
-                fontSize: 14.sp,
+                fontSize: 12.sp,
                 maxLines: 1,
                 textAlign: TextAlign.start,
                 textOverflow: TextOverflow.ellipsis,
@@ -45,7 +45,7 @@ class HomeScreenHeader extends StatelessWidget {
                   : CustomText(
                 title: 'Access Denied',
                 textColor: AppColors.primary,
-                fontSize: 14.sp,
+                fontSize: 12.sp,
                 maxLines: 1,
                 textOverflow: TextOverflow.ellipsis,
               )),

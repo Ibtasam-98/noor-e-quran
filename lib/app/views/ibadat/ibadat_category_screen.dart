@@ -53,6 +53,7 @@ class IbadatCategoryScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           HomeScreenHeader(birdController: _ibadatBirdController),
+          AppSizedBox.space5h,
           CustomMarquee(),
           if (_hasContinueAzkar()) // Check if there are continue azkar
             Column(
@@ -403,8 +404,8 @@ class IbadatCategoryScreen extends StatelessWidget {
                 child: GridView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
                     childAspectRatio: 1,
                   ),
                   itemCount: IbadatCategoryMenu.length,

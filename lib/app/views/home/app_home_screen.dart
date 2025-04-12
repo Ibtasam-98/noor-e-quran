@@ -69,6 +69,7 @@ class HomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           HomeScreenHeader(birdController: _homeBirdController),
+          AppSizedBox.space5h,
           CustomMarquee(),
           if (homeScreenController.lastAccessedSurahs.isNotEmpty) ...[
             Row(
@@ -558,54 +559,50 @@ class HomeScreen extends StatelessWidget {
           AppSizedBox.space10h,
           Column(
             children: [
-              for (int i = 0; i < 2; i++)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    for (int j = 0; j < 2; j++)
-                      Expanded(
-                        child:Obx(()=> InkWell(
-                          highlightColor: AppColors.transparent,
-                          splashColor: AppColors.transparent,
-                          onTap: () {
-                            final destinations = [
-                              QuranMenuScreen(),
-                              TasbeehMainScreen(),
-                              PrayerMainScreen(),
-                              IslamicCalendarScreen(),
-                            ];
-                            Get.to(destinations[i * 2 + j]);
-                          },
-                          child: Container(
-                            margin: EdgeInsets.all(5.h),
-                            decoration: BoxDecoration(
-                              color:  themeController.isDarkMode.value ? AppColors.black : AppColors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.primary.withOpacity(0.2),
-                                  spreadRadius: 1,
-                                  blurRadius: 4,
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              children: [
-                                CustomFrame(
-                                  leftImageAsset: "assets/frames/topLeftFrame.png",
-                                  rightImageAsset: "assets/frames/topRightFrame.png",
-                                  imageHeight: 30.h,
-                                  imageWidth: 30.w,
-                                ),
-                                Column(
+              SingleChildScrollView(
+                child: GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(), // To disable GridView's scrolling
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
+                    childAspectRatio: 1,
+                  ),
+                  itemCount: menuItems.length,
+                  itemBuilder: (context, index) {
+                    final menuItem = menuItems[index];
+                    return Obx(
+                          () => InkWell(
+                        highlightColor: AppColors.transparent,
+                        splashColor: AppColors.transparent,
+                        onTap: () {
+                          Get.to(menuItem['destination']());
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(5.h),
+                          decoration: BoxDecoration(
+                            color: themeController.isDarkMode.value ? AppColors.black : AppColors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primary.withOpacity(0.2),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              CustomFrame(
+                                leftImageAsset: "assets/frames/topLeftFrame.png",
+                                rightImageAsset: "assets/frames/topRightFrame.png",
+                                imageHeight: 30.h,
+                                imageWidth: 30.w,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    AppSizedBox.space20h,
                                     CustomText(
-                                      title: [
-                                        "Quran",
-                                        "Tasbeeh",
-                                        "Salah",
-                                        "Islamic",
-                                      ][i * 2 + j],
+                                      title: menuItem['title']!,
                                       fontSize: 18.sp,
                                       textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
                                       fontWeight: FontWeight.normal,
@@ -616,12 +613,7 @@ class HomeScreen extends StatelessWidget {
                                       fontFamily: 'grenda',
                                     ),
                                     CustomText(
-                                      title: [
-                                        "Recitation",
-                                        "Counter",
-                                        "Practices",
-                                        "Calender",
-                                      ][i * 2 + j],
+                                      title: menuItem['subtitle']!,
                                       fontSize: 12.sp,
                                       textColor: AppColors.primary,
                                       fontWeight: FontWeight.w500,
@@ -629,23 +621,23 @@ class HomeScreen extends StatelessWidget {
                                       textOverflow: TextOverflow.ellipsis,
                                       maxLines: 2,
                                     ),
-                                    AppSizedBox.space20h,
                                   ],
                                 ),
-                                CustomFrame(
-                                  leftImageAsset: "assets/frames/bottomLeftFrame.png",
-                                  rightImageAsset: "assets/frames/bottomRightFrame.png",
-                                  imageHeight: 30.h,
-                                  imageWidth: 30.w,
-                                ),
-                              ],
-                            ),
+                              ),
+                              CustomFrame(
+                                leftImageAsset: "assets/frames/bottomLeftFrame.png",
+                                rightImageAsset: "assets/frames/bottomRightFrame.png",
+                                imageHeight: 30.h,
+                                imageWidth: 30.w,
+                              ),
+                            ],
                           ),
-                        ),),
+                        ),
                       ),
-
-                  ],
+                    );
+                  },
                 ),
+              )
             ],
           )
 
@@ -653,4 +645,12 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
+  final List<Map<String, dynamic>> menuItems = [
+    {"title": "Quran", "subtitle": "Recitation", "destination": () => QuranMenuScreen()},
+    {"title": "Tasbeeh", "subtitle": "Counter", "destination": () => TasbeehMainScreen()},
+    {"title": "Salah", "subtitle": "Practices", "destination": () => PrayerMainScreen()},
+    {"title": "Islamic", "subtitle": "Calender", "destination": () => IslamicCalendarScreen()},
+  ];
+
 }

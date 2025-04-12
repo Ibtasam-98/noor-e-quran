@@ -112,7 +112,7 @@ class BaseHomeScreen extends StatelessWidget {
             title: CustomText(
               firstText: titleFirstPart,
               secondText: titleSecondPart,
-              fontSize: 18.sp,
+              fontSize: 15.sp,
               firstTextColor: defaultTextColor, // Use default text color
               secondTextColor: AppColors.primary,
             ),

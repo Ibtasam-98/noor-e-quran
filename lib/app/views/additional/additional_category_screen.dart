@@ -48,6 +48,7 @@ class AdditionalCategoryScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           HomeScreenHeader(birdController: _additionalBirdController),
+          AppSizedBox.space5h,
           CustomMarquee(),
           Obx(()=> CustomText(
            title: "Divine Wisdom",
@@ -65,8 +66,8 @@ class AdditionalCategoryScreen extends StatelessWidget {
                 child: GridView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
                     childAspectRatio: 1,
                   ),
                   itemCount: additionalCategoryMenu.length,

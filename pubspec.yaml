@@ -35,6 +35,7 @@ dependencies:
   intl:
   flutter_svg:
   glowy_borders:
+  just_audio:
   audioplayers:
   share_plus:
   percent_indicator:

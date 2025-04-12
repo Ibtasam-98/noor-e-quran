@@ -109,8 +109,8 @@ class QuranMenuScreen extends StatelessWidget {
             Expanded(
               child: GridView.builder(
                 shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
                   childAspectRatio: 1,
                 ),
                 itemCount: gridItems.length,
@@ -150,7 +150,7 @@ class QuranMenuScreen extends StatelessWidget {
                                   children: [
                                     CustomText(
                                       title: item.title,
-                                      fontSize: constraints.maxWidth * 0.1, // Responsive title font size
+                                      fontSize: 18.sp,
                                       textColor: textColor,
                                       fontWeight: FontWeight.normal,
                                       textOverflow: TextOverflow.ellipsis,
@@ -162,7 +162,7 @@ class QuranMenuScreen extends StatelessWidget {
                                     AppSizedBox.space5h,
                                     CustomText(
                                       title: item.subtitle,
-                                      fontSize: constraints.maxWidth * 0.1, // Responsive subtitle font size
+                                      fontSize: 12.sp,
                                       textColor: AppColors.primary,
                                       fontWeight: FontWeight.w500,
                                       textAlign: TextAlign.center,

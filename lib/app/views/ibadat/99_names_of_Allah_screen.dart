@@ -65,8 +65,8 @@ class NameOfAllahScreen extends StatelessWidget {
             AppSizedBox.space15h,
             Expanded(
               child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: MediaQuery.of(context).size.width > 600 ? 4 : 2,
                   childAspectRatio: 1,
                 ),
                 itemCount: names.length,
@@ -153,7 +153,7 @@ class NameOfAllahScreen extends StatelessWidget {
           Get.to(
               AudioPlayerScreen(
                   title: "Names of Allah",
-                  audioUrl: "audios/AllahNames.mp3",
+                  audioUrl: "assets/audios/AllahNames.mp3",
                   latinName: "اَلاسْمَاءُ الْحُسناى",
                   titleFontSize:35.sp
               ));

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,6 +34,13 @@ class VerseOfHourScreen extends StatelessWidget {
     required this.surahNumber,
     required this.surahArabicTitle
   }) : super(key: key);
+
+  String formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final String minutes = twoDigits(duration.inMinutes.remainder(60));
+    final String seconds = twoDigits(duration.inSeconds.remainder(60));
+    return '$minutes:$seconds';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -316,7 +322,7 @@ class VerseOfHourScreen extends StatelessWidget {
                         children: [
                           // Slider
                           Obx(() => Slider(
-                            value: controller.progress.value,
+                            value: controller.progress.value.clamp(0.0, 1.0), // CLAMP THE VALUE HERE
                             onChanged: controller.seekAudio,
                             activeColor: AppColors.primary,
                             inactiveColor: AppColors.primary.withOpacity(0.3),
@@ -380,8 +386,6 @@ class VerseOfHourScreen extends StatelessWidget {
               ],
             ),
           )
-
-
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -393,10 +397,9 @@ class VerseOfHourScreen extends StatelessWidget {
                 fontSize: 15.sp,
                 title: "Font Size",
               ),
-
               Obx(() => Expanded(
                 child: Slider(
-                  value: controller.currentFontSize.value,
+                  value: controller.currentFontSize.value.clamp(12.0, 60.0), // CLAMP THE VALUE HERE
                   min: 12.0,
                   max: 60.0,
                   divisions: 14,

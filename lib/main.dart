@@ -15,7 +15,6 @@ import 'app/controllers/user_location_premission_controller.dart';
 import 'app/views/onboarding/onboarding_screen.dart';
 import 'app/views/home/home_screen_bottom_navigation.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -44,7 +43,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-
   final bool hasSeenOnboarding;
 
   const MyApp({super.key, required this.hasSeenOnboarding});
@@ -52,9 +50,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Define a base design size, can be for a typical phone
+    const baseDesignWidth = 360.0;
+    const baseDesignHeight = 690.0;
+
+    // Determine if the screen is wider (typical for tablets like iPads)
+    final bool isTablet = screenWidth > 600; // Adjust threshold as needed
+
+    double designWidth = baseDesignWidth;
+    double designHeight = baseDesignHeight;
+
+    if (isTablet) {
+      designWidth = 768.0;
+      designHeight = 1024.0;
+    }
 
     return ScreenUtilInit(
-      designSize: const Size(360, 690),
+      designSize: Size(designWidth, designHeight),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {

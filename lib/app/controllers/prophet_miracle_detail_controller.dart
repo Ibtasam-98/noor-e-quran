@@ -1,6 +1,5 @@
-
 import 'package:get/get.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 
 import 'app_theme_switch_controller.dart';
 
@@ -18,14 +17,16 @@ class ProphetMiracleDetailController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _audioPlayer.onPlayerStateChanged.listen((state) {
-      _isPlaying.value = state == PlayerState.playing;
+    _audioPlayer.playerStateStream.listen((state) {
+      _isPlaying.value = state.processingState == ProcessingState.ready || state.processingState == ProcessingState.buffering;
     });
-    _audioPlayer.onDurationChanged.listen((d) => _duration.value = d);
-    _audioPlayer.onPositionChanged.listen((p) => _position.value = p);
-    _audioPlayer.onPlayerComplete.listen((_) {
-      _position.value = Duration.zero;
-      _isPlaying.value = false;
+    _audioPlayer.durationStream.listen((d) => _duration.value = d ?? Duration.zero);
+    _audioPlayer.positionStream.listen((p) => _position.value = p);
+    _audioPlayer.playerStateStream.listen((state) {
+      if (state.processingState == ProcessingState.completed) {
+        _position.value = Duration.zero;
+        _isPlaying.value = false;
+      }
     });
   }
 
@@ -39,7 +40,13 @@ class ProphetMiracleDetailController extends GetxController {
     if (_isPlaying.value) {
       await _audioPlayer.pause();
     } else {
-      await _audioPlayer.play(UrlSource(audioUrl));
+      try {
+        await _audioPlayer.setUrl(audioUrl);
+        await _audioPlayer.play();
+      } catch (e) {
+        print("Error loading or playing audio: $e");
+        // Handle the error appropriately, e.g., show a snackbar
+      }
     }
   }
 

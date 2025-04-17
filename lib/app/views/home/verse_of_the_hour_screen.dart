@@ -128,8 +128,6 @@ class VerseOfHourScreen extends StatelessWidget {
                                     textColor: AppColors.primary,
                                     fontSize: 13.sp,
                                     title: 'Surah No. $surahNumber | Verse No. $verseNumber',
-                                    fontFamily: 'grenda',
-                                    fontWeight: FontWeight.bold,
                                   ),
                                 ],
                               ),
@@ -225,14 +223,14 @@ class VerseOfHourScreen extends StatelessWidget {
                                               textColor: AppColors.white
                                           );
                                         },
-                                        child: Text(
+                                        child: Obx(()=>Text(
                                           arabicText,
                                           style: TextStyle(
                                             fontSize: controller.currentFontSize.value,
                                             color: isDarkMode ? AppColors.white : AppColors.black,
                                           ),
                                           textAlign: TextAlign.end,
-                                        ),
+                                        ),),
                                       ),
                                     ),
                                   ),

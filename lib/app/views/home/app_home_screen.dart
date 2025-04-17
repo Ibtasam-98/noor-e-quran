@@ -64,7 +64,6 @@ class HomeScreen extends StatelessWidget {
       titleFirstPart: "Noor e",
       titleSecondPart: " Quran",
       birdController: _homeBirdController,
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -645,7 +644,6 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
   final List<Map<String, dynamic>> menuItems = [
     {"title": "Quran", "subtitle": "Recitation", "destination": () => QuranMenuScreen()},
     {"title": "Tasbeeh", "subtitle": "Counter", "destination": () => TasbeehMainScreen()},

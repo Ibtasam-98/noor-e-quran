@@ -53,12 +53,10 @@ class MyApp extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Define a base design size, can be for a typical phone
     const baseDesignWidth = 360.0;
     const baseDesignHeight = 690.0;
 
-    // Determine if the screen is wider (typical for tablets like iPads)
-    final bool isTablet = screenWidth > 600; // Adjust threshold as needed
+    final bool isTablet = screenWidth > 600;
 
     double designWidth = baseDesignWidth;
     double designHeight = baseDesignHeight;

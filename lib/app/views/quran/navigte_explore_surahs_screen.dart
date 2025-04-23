@@ -98,7 +98,7 @@ class NavigteExploreSurahsScreen extends StatelessWidget {
                 tabs: const[
                   Tab(text: 'Surahs'),
                   Tab(text: 'Juz'),
-                  Tab(text: 'Favrouite'),
+                  Tab(text: 'Favrouites'),
           ],
         ),
         AppSizedBox.space10h,

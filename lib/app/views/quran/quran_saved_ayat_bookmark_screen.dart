@@ -162,7 +162,7 @@ class _QuranSavedAyatBookmarkScreenState extends State<QuranSavedAyatBookmarkScr
                             title: surahLatinName,
                             textAlign: TextAlign.end,
                             fontSize: 14.sp,
-                            fontFamily: 'grenda',
+                            // fontFamily: 'grenda',
                             maxLines: 1,
                             textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black
                           ),

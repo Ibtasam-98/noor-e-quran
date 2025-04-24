@@ -192,12 +192,12 @@ class _IslamicDesignStudioState extends State<IslamicDesignStudio>
               ? AppColors.black.withOpacity(0.2)
               : AppColors.black.withOpacity(0.2),
           highlightColor: themeController.isDarkMode.value
-              ? AppColors.lightGrey.withOpacity(0.1)
+              ? AppColors.grey.withOpacity(0.1)
               : AppColors.grey.withOpacity(0.2),
           child: Container(
             margin: EdgeInsets.all(4.0),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: AppColors.grey,
               borderRadius: BorderRadius.circular(10.r),
             ),
             width: _consistentImageSize,

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:noor_e_quran/app/config/app_colors.dart';
-import 'package:noor_e_quran/app/widgets/custom_text.dart';
 
+import '../config/app_colors.dart';
 import '../controllers/app_theme_switch_controller.dart';
+import 'custom_text.dart';
 
 class CustomCard extends StatelessWidget {
   final String? title;

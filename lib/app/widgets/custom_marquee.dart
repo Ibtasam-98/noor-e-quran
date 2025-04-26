@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 import '../config/app_colors.dart';
-import '../controllers/app_home_screen_controller.dart';
 import '../controllers/user_location_premission_controller.dart';
+import '../modules/home/controllers/app_home_screen_controller.dart';
 
 
 class CustomMarquee extends StatelessWidget {

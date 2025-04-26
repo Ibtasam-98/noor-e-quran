@@ -3,17 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
-// Controllers
+import 'package:noor_e_quran/app/modules/home/views/home_screen_bottom_navigation.dart';
 import 'app/controllers/connectivity_controller.dart';
-import 'app/controllers/app_home_screen_controller.dart';
 import 'app/controllers/app_theme_switch_controller.dart';
-import 'app/controllers/onboarding_controller.dart';
 import 'app/controllers/user_location_premission_controller.dart';
+import 'app/modules/home/controllers/app_home_screen_controller.dart';
+import 'app/modules/onboarding/controllers/onboarding_controller.dart';
+import 'app/modules/onboarding/views/onboarding_screen.dart';
 
-// Views
-import 'app/views/onboarding/onboarding_screen.dart';
-import 'app/views/home/home_screen_bottom_navigation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,7 +74,7 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-      child: hasSeenOnboarding ? BottomNavigationHomeScreen() : OnBoardingScreen(),
+      child: hasSeenOnboarding ? AppHomeScreenBottomNavigation() : OnBoardingScreen(),
     );
   }
 }

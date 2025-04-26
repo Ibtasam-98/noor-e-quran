@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; // Import screenutil
-
 import 'package:noor_e_quran/app/config/app_colors.dart';
-import 'package:noor_e_quran/app/config/app_sizedbox.dart';
-import 'package:noor_e_quran/app/widgets/custom_button.dart';
 import 'package:noor_e_quran/app/widgets/custom_snackbar.dart';
-import 'package:noor_e_quran/app/widgets/custom_text.dart';
 
 
 class ConnectivityController extends GetxController with SingleGetTickerProviderMixin {

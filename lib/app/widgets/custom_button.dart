@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../config/app_sizedbox.dart';
 import 'custom_text.dart';
+
 class CustomButton extends StatelessWidget {
   final String btnTitle;
   final Color btnTitleColor;

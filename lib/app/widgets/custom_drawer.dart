@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import '../config/app_colors.dart';
-import '../views/hadith/saved_hadith_screen.dart';
-import '../views/home/app_setting_screen.dart';
-import '../views/home/frequently_ask_question_screen.dart';
-import '../views/home/privacy_policy_screen.dart';
-import '../views/home/user_feedback_screen.dart';
-import '../views/quran/quran_saved_ayat_bookmark_screen.dart';
+import '../modules/hadith/views/saved_hadith_screen.dart';
+import '../modules/home/views/app_setting_screen.dart';
+import '../modules/quran/views/quran_saved_ayat_bookmark_screen.dart';
 import 'custom_text.dart';
 
 class CustomDrawer extends StatelessWidget {

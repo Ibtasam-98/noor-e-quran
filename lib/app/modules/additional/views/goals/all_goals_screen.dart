@@ -7,14 +7,12 @@ import '../../../../config/app_colors.dart';
 import '../../../../controllers/app_theme_switch_controller.dart';
 import '../../../../widgets/custom_text.dart';
 
-
 class AllGoalsScreen extends StatelessWidget {
   final Map<DateTime, List<String>> savedGoals;
   final List<String> dailyGoals;
   final AppThemeSwitchController themeController;
 
   AllGoalsScreen({required this.savedGoals, required this.dailyGoals, required this.themeController});
-
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +41,23 @@ class AllGoalsScreen extends StatelessWidget {
           fontSize: 18.sp,
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.only(left: 10.w,right: 10.w),
+      body: savedGoals.isEmpty
+          ? Center(
+        child: CustomText(
+          title: "No goals added yet.",
+          fontSize: 16.sp,
+          textColor: textColor.withOpacity(0.6),
+        ),
+      )
+          : Padding(
+        padding: EdgeInsets.only(left: 10.w, right: 10.w),
         child: ListView.builder(
           itemCount: savedGoals.length,
           itemBuilder: (context, index) {
             final date = savedGoals.keys.toList()[index];
             final goals = savedGoals[date]!;
             return Container(
-              margin: EdgeInsets.only(bottom: 5, top: 5.h,left: 5.w,right: 5.w),
+              margin: EdgeInsets.only(bottom: 5.h, top: 5.h, left: 5.w, right: 5.w),
               padding: EdgeInsets.all(10.h),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.r),
@@ -67,7 +73,7 @@ class AllGoalsScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: CustomText(
-                          title: '${DateFormat('MMMM yyyy').format(date)}',
+                          title: '${DateFormat('MMMM').format(date)}',
                           fontSize: 16.sp,
                           maxLines: 1,
                           textColor: AppColors.primary,

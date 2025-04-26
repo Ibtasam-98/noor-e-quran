@@ -4,12 +4,13 @@ class AppColors {
   static const white = Colors.white;
   static const black = Color(0xff030303);
   static const primary = Color(0xffb08e63);
-  static const secondry = Color(0xff9f631d);
+  static const secondry = Color(0xff804f17);
   static const transparent = Colors.transparent;
   static const lightGrey = Color(0xfff2f2f2);
   static const grey = Colors.grey;
   static const green = Color(0xff038128);
   static const red = Color(0xff6e0000);
+  static const redDarkShade = Color(0xffb80404);
   static const orange = Colors.orange;
   static const indigo = Color(0xff3F51B5FF);
   static const lightestGreen = Color(0xffd0f0c0);

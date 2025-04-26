@@ -295,7 +295,7 @@ class AppHomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -500,7 +500,7 @@ class AppHomeScreen extends StatelessWidget {
               ],
             ),
           ),),
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           Obx(()=>CustomText(
             title: "Find your Qibla ",
             textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,

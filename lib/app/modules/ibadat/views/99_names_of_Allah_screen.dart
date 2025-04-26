@@ -151,7 +151,7 @@ class NameOfAllahScreen extends StatelessWidget {
           Get.to(
               AudioPlayerScreen(
                   title: "Names of Allah",
-                  audioUrl: "assets/audios/AllahNames.mp3",
+                  audioUrl: "audios/AllahNames.mp3",
                   latinName: "اَلاسْمَاءُ الْحُسناى",
                   titleFontSize:35.sp
               ));

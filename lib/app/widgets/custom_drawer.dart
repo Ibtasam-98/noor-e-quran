@@ -73,7 +73,7 @@ class CustomDrawer extends StatelessWidget {
                         textAlign: TextAlign.start,
                         textStyle: GoogleFonts.quicksand(color: textColor),
                       ),
-                      trailing: Icon(Icons.arrow_forward_ios_outlined, size: 12.h),
+                      trailing: Icon(Icons.arrow_forward_ios_outlined, size: 10.h, color: iconColor),
                     ),
                     ListTile(
                       splashColor: AppColors.transparent,
@@ -91,7 +91,7 @@ class CustomDrawer extends StatelessWidget {
                         textAlign: TextAlign.start,
                         textStyle: GoogleFonts.quicksand(color: textColor),
                       ),
-                      trailing: Icon(Icons.arrow_forward_ios_outlined, size: 12.h),
+                      trailing: Icon(Icons.arrow_forward_ios_outlined, size: 10.h, color: iconColor),
                     ),
                     ListTile(
                       splashColor: AppColors.transparent,
@@ -107,9 +107,9 @@ class CustomDrawer extends StatelessWidget {
                         maxLines: 2,
                         textOverflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.start,
-                        textStyle: GoogleFonts.quicksand(color: textColor),
+                        textStyle: GoogleFonts.quicksand(color: textColor,),
                       ),
-                      trailing: Icon(Icons.arrow_forward_ios_outlined, size: 12.h),
+                      trailing: Icon(Icons.arrow_forward_ios_outlined, size: 10.h, color: iconColor),
                     ),
                     ListTile(
                       splashColor: AppColors.transparent,
@@ -127,7 +127,7 @@ class CustomDrawer extends StatelessWidget {
                         textAlign: TextAlign.start,
                         textStyle: GoogleFonts.quicksand(color: textColor),
                       ),
-                      trailing: Icon(Icons.arrow_forward_ios_outlined, size: 12.h),
+                      trailing: Icon(Icons.arrow_forward_ios_outlined, size: 10.h, color: iconColor),
                     ),
                     ListTile(
                       splashColor: AppColors.transparent,
@@ -145,7 +145,7 @@ class CustomDrawer extends StatelessWidget {
                         textAlign: TextAlign.start,
                         textStyle: GoogleFonts.quicksand(color: textColor),
                       ),
-                      trailing: Icon(Icons.arrow_forward_ios_outlined, size: 12.h),
+                      trailing: Icon(Icons.arrow_forward_ios_outlined, size: 10.h, color: iconColor),
                     ),
                   ],
                 ),

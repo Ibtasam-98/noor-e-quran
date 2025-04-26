@@ -8,7 +8,9 @@ import 'package:line_icons/line_icons.dart';
 import '../../../config/app_colors.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
 
+import '../../additional/views/additional_category_screen.dart';
 import '../../hadith/views/hadith_collection_screen.dart';
+import '../../ibadat/views/ibadat_category_screen.dart';
 import '../controllers/app_home_screen_bottom_navigation.dart';
 import 'app_home_screen.dart';
 
@@ -19,10 +21,8 @@ class AppHomeScreenBottomNavigation extends StatelessWidget {
   static final List<Widget> widgetOptions = <Widget>[
     AppHomeScreen(),
     HadithCollectionScreen(),
-    // IbadatCategoryScreen(),
-    // AdditionalCategoryScreen(),
-    Placeholder(),
-    Placeholder(),
+    IbadatCategoryScreen(),
+    AdditionalCategoryScreen(),
   ];
 
   @override
@@ -61,9 +61,16 @@ class AppHomeScreenBottomNavigation extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.w),
                 duration: Duration(milliseconds: 400),
                 tabBorderRadius: 45.r,
-                tabBackgroundColor: AppColors.primary,
                 iconSize: 20.sp,
                 color: isDarkMode ? AppColors.white : AppColors.black,
+                tabBackgroundGradient: LinearGradient(
+                  colors: [
+                    AppColors.primary,
+                    AppColors.secondry.withOpacity(0.9),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
                 tabs: [
                   GButton(icon: LineIcons.home, text: 'Home'),
                   GButton(icon: LineIcons.quran, text: 'Hadith'),

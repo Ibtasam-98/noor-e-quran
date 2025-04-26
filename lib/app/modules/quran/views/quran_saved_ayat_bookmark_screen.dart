@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:noor_e_quran/app/config/app_colors.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import 'package:noor_e_quran/app/modules/quran/views/quran_surah_ayat_detail_screen.dart';
+import 'package:noor_e_quran/app/modules/quran/views/quran_surah_detail_screen.dart';
 
 import '../../../controllers/app_theme_switch_controller.dart';
 import '../../../widgets/custom_text.dart';
@@ -117,15 +118,12 @@ class _QuranSavedAyatBookmarkScreenState extends State<QuranSavedAyatBookmarkScr
                   hoverColor: AppColors.transparent,
                   focusColor: AppColors.transparent,
                   onTap: () {
-                    Get.to(QuranSurahAyatDetailsScreen(
-                      arabicText: arabicText,
-                      ayahIndex: ayatNumber,
-                      surahIndex: surahIndex,
-                      surahName: surahArabicName,
-                      surahLatinName: surahLatinName,
-                      surahArabicName: surahArabicName,
-                      textAlign: TextAlign.end,
-                    ));
+
+                    Get.to(
+                        QuranSurahDetailScreen(
+                          ayatNumber: ayatNumber,
+                          surahNumber: surahIndex,)
+                    );
                   },
                   leading: Container(
                     width: 32.w,

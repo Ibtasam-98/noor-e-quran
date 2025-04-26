@@ -8,6 +8,7 @@ import 'package:noor_e_quran/app/modules/home/views/privacy_policy_screen.dart';
 import 'package:noor_e_quran/app/modules/home/views/user_feedback_screen.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
 import '../../../widgets/custom_text.dart';
+import 'delete_data_screen.dart';
 import 'export_data_screen.dart';
 import 'frequently_ask_question_screen.dart';
 
@@ -27,6 +28,7 @@ class AppSettingsScreen extends StatelessWidget {
   const AppSettingsScreen({super.key});
 
   static final List<MiscItem> _miscItems = [
+
      MiscItem(
       title: "Export Prayer Time",
       icon: Icons.picture_as_pdf_outlined,
@@ -48,6 +50,11 @@ class AppSettingsScreen extends StatelessWidget {
       icon: Icons.privacy_tip_outlined,
       destinationScreen: PrivacyPolicyScreen(),
     ),
+    MiscItem(
+      title: "Delete Data",
+      icon: Icons.delete_outline,
+      destinationScreen: DeleteDataScreen(),
+    ),
   ];
 
   @override
@@ -59,33 +66,20 @@ class AppSettingsScreen extends StatelessWidget {
 
     return Obx(() {
       final bool isDarkMode = themeController.isDarkMode.value;
-      final Color dynamicTextColor = isDarkMode ? AppColors.white : AppColors
-          .black;
-      final Color dynamicIconColor = isDarkMode ? AppColors.white : AppColors
-          .black;
-      final Color dynamicBackgroundColor = isDarkMode
-          ? AppColors.black
-          : AppColors.white;
-      final Color dynamicSectionHeaderColor = isDarkMode
-          ? AppColors.white
-          : AppColors.primary;
-      final Color dynamicContainerColor = AppColors.primary.withOpacity(0.1);
-      final double listItemIconSize = 16.h;
-      final double listItemFontSize = 14.sp;
 
       return Scaffold(
-        backgroundColor: dynamicBackgroundColor,
+        backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: AppBar(
             elevation: 0,
-            backgroundColor: dynamicBackgroundColor,
+            backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
             surfaceTintColor: AppColors.transparent,
-            foregroundColor: dynamicIconColor,
+            foregroundColor: isDarkMode ? AppColors.white : AppColors.black,
             title: CustomText(
               firstText: "Personalized",
               secondText: " Settings",
-              firstTextColor: dynamicTextColor,
+              firstTextColor: isDarkMode ? AppColors.white : AppColors.black,
               secondTextColor: AppColors.primary,
               fontSize: 18.sp,
             ),
@@ -98,7 +92,7 @@ class AppSettingsScreen extends StatelessWidget {
               },
               child: Icon(
                 Icons.west,
-                color: dynamicIconColor,
+                color: isDarkMode ? AppColors.white : AppColors.black,
               ),
             ),
           ),
@@ -112,7 +106,7 @@ class AppSettingsScreen extends StatelessWidget {
                 CustomText(
                   title: "Location",
                   fontSize: 18.sp,
-                  textColor: dynamicSectionHeaderColor,
+                  textColor: isDarkMode ? AppColors.white : AppColors.primary,
                   fontFamily: 'grenda',
                   maxLines: 1,
                   textOverflow: TextOverflow.ellipsis,
@@ -121,20 +115,20 @@ class AppSettingsScreen extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 5.h),
                   decoration: BoxDecoration(
-                    color: dynamicContainerColor,
+                    color: AppColors.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(15.r),
                   ),
                   child: ListTile(
                     leading: Icon(
                       Icons.location_on_outlined,
-                      color: dynamicIconColor,
-                      size: listItemIconSize,
+                      color: isDarkMode ? AppColors.white : AppColors.black,
+                      size: 16.h,
                     ),
                     title: CustomText(
                       title: "Enable Location",
-                      fontSize: listItemFontSize,
+                      fontSize: 14.sp,
                       textAlign: TextAlign.start,
-                      textColor: dynamicTextColor,
+                      textColor: isDarkMode ? AppColors.white : AppColors.black,
                     ),
                     trailing: Transform.scale(
                       scale: 0.8,
@@ -172,29 +166,29 @@ class AppSettingsScreen extends StatelessWidget {
                 CustomText(
                   title: "Theme",
                   fontSize: 18.sp,
-                  textColor: dynamicSectionHeaderColor,
+                  textColor: isDarkMode ? AppColors.white : AppColors.primary,
                   fontFamily: 'grenda',
                   maxLines: 1,
                   textOverflow: TextOverflow.ellipsis,
                 ),
                 AppSizedBox.space10h,
                 Container(
-                  padding: EdgeInsets.all(5.w),
                   decoration: BoxDecoration(
-                    color: dynamicContainerColor,
+                    color: AppColors.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(15.r),
                   ),
                   child: Column(
                     children: [
+                      AppSizedBox.space5h,
                       _buildThemeOptionRow(
                         title: "Light Mode",
                         value: false,
                         groupValue: isDarkMode,
                         themeController: themeController,
-                        textColor: dynamicTextColor,
+                        textColor: isDarkMode ? AppColors.white : AppColors.black,
                         icon: Icons.light_mode_outlined,
-                        iconSize: listItemIconSize,
-                        fontSize: listItemFontSize,
+                        iconSize: 16.h,
+                        fontSize: 14.sp,
                       ),
                       Divider(
                         color: AppColors.primary,
@@ -205,11 +199,12 @@ class AppSettingsScreen extends StatelessWidget {
                         value: true,
                         groupValue: isDarkMode,
                         themeController: themeController,
-                        textColor: dynamicTextColor,
+                        textColor: isDarkMode ? AppColors.white : AppColors.black,
                         icon: Icons.dark_mode_outlined,
-                        iconSize: listItemIconSize,
-                        fontSize: listItemFontSize,
+                        iconSize: 16.h,
+                        fontSize: 14.sp,
                       ),
+                      AppSizedBox.space5h,
                     ],
                   ),
                 ),
@@ -217,7 +212,7 @@ class AppSettingsScreen extends StatelessWidget {
                 CustomText(
                   title: "Misc",
                   fontSize: 18.sp,
-                  textColor: dynamicSectionHeaderColor,
+                  textColor: isDarkMode ? AppColors.white : AppColors.primary,
                   fontFamily: 'grenda',
                   maxLines: 1,
                   textOverflow: TextOverflow.ellipsis,
@@ -226,7 +221,7 @@ class AppSettingsScreen extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 5.h),
                   decoration: BoxDecoration(
-                    color: dynamicContainerColor,
+                    color: AppColors.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(15.r),
                   ),
                   child: Column(
@@ -238,19 +233,19 @@ class AppSettingsScreen extends StatelessWidget {
                             child: ListTile(
                               leading: Icon(
                                 item.icon,
-                                size: listItemIconSize,
-                                color: dynamicIconColor,
+                                size: 16.h,
+                                color: isDarkMode ? AppColors.white : AppColors.black,
                               ),
                               title: CustomText(
                                 title: item.title,
-                                fontSize: listItemFontSize,
+                                fontSize: 14.sp,
                                 textAlign: TextAlign.start,
-                                textColor: dynamicTextColor,
+                                textColor: isDarkMode ? AppColors.white : AppColors.black,
                               ),
                               trailing: Icon(
                                 Icons.arrow_forward_ios,
-                                size: listItemIconSize - 4.h,
-                                color: dynamicIconColor,
+                                size: 10.h,
+                                color: isDarkMode ? AppColors.white : AppColors.black,
                               ),
                             ),
                           ),
@@ -264,6 +259,7 @@ class AppSettingsScreen extends StatelessWidget {
                     }).toList(),
                   ),
                 ),
+                AppSizedBox.space15h,
               ],
             ),
           ),

@@ -46,8 +46,8 @@ class _IslamicDesignStudioState extends State<IslamicDesignStudio>
     loadAssets([
       "img1.jpeg", "img2.jpg", "img3.jpeg", "img4.jpg", "img5.jpg",
       "img6.jpg", "img7.jpg", "img8.jpg", "img9.webp", "img10.jpg",
-      "img11.jpg", "img12.jpg", "img13.jpeg", "img14.jpg", "img15.jpg",
-      "img16.jpg", "img17.jpg", "img18.jpg", "img19.jpg", "img20.jpg",
+      "img11.jpg", "img12.jpg", "img13.jpg", "img14.jpg", "img15.jpg",
+      "img16.jpg", "img17.png", "img18.jpg", "img19.jpg", "img20.jpg",
     ]);
     _loadEditedImages();
   }

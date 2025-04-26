@@ -59,6 +59,9 @@ dependencies:
   latlong2:
   adhan:
   image_editor_plus:
+  whatsapp_unilink:
+  google_maps_flutter:
+  ripple_wave: ^0.1.5
 
 
 

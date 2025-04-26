@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import '../../modules/additional/views/goals/daily_goal_screen.dart';
 import '../../modules/additional/views/islamic_design_studio.dart';
-import '../../modules/additional/views/prophet_miracles_screen.dart';
 import '../../modules/common/views/dua_details_screen.dart';
 import '../../modules/ibadat/views/99_names_of_Allah_screen.dart';
 import '../../modules/ibadat/views/fasting_menu_screen.dart';
@@ -162,11 +161,6 @@ final List<GridItem> additionalCategoryMenu = [
     destination: IslamicDesignStudio(),
   ),
 
-  GridItem(
-    title: "Prophet",
-    subtitle: "Muhammad",
-    destination: ProphetMiraclesScreen(),
-  ),
   GridItem(
     title: "Hajj",
     subtitle: "Pilgrimage",

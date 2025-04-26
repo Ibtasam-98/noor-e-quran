@@ -228,6 +228,15 @@ class _DuaDetailCommonScreenState extends State<DuaDetailCommonScreen> {
                       btnTitleColor: AppColors.white,
                       btnBorderColor: AppColors.primary,
                       bgColor: AppColors.primary,
+                      useGradient: true,
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.primary,
+                          AppColors.secondry.withOpacity(0.9),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
                     ),
                     )
                   ],

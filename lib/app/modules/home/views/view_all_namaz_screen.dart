@@ -54,6 +54,7 @@ class ViewAllNamazScreen extends StatelessWidget {
             color: iconColor,
           ),
         ),
+
       ),
       body: Padding(
         padding: EdgeInsets.only(left: 10.w,right: 10.w,bottom: 5.h),

@@ -291,9 +291,18 @@ class _DailyGoalScreenState extends State<DailyGoalScreen> {
                 haveBgColor: true,
                 btnTitle: "Add",
                 btnTitleColor: AppColors.white,
-                bgColor: AppColors.primary,
                 borderRadius: 45.r,
                 height: 45.h,
+                bgColor: AppColors.primary,
+                useGradient: true,
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.primary,
+                    AppColors.secondry.withOpacity(0.9),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
                 onTap: () {
                   final newGoal = _goalController.text.trim();
                   if (newGoal.isNotEmpty && RegExp(r'^[a-zA-Z ]+$').hasMatch(newGoal)) {
@@ -649,6 +658,15 @@ class _DailyGoalScreenState extends State<DailyGoalScreen> {
                 btnTitle: "Save Goals",
                 btnTitleColor: AppColors.white,
                 bgColor: AppColors.primary,
+                useGradient: true,
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.primary,
+                    AppColors.secondry.withOpacity(0.9),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
                 borderRadius: 45.r,
                 height: 45.h,
                 onTap: () {

@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../config/app_colors.dart';
-import '../../../../controllers/app_theme_switch_controller.dart';
-import '../../../../widgets/custom_text.dart';
+import '../../../config/app_colors.dart';
+import '../../../controllers/app_theme_switch_controller.dart';
+import '../../../widgets/custom_text.dart';
 
 class AllGoalsScreen extends StatelessWidget {
   final Map<DateTime, List<String>> savedGoals;

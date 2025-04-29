@@ -234,7 +234,7 @@ class _HadithCollectionScreenState extends State<HadithCollectionScreen> {
                 ),
               ],
             ),
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           Obx(()=>CustomText(
               title: "Hadith Of The Hour",
               textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
@@ -243,7 +243,7 @@ class _HadithCollectionScreenState extends State<HadithCollectionScreen> {
               maxLines: 1,
               textOverflow: TextOverflow.ellipsis,),
           ),
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           Obx(()=> Container(
             width: double.infinity,
             decoration: BoxDecoration(

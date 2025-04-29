@@ -227,7 +227,7 @@ class PrayerMainScreen extends StatelessWidget {
                                     ),
                                     CustomText(
                                       title: prayerCategories[index].subtitle,
-                                      fontSize: constraints.maxWidth * 0.1, // Responsive font size
+                                      fontSize: constraints.maxWidth * 0.08, // Responsive font size
                                       textColor: AppColors.primary,
                                       fontWeight: FontWeight.w500,
                                       textAlign: TextAlign.center,

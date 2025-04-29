@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import '../../modules/additional/views/goals/daily_goal_screen.dart';
+import '../../modules/additional/views/daily_goal_screen.dart';
+import '../../modules/additional/views/donation_screen.dart';
 import '../../modules/additional/views/islamic_design_studio.dart';
 import '../../modules/common/views/dua_details_screen.dart';
 import '../../modules/ibadat/views/99_names_of_Allah_screen.dart';
@@ -116,6 +117,25 @@ final List<GridItem> IbadatCategoryMenu = [
     destination: FivePillarIslamScreen(),
   ),
   GridItem(
+    title: "Hajj",
+    subtitle: "Pilgrimage",
+    destination: PdfViewer(
+      assetPath: 'assets/pdf/hajj_guide.pdf',
+      firstTitle: 'Hajj',
+      secondTitle: ' Pilgrimage',
+    ),
+  ),
+  GridItem(
+    title: "Umrah",
+    subtitle: "Devotion", // Unique subtitle for Umrah
+    destination: PdfViewer(
+      assetPath: 'assets/pdf/umrah_guide.pdf',
+      firstTitle: 'Umrah',
+      secondTitle: ' Devotion',
+    ),
+  ),
+
+  GridItem(
     title: "Darood e Ibrahim",
     subtitle: " Divine Mercy",
     destination: DuaDetailCommonScreen(
@@ -156,28 +176,13 @@ final List<GridItem> additionalCategoryMenu = [
     destination: DailyGoalScreen(),
   ),
   GridItem(
+    title: "Donation",
+    subtitle: "Give Now",
+    destination: DonationScreen(),
+  ),
+  GridItem(
     title: "Islamic",
     subtitle: "Design Studio",
     destination: IslamicDesignStudio(),
   ),
-
-  GridItem(
-    title: "Hajj",
-    subtitle: "Pilgrimage",
-    destination: PdfViewer(
-      assetPath: 'assets/pdf/hajj_guide.pdf',
-      firstTitle: 'Hajj',
-      secondTitle: ' Pilgrimage',
-    ),
-  ),
-  GridItem(
-    title: "Umrah",
-    subtitle: "Devotion", // Unique subtitle for Umrah
-    destination: PdfViewer(
-      assetPath: 'assets/pdf/umrah_guide.pdf',
-      firstTitle: 'Umrah',
-      secondTitle: ' Devotion',
-    ),
-  ),
 ];
-

@@ -20,10 +20,16 @@ class AzkarCounterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Get.find<AppThemeSwitchController>().isDarkMode.value;
+    // Ensure targetCount is an int.  Parse if necessary, with a default.
+    final int targetCount = zikar['repeat'] is int
+        ? zikar['repeat'] as int
+        : int.tryParse(zikar['repeat'].toString()) ?? 1; // Provide a default value
+
     final controller = Get.put(AzkarCounterController(
-        zikar,
-        zikar['repeat'] as int, azkarType ?? "",
-        azkarName ?? ""
+      zikar,
+      targetCount,
+      azkarType ?? "",
+      azkarName ?? "",
     )); // Pass title to controller
 
     // Load state on screen creation
@@ -214,3 +220,4 @@ class AzkarCounterController extends GetxController {
     saveState(); // Save the reset state
   }
 }
+

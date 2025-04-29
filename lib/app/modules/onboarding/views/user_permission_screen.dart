@@ -427,7 +427,7 @@ class UserPermissionScreen extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(15.w),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.36),
+                    color: AppColors.primary.withOpacity(0.26),
                     borderRadius: BorderRadius.circular(10.r),
                   ),
                   child: CustomText(

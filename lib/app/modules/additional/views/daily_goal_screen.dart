@@ -9,11 +9,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:line_icons/line_icons.dart';
 import 'dart:convert';
 
-import '../../../../config/app_colors.dart';
-import '../../../../config/app_sizedbox.dart';
-import '../../../../controllers/app_theme_switch_controller.dart';
-import '../../../../widgets/custom_snackbar.dart';
-import '../../../../widgets/custom_text.dart';
+import '../../../config/app_colors.dart';
+import '../../../config/app_sizedbox.dart';
+import '../../../controllers/app_theme_switch_controller.dart';
+import '../../../widgets/custom_snackbar.dart';
+import '../../../widgets/custom_text.dart';
 import 'all_goals_screen.dart';
 
 class DailyGoalScreen extends StatefulWidget {

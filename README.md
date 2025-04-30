@@ -2,12 +2,11 @@
 
 Your all-in-one Islamic companion app featuring the Holy Quran, Hadith, prayer times, and more.
 
-## Getting Started
 
 ## Noor e Quran App Description 
 
-** (Noor e Quran) - Your Comprehensive Islamic Companion**
-Illuminate your spiritual journey with نورِ قرآن (Noor e Quran), the all-in-one Islamic app designed to enrich your understanding and practice of Islam. Seamlessly navigate through the Holy Quran, explore Hadith collections, stay punctual with prayer times, and much more. Embrace the light of guidance in your daily life with a user-friendly interface and a wealth of authentic Islamic knowledge.
+** Your Comprehensive Islamic Companion**
+Illuminate your spiritual journey with نورِ قرآن (Noor e Quran) the all-in-one Islamic app designed to enrich your understanding and practice of Islam. Seamlessly navigate through the Holy Quran, explore Hadith collections, stay punctual with prayer times, and much more. Embrace the light of guidance in your daily life with a user-friendly interface and a wealth of authentic Islamic knowledge.
 
 **Key Features:**
 
@@ -38,11 +37,3 @@ Illuminate your spiritual journey with نورِ قرآن (Noor e Quran), the all
 * **Dhikr:** Access a collection of beneficial supplications and phrases for the remembrance of Allah.
 
 
-**Importance of Key Islamic Elements:**
-
-* **Quran:** The literal word of God revealed to Prophet Muhammad (peace be upon him), serving as the ultimate guide for Muslims in all aspects of life. It provides guidance, wisdom, and a complete way of life. Reciting, understanding, and implementing the Quran's teachings are fundamental to a Muslim's faith.
-* **Hadith:** The sayings, actions, and approvals of Prophet Muhammad (peace be upon him). Hadith clarifies and elaborates on the Quranic teachings, providing practical examples for Muslims to follow. They are a crucial source of Islamic law and guidance.
-* **Prayer (Salah):** The second pillar of Islam, a direct communication with Allah performed five times daily. It is an act of worship that strengthens faith, purifies the heart, and seeks Allah's blessings and guidance. Prayer is considered the most virtuous deed after the declaration of faith.
-* **Fasting (Sawm):** The fourth pillar of Islam, involving abstaining from food, drink, and other physical needs from dawn till sunset during the month of Ramadan. It cultivates self-discipline, empathy for the needy, spiritual reflection, and draws one closer to Allah.
-* **Hajj:** The fifth pillar of Islam, a pilgrimage to Mecca that every physically and financially able Muslim must perform at least once in their lifetime. It is a profound act of worship that signifies devotion, unity among Muslims, and the cleansing of sins.
-* **Umrah:** A non-obligatory pilgrimage to Mecca that can be performed at any time of the year. While not mandatory, it holds great spiritual significance and offers immense rewards, especially when performed during the month of Ramadan, where its reward is likened to that of Hajj.

@@ -173,7 +173,7 @@ class AzkarCounterController extends GetxController {
   final zikarFontSize = 18.0.obs;
   final backgroundImageOpacity = 0.0.obs;
   final GetStorage box = GetStorage();
-  final String title, azkarName; // Added title and azkarName properties
+  final String title, azkarName;
 
 
   AzkarCounterController(this.zikar, this.targetCount, this.title, this.azkarName); // Added azkarName to constructor

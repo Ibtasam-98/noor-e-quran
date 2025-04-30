@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:noor_e_quran/app/config/contants.dart';
-import 'package:noor_e_quran/app/modules/onboarding/views/user_permission_screen.dart';
+import 'package:noor_e_quran/app/config/app_contants.dart';
+import 'package:noor_e_quran/app/modules/boarding/views/user_permission_screen.dart';
 import 'package:noor_e_quran/app/widgets/custom_button.dart';
 import '../../../config/app_colors.dart';
 import '../../../config/app_sizedbox.dart';
@@ -120,6 +120,7 @@ class OnBoardingScreen extends StatelessWidget {
                       maxLines: 5,
                     ),
                     AppSizedBox.space25h,
+
                     Obx(() {
                       return AnimatedOpacity(
                         opacity: onBoardingController.showGuestButton.value ? 1.0 : 0.0,

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -79,7 +80,7 @@ class CustomDrawer extends StatelessWidget {
                       splashColor: AppColors.transparent,
                       hoverColor: AppColors.transparent,
                       onTap: () {
-                        Get.to(SavedHadithScreen());
+                         Get.to(SavedHadithScreen());
                       },
                       leading: Icon(LineIcons.bookmark, size: 17.h, color: iconColor),
                       title: CustomText(
@@ -97,7 +98,7 @@ class CustomDrawer extends StatelessWidget {
                       splashColor: AppColors.transparent,
                       hoverColor: AppColors.transparent,
                       onTap: () {
-                        Get.to(QuranSavedAyatBookmarkScreen());
+                         Get.to(QuranSavedAyatBookmarkScreen());
                       },
                       leading: Icon(LineIcons.bookmark, size: 17.h, color: iconColor),
                       title: CustomText(
@@ -115,7 +116,7 @@ class CustomDrawer extends StatelessWidget {
                       splashColor: AppColors.transparent,
                       hoverColor: AppColors.transparent,
                       onTap: () {
-                        Get.to(AppSettingsScreen());
+                         Get.to(AppSettingsScreen());
                       },
                       leading: Icon(LineIcons.cog, size: 18.h, color: iconColor),
                       title: CustomText(
@@ -133,7 +134,7 @@ class CustomDrawer extends StatelessWidget {
                       splashColor: AppColors.transparent,
                       hoverColor: AppColors.transparent,
                       onTap: () {
-                        Get.to(AboutUsScreen());
+                         Get.to(AboutUsScreen());
                       },
                       leading: Icon(LineIcons.infoCircle, size: 18.h, color: iconColor),
                       title: CustomText(

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -6,10 +7,11 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:vibration/vibration.dart';
 
-import '../../../../config/app_colors.dart';
-import '../../../../controllers/app_theme_switch_controller.dart';
-import '../../../../widgets/custom_snackbar.dart';
-import '../../../../widgets/custom_text.dart';
+import '../../../config/app_colors.dart';
+import '../../../controllers/app_theme_switch_controller.dart';
+import '../../../widgets/custom_snackbar.dart';
+import '../../../widgets/custom_text.dart';
+
 
 class AzkarCounterScreen extends StatelessWidget {
   final String? azkarType, azkarName;
@@ -220,4 +222,3 @@ class AzkarCounterController extends GetxController {
     saveState(); // Save the reset state
   }
 }
-

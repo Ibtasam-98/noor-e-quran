@@ -62,5 +62,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSCalendarsUsageDescription</key>
+    <string>This app would like to add prayer time reminders to your calendar so you can be notified when it's time for Salat.</string>
 </dict>
 </plist>

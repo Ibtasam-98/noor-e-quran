@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,24 +8,25 @@ import 'package:intl/intl.dart';
 import 'package:noor_e_quran/app/config/app_colors.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import 'package:noor_e_quran/app/controllers/app_theme_switch_controller.dart';
+import 'package:noor_e_quran/app/modules/home/views/app_home_base_screen.dart';
 import 'package:noor_e_quran/app/modules/home/views/qibla_screen.dart';
-import 'package:noor_e_quran/app/modules/home/views/view_all_namaz_screen.dart';
+import 'package:noor_e_quran/app/modules/home/views/view_all_prayer_screen.dart';
 import 'package:noor_e_quran/app/widgets/custom_card.dart';
 import 'package:noor_e_quran/app/widgets/custom_text.dart';
 import 'package:quran/quran.dart' as quran;
 import '../../../widgets/custom_frame.dart';
-import '../../../widgets/custom_marquee.dart';
 import '../../prayer/views/prayer_main_screen.dart';
+import '../../quran/views/last_access_surah_list_screen.dart';
 import '../../quran/views/quran_menu_screen.dart';
 import '../../quran/views/quran_surah_detail_screen.dart';
 import '../../quran/views/quran_verse_of_the_hour_screen.dart';
 import '../../tasbeeh/views/tasbeeh_counter_screen.dart';
 import '../controllers/app_home_screen_controller.dart';
 import 'app_home_screen_header.dart';
-import 'base_home_screen.dart';
-import 'islamic_calender_screen.dart';
 import 'package:noor_e_quran/app/controllers/flying_bird_animation_controller.dart';
 import 'package:noor_e_quran/app/controllers/user_location_premission_controller.dart';
+
+import 'islamic_calender_screen.dart';
 
 
 class AppHomeScreen extends StatelessWidget {
@@ -39,7 +41,7 @@ class AppHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return BaseHomeScreen(
+    return AppHomeBaseScreen(
       titleFirstPart: "Noor e",
       titleSecondPart: " Quran",
       birdController: _homeBirdController,
@@ -47,8 +49,6 @@ class AppHomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           HomeScreenHeader(birdController: _homeBirdController),
-          AppSizedBox.space5h,
-          CustomMarquee(),
           if (homeScreenController.lastAccessedSurahs.isNotEmpty) ...[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -67,7 +67,7 @@ class AppHomeScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: InkWell(
-                    onTap: () => Get.to(() => ViewAllNamazScreen()),
+                    onTap: () => Get.to(() => LastAccessSurahListScreen()),
                     child: CustomText(
                       title: "View All",
                       textColor: AppColors.primary,
@@ -175,123 +175,125 @@ class AppHomeScreen extends StatelessWidget {
               },
             ),
           ],
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           Obx(() => CustomText(
-            title: "Verse Of The Hour",
+            title: "Verse of the hour",
             textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-            fontSize: 18.sp,
+            fontSize: 16.sp,
             fontFamily: 'grenda',
+            maxLines: 1,
             textAlign: TextAlign.start,
             textOverflow: TextOverflow.ellipsis,
           )),
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           Stack(
             children: [
               InkWell(
-                splashColor: AppColors.transparent,
-                highlightColor: AppColors.transparent,
-                onTap: () {
-                  Get.to(VerseOfHourScreen(
-                    surahNumber: homeScreenController.randomVerse.value.surahNumber,
-                    verseNumber: homeScreenController.randomVerse.value.verseNumber,
-                    arabicText: homeScreenController.randomVerse.value.verse,
-                    translation: homeScreenController.randomVerse.value.translation,
-                    title: quran.getSurahName(homeScreenController.randomVerse.value.surahNumber),
-                    surahArabicTitle: quran.getSurahNameArabic(homeScreenController.randomVerse.value.surahNumber),
-                  ));
-                },
-                child: Obx(()=>Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                          themeController.isDarkMode.value
-                              ? "assets/images/quran_bg_dark.jpg"
-                              : "assets/images/quran_bg_light.jpg"),
-                      fit: BoxFit.cover,
+                  splashColor: AppColors.transparent,
+                  highlightColor: AppColors.transparent,
+                  onTap: () {
+                    Get.to(VerseOfHourScreen(
+                      surahNumber: homeScreenController.randomVerse.value.surahNumber,
+                      verseNumber: homeScreenController.randomVerse.value.verseNumber,
+                      arabicText: homeScreenController.randomVerse.value.verse,
+                      translation: homeScreenController.randomVerse.value.translation,
+                      title: quran.getSurahName(homeScreenController.randomVerse.value.surahNumber),
+                      surahArabicTitle: quran.getSurahNameArabic(homeScreenController.randomVerse.value.surahNumber),
+                    ));
+                  },
+                  child: Obx(()=>Container(
+
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                            themeController.isDarkMode.value
+                                ? "assets/images/quran_bg_dark.jpg"
+                                : "assets/images/quran_bg_light.jpg"),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(15.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: themeController.isDarkMode.value ? AppColors.primary.withOpacity(0.3) : AppColors.transparent,
+                          blurRadius: 5,
+                        ),
+                      ],
                     ),
-                    borderRadius: BorderRadius.circular(15.r),
-                    boxShadow: [
-                      BoxShadow(
-                        color: themeController.isDarkMode.value ? AppColors.primary.withOpacity(0.3) : AppColors.transparent,
-                        blurRadius: 5,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              AppColors.black.withOpacity(0.5),
-                              AppColors.transparent,
-                              AppColors.black.withOpacity(0.5),
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                AppColors.black.withOpacity(0.5),
+                                AppColors.transparent,
+                                AppColors.black.withOpacity(0.5),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                            borderRadius: BorderRadius.circular(15.r),
                           ),
-                          borderRadius: BorderRadius.circular(15.r),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h).copyWith(right: 20.w),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Obx(() =>
-                                  CustomText(
-                                    title: homeScreenController.randomVerse.value.verse,
-                                    textAlign: TextAlign.end,
-                                    textColor: AppColors.white,
-                                    fontSize: 20.sp,
-                                    maxLines: 1,
-                                  )),
-                              AppSizedBox.space5h,
-                              Obx(() =>
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: CustomText(
-                                      title: homeScreenController.randomVerse.value.translation,
-                                      fontSize: 14.sp,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h).copyWith(right: 20.w),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Obx(() =>
+                                    CustomText(
+                                      title: homeScreenController.randomVerse.value.verse,
+                                      textAlign: TextAlign.end,
                                       textColor: AppColors.white,
-                                      maxLines: 2,
-                                      fontWeight: FontWeight.w500,
-                                      textAlign: TextAlign.start,
+                                      fontSize: 20.sp,
+                                      maxLines: 1,
+                                    )),
+                                AppSizedBox.space5h,
+                                Obx(() =>
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: CustomText(
+                                        title: homeScreenController.randomVerse.value.translation,
+                                        fontSize: 14.sp,
+                                        textColor: AppColors.white,
+                                        maxLines: 2,
+                                        fontWeight: FontWeight.w500,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    )),
+                                AppSizedBox.space5h,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Obx(() =>
+                                          CustomText(
+                                            title: 'Surah ${quran.getSurahName(homeScreenController
+                                                .randomVerse.value.surahNumber)} | Surah No. ${homeScreenController
+                                                .randomVerse.value
+                                                .surahNumber} | Verse No.${homeScreenController
+                                                .randomVerse.value
+                                                .verseNumber}',
+                                            fontSize: 13.sp,
+                                            textColor: AppColors.white,
+                                            maxLines: 2,
+                                            textAlign: TextAlign.start,
+                                            fontWeight: FontWeight.bold,
+                                            textStyle: const TextStyle(fontStyle: FontStyle.italic),
+                                          )),
                                     ),
-                                  )),
-                              AppSizedBox.space5h,
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Obx(() =>
-                                        CustomText(
-                                          title: 'Surah ${quran.getSurahName(homeScreenController
-                                              .randomVerse.value.surahNumber)} | Surah No. ${homeScreenController
-                                              .randomVerse.value
-                                              .surahNumber} | Verse No.${homeScreenController
-                                              .randomVerse.value
-                                              .verseNumber}',
-                                          fontSize: 13.sp,
-                                          textColor: AppColors.white,
-                                          maxLines: 2,
-                                          textAlign: TextAlign.start,
-                                          fontWeight: FontWeight.bold,
-                                          textStyle: const TextStyle(fontStyle: FontStyle.italic),
-                                        )),
-                                  ),
-                                  Icon(Icons.remove_red_eye, color: AppColors.white, size: 15.h),
-                                ],
-                              ),
-                            ],
+                                    Icon(Icons.remove_red_eye, color: AppColors.white, size: 15.h),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),)
+                      ],
+                    ),
+                  ),)
               ),
             ],
           ),
@@ -300,18 +302,20 @@ class AppHomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Obx(()=>CustomText(
-                  title: "Upcoming Prayers",
-                  textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-                  fontSize: 18.sp,
-                  fontFamily: 'grenda',
-                  textAlign: TextAlign.start,
-                  textOverflow: TextOverflow.ellipsis,
-                ),)
+                  child: Obx(()=>CustomText(
+                    title: "Upcoming Prayers",
+                    textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
+                    fontSize: 16.sp,
+                    fontFamily: 'grenda',
+                    textAlign: TextAlign.start,
+                    textOverflow: TextOverflow.ellipsis,
+                  ),)
               ),
               Expanded(
                 child: InkWell(
-                  onTap: () => Get.to(ViewAllNamazScreen()),
+                  onTap: (){
+                   Get.to(ViewAllPrayerScreen());
+                  },
                   child: CustomText(
                     title: "View All",
                     textColor:  AppColors.primary,
@@ -504,12 +508,12 @@ class AppHomeScreen extends StatelessWidget {
           Obx(()=>CustomText(
             title: "Find your Qibla ",
             textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-            fontSize: 18.sp,
+            fontSize: 16.sp,
             fontFamily: 'grenda',
             maxLines: 1,
             textOverflow: TextOverflow.ellipsis,
           ),),
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           InkWell(
             onTap: () {
               Get.to(QiblaScreen(city: locationPermissionScreenController.cityName.toString() + ", " + locationPermissionScreenController.countryName.toString()));
@@ -517,7 +521,7 @@ class AppHomeScreen extends StatelessWidget {
             child: CustomCard(
               title: "Pray Towards Makkah",
               subtitle: "Find the Qibla Wherever You Are ",
-              imageUrl: 'assets/images/masjid_nabvi.jpg',
+              imageUrl: themeController.isDarkMode.value ? 'assets/images/sajdah_bg_dark.jpg' : 'assets/images/sajdah_bg_light.jpg',
               titleFontSize: 20.sp,
               subtitleFontSize: 14.sp,
               mergeWithGradientImage: true,
@@ -525,16 +529,16 @@ class AppHomeScreen extends StatelessWidget {
               addBoxShadow: true,
             ),
           ),
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           Obx(()=>CustomText(
             title: "Strengthen Your Iman Daily",
             textColor:  themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-            fontSize: 18.sp,
+            fontSize: 16.sp,
             fontFamily: 'grenda',
             maxLines: 1,
             textOverflow: TextOverflow.ellipsis,
           ),),
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           Column(
             children: [
               SingleChildScrollView(
@@ -618,7 +622,6 @@ class AppHomeScreen extends StatelessWidget {
               )
             ],
           )
-
         ],
       ),
     );
@@ -628,6 +631,6 @@ class AppHomeScreen extends StatelessWidget {
     {"title": "Tasbeeh", "subtitle": "Counter", "destination": () => TasbeehCounterScreen()},
     {"title": "Salah", "subtitle": "Practices", "destination": () => PrayerMainScreen()},
     {"title": "Islamic", "subtitle": "Calender", "destination": () => IslamicCalendarScreen()},
-  ];
 
+  ];
 }

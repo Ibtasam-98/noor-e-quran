@@ -5,7 +5,7 @@ import 'package:noor_e_quran/app/config/app_colors.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
-import '../../../data/models/name_of_Allah.dart';
+import '../../../data/models/name_of_Allah_model.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_frame.dart';
 import '../../../widgets/custom_text.dart';

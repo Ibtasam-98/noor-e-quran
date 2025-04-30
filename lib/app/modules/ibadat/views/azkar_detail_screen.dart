@@ -1,11 +1,12 @@
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
-import '../../../../config/app_colors.dart';
-import '../../../../controllers/app_theme_switch_controller.dart';
-import '../../../../widgets/custom_card.dart';
-import '../../../../widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../config/app_colors.dart';
+import '../../../controllers/app_theme_switch_controller.dart';
+import '../../../widgets/custom_card.dart';
+import '../../../widgets/custom_text.dart';
 import 'azkar_counter_screen.dart';
 
 class AzkarDetailsScreen extends StatelessWidget {
@@ -38,7 +39,7 @@ class AzkarDetailsScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-          padding: EdgeInsets.only(left: 10.w,right: 10.w),
+        padding: EdgeInsets.only(left: 10.w,right: 10.w),
         child: Column(
           children: [
             CustomCard(

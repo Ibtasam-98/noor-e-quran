@@ -7,8 +7,9 @@ import 'package:get_storage/get_storage.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:noor_e_quran/app/config/app_colors.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
-import 'package:noor_e_quran/app/config/contants.dart';
+import 'package:noor_e_quran/app/config/app_contants.dart';
 import 'package:noor_e_quran/app/controllers/app_theme_switch_controller.dart';
+import 'package:noor_e_quran/app/widgets/custom_appbar.dart';
 import 'package:noor_e_quran/app/widgets/custom_button.dart';
 import 'package:noor_e_quran/app/widgets/custom_text.dart';
 import '../../../controllers/connectivity_controller.dart';
@@ -27,29 +28,26 @@ class UserPermissionScreen extends StatelessWidget {
       bool isDarkMode = themeSwitchController.isDarkMode.value;
       return Scaffold(
         backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
-        appBar: AppBar(
-          backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
-          centerTitle: false,
-          title: CustomText(
-            firstText: "Noor e",
-            secondText: " Quran",
-            fontSize: 18.sp,
-            firstTextColor: isDarkMode ? AppColors.white : AppColors.black,
-            secondTextColor: AppColors.primary,
-          ),
-          leading: IconButton(
-            icon: Icon(LineIcons.arrowLeft, color: isDarkMode ? AppColors.white : AppColors.black),
-            onPressed: () => Get.back(),
-          ),
+        appBar: CustomAppBar(
+          firstText: AppConstants.appPrimaryTitle,
+          secondText: AppConstants.appSecondryTitle,
+          firstTextColor: isDarkMode ? AppColors.white: AppColors.black,
+          secondTextColor: AppColors.primary,
+          addSpace: true,
         ),
+
         body: Column(
           children: [
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
-              child: LinearProgressIndicator(
-                value: (userPermissionController.currentPage.value + 1) / 4,
-                backgroundColor: AppColors.grey,
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+              child: SizedBox(
+                height: 4.h,
+                child: LinearProgressIndicator(
+                  value: (userPermissionController.currentPage.value + 1) / 4,
+                  backgroundColor: AppColors.grey.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(5),
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                ),
               ),
             ),
             Expanded(
@@ -81,11 +79,13 @@ class UserPermissionScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomText(
-            title: "Checking Internet Connection",
+            title: "Checking Internet Connection ",
             fontSize: 20.sp,
             fontFamily: 'grenda',
             textAlign: TextAlign.start,
             textColor: AppColors.primary,
+            maxLines: 2,
+            textOverflow: TextOverflow.ellipsis,
           ),
           CustomText(
             fontSize: 15.sp,
@@ -93,17 +93,19 @@ class UserPermissionScreen extends StatelessWidget {
             textAlign: TextAlign.start,
             textColor: isDarkMode ? AppColors.white : AppColors.black,
             maxLines: 2,
+            textOverflow: TextOverflow.ellipsis,
           ),
           AppSizedBox.space10h,
           Obx(() {
             return CustomText(
               fontSize: 15.sp,
               title: connectivitiyController.internetCheckCompleted.value
-                  ? "Internet connection checked successfully."
-                  : "Please click the Check button below to complete the internet checking process.",
+                  ? "Internet connection successfully."
+                  : "Please click the Check button below complete the checking process.",
               textAlign: TextAlign.start,
               textColor: isDarkMode ? AppColors.white : AppColors.black,
               maxLines: 2,
+              textOverflow: TextOverflow.ellipsis,
             );
           }),
           const Spacer(),
@@ -141,8 +143,7 @@ class UserPermissionScreen extends StatelessWidget {
                         CustomSnackbar.show(
                             backgroundColor: AppColors.red,
                             title: "No Internet Connection",
-                            subtitle:
-                            "Please connect to Wi-Fi or cellular data.",
+                            subtitle: "Please connect to Wi-Fi or cellular data.",
                             icon: Icon(LineIcons.wifi));
                       }
                     },
@@ -191,17 +192,20 @@ class UserPermissionScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomText(
-            title: "Allow location access",
+            title: "Allow Location access",
             fontSize: 20.sp,
             fontFamily: 'grenda',
             textAlign: TextAlign.start,
             textColor: AppColors.primary,
+            maxLines: 2,
+            textOverflow: TextOverflow.ellipsis,
           ),
           CustomText(
             fontSize: 15.sp,
-            title:
-            "Enabling location access allows us to automatically calculate accurate prayer times based on your current location, ensuring you never miss a prayer.",
+            title: "Enabling access allows us to automatically calculate accurate prayer times based on your current location, ensuring you never miss a prayer.",
             textAlign: TextAlign.start,
+            maxLines: 3,
+            textOverflow: TextOverflow.ellipsis,
             textColor: isDarkMode ? AppColors.white : AppColors.black,
           ),
           AppSizedBox.space15h,
@@ -276,17 +280,21 @@ class UserPermissionScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomText(
-                title: "Choose Preferred Theme",
+                title: "Choose Theme",
                 fontSize: 20.sp,
                 fontFamily: 'grenda',
                 textAlign: TextAlign.start,
                 textColor: AppColors.primary,
+                maxLines: 2,
+                textOverflow: TextOverflow.ellipsis,
               ),
               CustomText(
                 title: "Choose your preferred theme from the options presented below. Select either Light Mode for a bright and vibrant interface, or Dark Mode for a sleek and comfortable experience, especially in low-light environments.",
                 textAlign: TextAlign.start,
                 textColor: isDarkMode ? AppColors.white : AppColors.black,
                 fontSize: 15.sp,
+                maxLines: 2,
+                textOverflow: TextOverflow.ellipsis,
               ),
               AppSizedBox.space20h,
               Row(
@@ -401,10 +409,12 @@ class UserPermissionScreen extends StatelessWidget {
               children: [
                 CustomText(
                   fontSize: 20.sp,
-                  title: "Discover the Beauty of the Quran",
+                  title: AppConstants.onboardingTitle,
                   fontFamily: 'grenda',
                   textColor: AppColors.primary,
                   textAlign: TextAlign.start,
+                  maxLines: 2,
+                  textOverflow: TextOverflow.ellipsis,
                 ),
                 AppSizedBox.space10h,
                 Align(
@@ -413,7 +423,9 @@ class UserPermissionScreen extends StatelessWidget {
                     fontSize: 30.sp,
                     textAlign: TextAlign.end,
                     textColor: isDarkMode ? AppColors.white : AppColors.primary,
-                    title: AppConstants.bismillah
+                    title: AppConstants.bismillah ,
+                    maxLines: 2,
+                    textOverflow: TextOverflow.ellipsis,
                   ),
                 ),
                 AppSizedBox.space15h,
@@ -422,6 +434,8 @@ class UserPermissionScreen extends StatelessWidget {
                   textAlign: TextAlign.start,
                   textColor: isDarkMode ? AppColors.white : AppColors.black,
                   fontSize: 15.sp,
+                  maxLines: 4,
+                  textOverflow: TextOverflow.ellipsis,
                 ),
                 AppSizedBox.space15h,
                 Container(
@@ -433,8 +447,9 @@ class UserPermissionScreen extends StatelessWidget {
                   child: CustomText(
                     title: AppConstants.appWelcomeQuranicVerseArabic,
                     fontSize: 15.sp,
-                    fontFamily: 'quicksand',
                     textAlign: TextAlign.end,
+                    maxLines: 3,
+                    textOverflow: TextOverflow.ellipsis,
                     textColor: isDarkMode ? AppColors.white : AppColors.black,
                   ),
                 ),
@@ -442,9 +457,10 @@ class UserPermissionScreen extends StatelessWidget {
                 CustomText(
                   title: AppConstants.appWelcomeQuranicVerseTranslation,
                   fontSize: 14.sp,
-                  fontFamily: 'quicksand',
                   textAlign: TextAlign.start,
                   textColor: isDarkMode ? AppColors.white : AppColors.black,
+                  maxLines: 4,
+                  textOverflow: TextOverflow.ellipsis,
                 ),
                 AppSizedBox.space10h,
                 Align(
@@ -452,10 +468,11 @@ class UserPermissionScreen extends StatelessWidget {
                   child: CustomText(
                     title:  AppConstants.appWelcomeQuranicVerseReference,
                     fontSize: 12.sp,
-                    fontFamily: 'quicksand',
                     textAlign: TextAlign.start,
                     textColor: isDarkMode ? AppColors.white.withOpacity(0.3) : AppColors.black,
                     textStyle: TextStyle(fontStyle: FontStyle.italic),
+                    maxLines: 2,
+                    textOverflow: TextOverflow.ellipsis,
                   ),
                 ),
                 AppSizedBox.space15h,
@@ -468,7 +485,7 @@ class UserPermissionScreen extends StatelessWidget {
               padding: EdgeInsets.only(bottom: 30.h),
               child: CustomButton(
                 haveBgColor: true,
-                btnTitle: "Explore Noor e Quran",
+                btnTitle: AppConstants.exploreAppHeading,
                 btnTitleColor: Colors.white,
                 bgColor: AppColors.primary,
                 borderRadius: 45.r,

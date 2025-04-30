@@ -1,10 +1,12 @@
 
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import '../../../data/models/name_of_Allah.dart';
+
+import '../../../data/models/name_of_Allah_model.dart';
 
 class IbadatCategoryController extends GetxController {
   late List<NameOfAllah> namesOfAllah;

@@ -1,3 +1,4 @@
+
 import 'dart:async';
 import 'dart:math' show pi, sin, cos, atan2;
 import 'package:flutter/material.dart';
@@ -245,7 +246,7 @@ class _QiblaScreenState extends State<QiblaScreen> {
                             image: DecorationImage(
                               image: AssetImage(isDarkMode
                                   ? 'assets/images/sajdah_bg_dark.jpg'
-                                  : 'assets/images/sajdah_dark_light.jpg'),
+                                  : 'assets/images/sajdah_bg_light.jpg'),
                               fit: BoxFit.cover,
                             ),
                           ),

@@ -3,13 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:noor_e_quran/app/modules/home/views/home_screen_bottom_navigation.dart';
 import 'app/controllers/connectivity_controller.dart';
 import 'app/controllers/app_theme_switch_controller.dart';
 import 'app/controllers/user_location_premission_controller.dart';
+import 'app/modules/boarding/controllers/onboarding_controller.dart';
+import 'app/modules/boarding/views/onboarding_screen.dart';
 import 'app/modules/home/controllers/app_home_screen_controller.dart';
-import 'app/modules/onboarding/controllers/onboarding_controller.dart';
-import 'app/modules/onboarding/views/onboarding_screen.dart';
+import 'app/modules/home/views/home_screen_bottom_navigation.dart';
 
 
 void main() async {

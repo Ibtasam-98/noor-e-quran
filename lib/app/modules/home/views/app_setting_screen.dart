@@ -1,16 +1,12 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:noor_e_quran/app/config/app_colors.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import 'package:noor_e_quran/app/controllers/user_location_premission_controller.dart';
-import 'package:noor_e_quran/app/modules/home/views/privacy_policy_screen.dart';
-import 'package:noor_e_quran/app/modules/home/views/user_feedback_screen.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
 import '../../../widgets/custom_text.dart';
-import 'delete_data_screen.dart';
-import 'export_data_screen.dart';
-import 'frequently_ask_question_screen.dart';
 
 class MiscItem {
   final String title;
@@ -29,31 +25,36 @@ class AppSettingsScreen extends StatelessWidget {
 
   static final List<MiscItem> _miscItems = [
 
-     MiscItem(
+    MiscItem(
       title: "Export Prayer Time",
       icon: Icons.picture_as_pdf_outlined,
-      destinationScreen: ExportPrayerTime(),
+    //  destinationScreen: ExportPrayerTime(),
+      destinationScreen: Placeholder(),
 
     ),
-     MiscItem(
+    MiscItem(
       title: "FAQ",
       icon: Icons.quiz_outlined,
-      destinationScreen: FAQScreen(),
+      // destinationScreen: FAQScreen(),
+      destinationScreen: Placeholder(),
     ),
-     MiscItem(
+    MiscItem(
       title: "Feedback",
       icon: Icons.feedback_outlined,
-      destinationScreen: UserFeedbackScreen(),
+      // destinationScreen: UserFeedbackScreen(),
+      destinationScreen: Placeholder(),
     ),
-     MiscItem(
+    MiscItem(
       title: "Privacy Policy",
       icon: Icons.privacy_tip_outlined,
-      destinationScreen: PrivacyPolicyScreen(),
+      // destinationScreen: PrivacyPolicyScreen(),
+      destinationScreen: Placeholder(),
     ),
     MiscItem(
       title: "Delete Data",
       icon: Icons.delete_outline,
-      destinationScreen: DeleteDataScreen(),
+      // destinationScreen: DeleteDataScreen(),
+      destinationScreen: Placeholder(),
     ),
   ];
 
@@ -84,17 +85,7 @@ class AppSettingsScreen extends StatelessWidget {
               fontSize: 18.sp,
             ),
             centerTitle: false,
-            leading: InkWell(
-              splashColor: AppColors.transparent,
-              highlightColor: AppColors.transparent,
-              onTap: () {
-                Get.back();
-              },
-              child: Icon(
-                Icons.west,
-                color: isDarkMode ? AppColors.white : AppColors.black,
-              ),
-            ),
+
           ),
         ),
         body: SingleChildScrollView(

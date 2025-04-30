@@ -1,47 +1,42 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hadith/classes.dart';
-import 'package:intl/intl.dart';
-import 'package:noor_e_quran/app/config/app_sizedbox.dart';
-import 'package:noor_e_quran/app/controllers/flying_bird_animation_controller.dart';
 import 'package:hadith/hadith.dart';
-import '../../../config/app_colors.dart';
-import '../../../controllers/app_theme_switch_controller.dart';
-import '../../../controllers/user_location_premission_controller.dart';
+import 'package:intl/intl.dart';
+import 'package:noor_e_quran/app/config/app_colors.dart';
+import 'package:noor_e_quran/app/config/app_sizedbox.dart';
+import 'package:noor_e_quran/app/controllers/app_theme_switch_controller.dart';
+import 'package:noor_e_quran/app/modules/home/views/app_home_base_screen.dart';
+import 'package:noor_e_quran/app/widgets/custom_card.dart';
+import 'package:noor_e_quran/app/widgets/custom_text.dart';
+import 'package:quran/quran.dart' as quran;
 import '../../../widgets/custom_formated_text.dart';
 import '../../../widgets/custom_frame.dart';
-import '../../../widgets/custom_marquee.dart';
-import '../../../widgets/custom_text.dart';
+import 'package:noor_e_quran/app/controllers/flying_bird_animation_controller.dart';
+import 'package:noor_e_quran/app/controllers/user_location_premission_controller.dart';
+import 'package:flutter_html/flutter_html.dart';
 import '../../home/controllers/app_home_screen_controller.dart';
 import '../../home/views/app_home_screen_header.dart';
-import '../../home/views/base_home_screen.dart';
 import '../controllers/hadith_collection_controller.dart';
 import 'hadith_collection_detail_screen.dart';
 import 'hadith_collection_specific_book_detail_screen.dart';
 import 'hadith_detail_screen.dart';
 import 'last_accessed_hadith_screen.dart';
 
-
-class HadithCollectionScreen extends StatefulWidget {
-
+class HadithCollectionScreen extends StatelessWidget {
   final Map<String, dynamic>? userData;
-
-  HadithCollectionScreen({super.key, this.userData});
-
-  @override
-  State<HadithCollectionScreen> createState() => _HadithCollectionScreenState();
-}
-
-class _HadithCollectionScreenState extends State<HadithCollectionScreen> {
-  final HadithCollectionController controller = Get.put(HadithCollectionController());
-  final FlyingBirdAnimationController _hadithBirdController = Get.put(FlyingBirdAnimationController(), tag: 'hadith_bird');
+  final FlyingBirdAnimationController _hadithBirdController =
+  Get.put(FlyingBirdAnimationController(), tag: 'hadith_bird');
   final UserPermissionController locationPermissionScreenController = Get.find<UserPermissionController>();
   final AppHomeScreenController homeScreenController = Get.find<AppHomeScreenController>();
   final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
+  final HadithCollectionController controller = Get.put(HadithCollectionController());
+
+  HadithCollectionScreen({super.key, this.userData});
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +72,8 @@ class _HadithCollectionScreenState extends State<HadithCollectionScreen> {
     final bool isTablet = screenWidth > 600;
 
 
-    return BaseHomeScreen(
+
+    return AppHomeBaseScreen(
       titleFirstPart: "Noor e",
       titleSecondPart: " Quran",
       birdController: _hadithBirdController,
@@ -85,8 +81,6 @@ class _HadithCollectionScreenState extends State<HadithCollectionScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           HomeScreenHeader(birdController: _hadithBirdController),
-          AppSizedBox.space5h,
-          CustomMarquee(),
           if (hadithNumberKeys.isNotEmpty)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,15 +89,15 @@ class _HadithCollectionScreenState extends State<HadithCollectionScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: Obx(()=>CustomText(
-                        title: "Last Accessed Hadith",
-                        textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-                        fontSize: 18.sp,
-                        fontFamily: 'grenda',
-                        maxLines: 1,
-                        textAlign: TextAlign.start,
-                        textOverflow: TextOverflow.ellipsis,
-                      ),)
+                        child: Obx(()=>CustomText(
+                          title: "Last Accessed Hadith",
+                          textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
+                          fontSize: 18.sp,
+                          fontFamily: 'grenda',
+                          maxLines: 1,
+                          textAlign: TextAlign.start,
+                          textOverflow: TextOverflow.ellipsis,
+                        ),)
                     ),
                     Expanded(
                       child: InkWell(
@@ -235,14 +229,15 @@ class _HadithCollectionScreenState extends State<HadithCollectionScreen> {
               ],
             ),
           AppSizedBox.space15h,
-          Obx(()=>CustomText(
-              title: "Hadith Of The Hour",
-              textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-              fontSize: 18.sp,
-              fontFamily: 'grenda',
-              maxLines: 1,
-              textOverflow: TextOverflow.ellipsis,),
-          ),
+          Obx(() => CustomText(
+            title: "Hadith of the hour",
+            textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
+            fontSize: 16.sp,
+            fontFamily: 'grenda',
+            textAlign: TextAlign.start,
+            maxLines: 1,
+            textOverflow: TextOverflow.ellipsis,
+          )),
           AppSizedBox.space15h,
           Obx(()=> Container(
             width: double.infinity,
@@ -352,7 +347,7 @@ class _HadithCollectionScreenState extends State<HadithCollectionScreen> {
               ],
             ),
           ),),
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           Obx(()=>CustomText(
             title: "Explore by Books",
             textColor: themeController.isDarkMode.value? AppColors.white : AppColors.black,
@@ -362,7 +357,7 @@ class _HadithCollectionScreenState extends State<HadithCollectionScreen> {
             textAlign: TextAlign.start,
             textOverflow: TextOverflow.ellipsis,
           ),),
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -385,8 +380,7 @@ class _HadithCollectionScreenState extends State<HadithCollectionScreen> {
                           book.book.isNotEmpty ? book.book.last.name : 'Unknown';
                           int bookNumber = int.tryParse(book.bookNumber) ?? 0;
 
-                          Get.to(
-                            HadithCollectionSpecificBookDetailScreen(
+                          Get.to(HadithCollectionSpecificBookDetailScreen(
                               collection: collection,
                               bookNumber: bookNumber,
                               bookFirstName: bookFirstName,
@@ -396,73 +390,74 @@ class _HadithCollectionScreenState extends State<HadithCollectionScreen> {
                           );
                         },
                         child: Container(
-                            width: isTablet ? 220.w : 180.w,
-                        padding: EdgeInsets.all(10.w),
-                        margin: EdgeInsets.only(right: 8.w, bottom: 10.h),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.r),
-                          color: (collectionIndex % 2 == 0)
-                              ? (collectionIndex % 4 == 1)
-                              ? AppColors.primary.withOpacity(0.29)
-                              : AppColors.primary.withOpacity(0.1)
-                              : (collectionIndex % 4 == 3)
-                              ? AppColors.primary.withOpacity(0.29)
-                              : AppColors.primary.withOpacity(0.1),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.zero,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Obx(
-                                    () => CustomText(
-                                  title: collection.name,
-                                  textColor: themeController.isDarkMode.value
-                                      ? AppColors.white
-                                      : AppColors.black,
-                                  capitalize: true,
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.w500,
-                                  textOverflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  textAlign: TextAlign.start,
+                          width: isTablet ? 220.w : 180.w,
+                          padding: EdgeInsets.all(10.w),
+                          margin: EdgeInsets.only(right: 8.w, bottom: 10.h),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.r),
+                            // color: (collectionIndex % 2 == 0)
+                            //     ? (collectionIndex % 4 == 1)
+                            //     ? AppColors.primary.withOpacity(0.29)
+                            //     : AppColors.primary.withOpacity(0.1)
+                            //     : (collectionIndex % 4 == 3)
+                            //     ? AppColors.primary.withOpacity(0.29)
+                            //     : AppColors.primary.withOpacity(0.1),
+                              color: (collectionIndex % 2 == 0) ? AppColors.primary.withOpacity(0.29) : AppColors.primary.withOpacity(0.1),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.zero,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Obx(
+                                      () => CustomText(
+                                    title: collection.name,
+                                    textColor: themeController.isDarkMode.value
+                                        ? AppColors.white
+                                        : AppColors.black,
+                                    capitalize: true,
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w500,
+                                    textOverflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    textAlign: TextAlign.start,
+                                  ),
                                 ),
-                              ),
-                              CustomText(
-                                title: book.book.first.name,
-                                textAlign: TextAlign.start,
-                                capitalize: true,
-                                maxLines: 1,
-                                fontSize: 12.sp,
-                                textColor: AppColors.primary,
-                                textOverflow: TextOverflow.ellipsis,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              Obx(
-                                    () => CustomText(
-                                  title: "Total Hadith ${book.numberOfHadith.toString()}",
+                                CustomText(
+                                  title: book.book.first.name,
                                   textAlign: TextAlign.start,
                                   capitalize: true,
                                   maxLines: 1,
                                   fontSize: 12.sp,
-                                  textColor: themeController.isDarkMode.value
-                                      ? AppColors.grey
-                                      : AppColors.black,
+                                  textColor: AppColors.primary,
                                   textOverflow: TextOverflow.ellipsis,
                                   fontWeight: FontWeight.w500,
                                 ),
-                              ),
-                            ],
+                                Obx(
+                                      () => CustomText(
+                                    title: "Total Hadith ${book.numberOfHadith.toString()}",
+                                    textAlign: TextAlign.start,
+                                    capitalize: true,
+                                    maxLines: 1,
+                                    fontSize: 12.sp,
+                                    textColor: themeController.isDarkMode.value
+                                        ? AppColors.grey
+                                        : AppColors.black,
+                                    textOverflow: TextOverflow.ellipsis,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                  );
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
                   } else {
-                  return SizedBox.shrink();
-                  }
-                  } else {
-                  return SizedBox.shrink();
+                    return SizedBox.shrink();
                   }
                 },
               ),
@@ -581,4 +576,5 @@ class _HadithCollectionScreenState extends State<HadithCollectionScreen> {
       ),
     );
   }
+
 }

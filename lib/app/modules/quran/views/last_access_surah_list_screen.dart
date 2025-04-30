@@ -11,10 +11,10 @@ import '../../../config/app_sizedbox.dart';
 import '../../../widgets/custom_card.dart';
 import '../controllers/last_access_surah_list_controller.dart';
 
-class LastAccessListScreen extends StatelessWidget {
+class LastAccessSurahListScreen extends StatelessWidget {
   final LastAccessSurahListController lastAccessSurahListController = Get.put(LastAccessSurahListController());
 
-  LastAccessListScreen({super.key});
+  LastAccessSurahListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -28,7 +29,7 @@ class HomeScreenHeader extends StatelessWidget {
               Obx(() => CustomText(
                 title: "Location",
                 textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-                fontSize: 15.sp,
+                fontSize: 16.sp,
                 fontFamily: 'grenda',
                 maxLines: 1,
                 textOverflow: TextOverflow.ellipsis,
@@ -69,7 +70,7 @@ class HomeScreenHeader extends StatelessWidget {
                       child: Image.asset(
                         'assets/anim/bird.gif',
                         width: 50.w,
-                        height: 50.h,
+                        height: 45.h,
                       ),
                     ),
                   ),

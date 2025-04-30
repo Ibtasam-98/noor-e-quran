@@ -305,7 +305,7 @@ class HadithCollectionSpecificBookDetailScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.r),
                   color: (index % 2 == 1)
-                      ? AppColors.primary.withOpacity(0.39)
+                      ? AppColors.primary.withOpacity(0.29)
                       : AppColors.primary.withOpacity(0.1),
                 ),
                 child: ListTile(

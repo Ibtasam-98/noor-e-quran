@@ -137,6 +137,7 @@ class LastAccessedHadithsScreen extends StatelessWidget {
                                   "body": Style(
                                     fontSize: FontSize(14.0),
                                     maxLines: 2,
+                                    color: isDarkMode ? AppColors.white : AppColors.black,
                                   ),
                                 },
                               ),

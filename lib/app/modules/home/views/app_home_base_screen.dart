@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +15,7 @@ import '../../../controllers/user_location_premission_controller.dart';
 import '../../../widgets/custom_shimmer.dart';
 import '../controllers/app_home_screen_controller.dart';
 
-class BaseHomeScreen extends StatelessWidget {
+class AppHomeBaseScreen extends StatelessWidget {
   final Widget child;
   final String titleFirstPart;
   final String titleSecondPart;
@@ -22,7 +23,7 @@ class BaseHomeScreen extends StatelessWidget {
   final String? marqueeText;
   final Widget? birdAnimationWidget;
 
-  const BaseHomeScreen({
+  const AppHomeBaseScreen({
     Key? key,
     required this.child,
     required this.titleFirstPart,

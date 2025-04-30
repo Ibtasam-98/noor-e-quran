@@ -1,12 +1,11 @@
-# Noor e Quran
+# noor_e_quran
 
 Your all-in-one Islamic companion app featuring the Holy Quran, Hadith, prayer times, and more.
 
+## Noor e Quran App Description
 
-## Noor e Quran App Description 
-
-## Your Comprehensive Islamic Companion
-Illuminate your spiritual journey with نورِ قرآن (Noor e Quran) the all-in-one Islamic app designed to enrich your understanding and practice of Islam. Seamlessly navigate through the Holy Quran, explore Hadith collections, stay punctual with prayer times, and much more. Embrace the light of guidance in your daily life with a user-friendly interface and a wealth of authentic Islamic knowledge.
+**(Noor e Quran) - Your Comprehensive Islamic Companion**
+Illuminate your spiritual journey with نورِ قرآن (Noor e Quran), the all-in-one Islamic app designed to enrich your understanding and practice of Islam. Seamlessly navigate through the Holy Quran, explore Hadith collections, stay punctual with prayer times, and much more. Embrace the light of guidance in your daily life with a user-friendly interface and a wealth of authentic Islamic knowledge.
 
 **Key Features:**
 
@@ -35,5 +34,4 @@ Illuminate your spiritual journey with نورِ قرآن (Noor e Quran) the all-
 * **Checklist for Hajj & Umrah:** Utilize a comprehensive checklist to ensure you are well-prepared for your pilgrimage.
 * **Tasbeeh Counter:** Engage in Dhikr (remembrance of Allah) with a convenient digital Tasbeeh counter.
 * **Dhikr:** Access a collection of beneficial supplications and phrases for the remembrance of Allah.
-
 

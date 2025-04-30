@@ -14,54 +14,71 @@ dependencies:
   cupertino_icons: ^1.0.8
   google_fonts:
 
-  waveform_flutter: ^1.2.0
+  # UI Packages
   get: ^4.6.6
   font_awesome_flutter: ^10.8.0
   flutter_advanced_drawer: ^1.3.7
   flutter_screenutil: ^5.9.3
-  geolocator: ^13.0.2
-  geocoding:
-  location: ^7.0.1
-  shared_preferences: ^2.3.5
-  get_storage: ^2.1.1
   page_transition: ^2.2.1
   day_night_switch:
   glassmorphism_ui:
   google_nav_bar:
   line_icons:
   shimmer:
-  quran:
-  marquee:
-  intl:
   flutter_svg:
   glowy_borders:
-  just_audio:
-  audioplayers:
-  share_plus:
   percent_indicator:
-  islamic_hijri_calendar:
-  hijri:
   animated_read_more_text:
   flutter_pdfview:
   table_calendar:
-  vibration: ^3.1.3
-  hadith:
-  flutter_html:
-  url_launcher:
-  internet_connection_checker:
   simple_animation_progress_bar: ^1.8.2
-  pdf:
-  open_file: ^3.5.10
-  printing:
-  permission_handler:
+
+  # Location Packages
+  geolocator: ^13.0.2
+  geocoding:
+  location: ^7.0.1
   flutter_compass:
   flutter_map:
   latlong2:
+  google_maps_flutter:
+  ripple_wave:
+
+  # Storage Packages
+  shared_preferences: ^2.3.5
+  get_storage: ^2.1.1
+
+  # Audio Packages
+  just_audio:
+  audioplayers:
+
+  # Utility Packages
+  intl:
+  share_plus:
+  vibration: ^3.1.3
+  url_launcher:
+  internet_connection_checker:
+  open_file: ^3.5.10
+  whatsapp_unilink:
+  add_2_calendar: ^3.0.1
+
+  # Data Packages (Quran & Islamic)
+  quran:
+  islamic_hijri_calendar:
+  hijri:
+  hadith:
+
+  # HTML & PDF Packages
+  flutter_html:
+  pdf:
+  printing:
+
+  # Permissions
+  permission_handler:
+
+  # Other
   adhan:
   image_editor_plus:
-  whatsapp_unilink:
-  google_maps_flutter:
-  ripple_wave: ^0.1.5
+  marquee:
 
 
 

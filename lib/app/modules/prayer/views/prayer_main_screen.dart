@@ -9,7 +9,7 @@ import '../../../config/app_colors.dart';
 import '../../../config/app_sizedbox.dart';
 import '../../../config/prayer_enum.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
-import '../../../data/models/prayer_model.dart';
+import '../../../data/models/namaz_category_model.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_frame.dart';
 import '../../../widgets/custom_text.dart';

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -9,7 +10,7 @@ import '../../../controllers/app_theme_switch_controller.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_text.dart';
 import '../controllers/ibadat_category_controller.dart';
-import 'azkar/azkar_counter_screen.dart';
+import 'azkar_counter_screen.dart';
 
 class ViewContinueAzkarListScreen extends StatelessWidget {
   final IbadatCategoryController controller = Get.put(IbadatCategoryController());
@@ -164,11 +165,11 @@ class ViewContinueAzkarListScreen extends StatelessWidget {
             ),
             AppSizedBox.space10h,
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: azkarWidgets,
-                ),
-              )
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: azkarWidgets,
+                  ),
+                )
             ),
             AppSizedBox.space25h,
           ],

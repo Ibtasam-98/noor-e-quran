@@ -5,14 +5,14 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:noor_e_quran/app/modules/home/views/app_home_screen.dart';
+import 'package:noor_e_quran/app/modules/home/views/app_setting_screen.dart';
 import '../../../config/app_colors.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
-
-import '../../additional/views/additional_category_screen.dart';
+import '../../additional/views/additional_feature_screen.dart';
 import '../../hadith/views/hadith_collection_screen.dart';
 import '../../ibadat/views/ibadat_category_screen.dart';
 import '../controllers/app_home_screen_bottom_navigation.dart';
-import 'app_home_screen.dart';
 
 class AppHomeScreenBottomNavigation extends StatelessWidget {
 
@@ -22,7 +22,7 @@ class AppHomeScreenBottomNavigation extends StatelessWidget {
     AppHomeScreen(),
     HadithCollectionScreen(),
     IbadatCategoryScreen(),
-    AdditionalCategoryScreen(),
+    AdditionalFeatureScreen(),
   ];
 
   @override
@@ -58,7 +58,7 @@ class AppHomeScreenBottomNavigation extends StatelessWidget {
                 gap: 15,
                 activeColor: AppColors.white,
                 textStyle: GoogleFonts.quicksand(color: AppColors.white),
-                padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.w),
+                padding: EdgeInsets.symmetric(horizontal:20.h, vertical: 10.w),
                 duration: Duration(milliseconds: 400),
                 tabBorderRadius: 45.r,
                 iconSize: 20.sp,

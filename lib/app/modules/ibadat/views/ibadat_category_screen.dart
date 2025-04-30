@@ -1,52 +1,54 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:noor_e_quran/app/config/app_colors.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import 'package:noor_e_quran/app/controllers/app_theme_switch_controller.dart';
-import 'package:noor_e_quran/app/controllers/flying_bird_animation_controller.dart';
-import 'package:noor_e_quran/app/modules/ibadat/views/view_continue_azkar_list_screen.dart';
+import 'package:noor_e_quran/app/modules/home/views/app_home_base_screen.dart';
+import 'package:noor_e_quran/app/modules/ibadat/views/view_continued_azkar_list_screen.dart';
+import 'package:noor_e_quran/app/widgets/custom_card.dart';
 import 'package:noor_e_quran/app/widgets/custom_text.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:intl/intl.dart';
-
-import '../../../controllers/user_location_premission_controller.dart';
-import '../../../data/models/grid_item_model.dart';
+import 'package:quran/quran.dart' as quran;
+import '../../../data/models/ibadat_category_model.dart';
 import '../../../widgets/custom_frame.dart';
-import '../../../widgets/custom_marquee.dart';
-import '../../common/views/dua_details_screen.dart';
+import 'package:noor_e_quran/app/controllers/flying_bird_animation_controller.dart';
+import 'package:noor_e_quran/app/controllers/user_location_premission_controller.dart';
+
 import '../../home/controllers/app_home_screen_controller.dart';
 import '../../home/views/app_home_screen_header.dart';
-import '../../home/views/base_home_screen.dart';
 import '../controllers/ibadat_category_controller.dart';
-import 'azkar/azkar_counter_screen.dart';
-import 'azkar/azkar_detail_screen.dart';
+import 'azkar_counter_screen.dart';
+import 'azkar_detail_screen.dart';
 
 
 class IbadatCategoryScreen extends StatelessWidget {
-  final IbadatCategoryController controller = Get.put(IbadatCategoryController());
+  final Map<String, dynamic>? userData;
   final FlyingBirdAnimationController _ibadatBirdController = Get.put(FlyingBirdAnimationController(), tag: 'ibadat_bird');
   final UserPermissionController locationPermissionScreenController = Get.find<UserPermissionController>();
   final AppHomeScreenController homeScreenController = Get.find<AppHomeScreenController>();
   final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
+  final IbadatCategoryController ibadatController = Get.put(IbadatCategoryController());
 
-  final box = GetStorage();
+
+  IbadatCategoryScreen({super.key, this.userData});
 
   @override
   Widget build(BuildContext context) {
-    return BaseHomeScreen(
+
+    return AppHomeBaseScreen(
       titleFirstPart: "Noor e",
       titleSecondPart: " Quran",
       birdController: _ibadatBirdController,
-      marqueeText: 'As of ${homeScreenController.getCurrentDate()}, in ${locationPermissionScreenController.cityName}, the Islamic date is ${homeScreenController.getIslamicDate()}',
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           HomeScreenHeader(birdController: _ibadatBirdController),
-          AppSizedBox.space5h,
-          CustomMarquee(),
-          if (_hasContinueAzkar(controller.azkarData)) // Check if there are continue azkar
+          if (_hasContinueAzkar(ibadatController.azkarData)) // Check if there are continue azkar
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -91,21 +93,21 @@ class IbadatCategoryScreen extends StatelessWidget {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: _buildContinueAzkarList(themeController.isDarkMode.value, controller.azkarData),
+                    children: _buildContinueAzkarList(themeController.isDarkMode.value, ibadatController.azkarData),
                   ),
                 ),
               ],
             ),
-
-          AppSizedBox.space10h,
-          Obx(()=>CustomText(
-            title: "Name Of The Hour",
+          AppSizedBox.space15h,
+          Obx(() => CustomText(
+            title: "Name of the hour",
             textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-            fontSize: 18.sp,
+            fontSize: 16.sp,
             fontFamily: 'grenda',
             maxLines: 1,
+            textAlign: TextAlign.start,
             textOverflow: TextOverflow.ellipsis,
-          ),),
+          )),
           AppSizedBox.space15h,
           Obx(()=>Container(
             width: double.infinity,
@@ -127,7 +129,7 @@ class IbadatCategoryScreen extends StatelessWidget {
               ],
             ),
             child: GetBuilder <IbadatCategoryController>(
-              init: controller,
+              init: ibadatController,
               builder: (controller) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
@@ -136,17 +138,7 @@ class IbadatCategoryScreen extends StatelessWidget {
                       splashColor: AppColors.transparent,
                       highlightColor: AppColors.transparent,
                       onTap: () {
-                        Get.to(DuaDetailCommonScreen(
-                          arabicDua: controller.currentName.arabicName,
-                          audioUrl: "",
-                          duaTranslation: controller.currentName.paragraph,
-                          duaUrduTranslation: "",
-                          engFirstTitle: controller.currentName.englishName,
-                          showAudiotWidgets: false,
-                          engSecondTitle: "",
-                          latinTitle: "",
-                          isComingFromAllahNameScreen: true,
-                        ));
+
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -171,27 +163,25 @@ class IbadatCategoryScreen extends StatelessWidget {
                                 alignment: Alignment.centerRight,
                                 child: CustomText(
                                   title: controller.currentName.arabicName,
-                                  fontSize: 30.sp,
+                                  fontSize: 20.sp,
                                   textColor: AppColors.white,
                                   maxLines: 1,
                                   textOverflow: TextOverflow.ellipsis,
                                 ),
                               ),
+                              AppSizedBox.space15h,
                               Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
                                     child: CustomText(
                                       title: controller.currentName.description,
                                       fontSize: 13.sp,
                                       textColor: AppColors.white,
-                                      maxLines: 2,
+                                      maxLines: 1,
                                       textOverflow: TextOverflow.ellipsis,
                                       capitalize: true,
                                       textAlign: TextAlign.start,
-                                      textStyle: const TextStyle(
-                                          fontStyle: FontStyle.italic),
                                     ),
                                   ),
                                   AppSizedBox.space25w,
@@ -209,7 +199,7 @@ class IbadatCategoryScreen extends StatelessWidget {
               },
             ),
           ),),
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           Obx(()=>CustomText(
             title: "Explore Azkar Categories",
             textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
@@ -219,7 +209,7 @@ class IbadatCategoryScreen extends StatelessWidget {
             textAlign: TextAlign.start,
             textOverflow: TextOverflow.ellipsis,
           ),),
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           GetBuilder<IbadatCategoryController>(builder: (controller) {
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -307,7 +297,7 @@ class IbadatCategoryScreen extends StatelessWidget {
               ),
             );
           }),
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           Obx(()=>CustomText(
             title: "Shahadat",
             textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
@@ -317,7 +307,7 @@ class IbadatCategoryScreen extends StatelessWidget {
             textAlign: TextAlign.start,
             textOverflow: TextOverflow.ellipsis,
           ),),
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
@@ -478,124 +468,124 @@ class IbadatCategoryScreen extends StatelessWidget {
               ),
             ],
           ),
+
         ],
       ),
     );
   }
-}
 
-List<Widget> _buildContinueAzkarList(bool isDarkMode, List<Map<String, dynamic>> azkarData) {
-  List<Widget> azkarWidgets = [];
-  final now = DateTime.now();
-  final dateFormat = DateFormat('yyyy-MM-dd HH:mm');
-  int index = 0; // Initialize an index to track even/odd
-  int displayedCount = 0; // Counter for displayed Azkar
-  final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
-  final GetStorage box = GetStorage();
+  List<Widget> _buildContinueAzkarList(bool isDarkMode, List<Map<String, dynamic>> azkarData) {
+    List<Widget> azkarWidgets = [];
+    final now = DateTime.now();
+    final dateFormat = DateFormat('yyyy-MM-dd HH:mm');
+    int index = 0; // Initialize an index to track even/odd
+    int displayedCount = 0; // Counter for displayed Azkar
+    final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
+    final GetStorage box = GetStorage();
 
-  box.getKeys().forEach((key) {
-    if (displayedCount < 3 && key.startsWith('azkar_count_')) {
-      final zikarName = key.substring('azkar_count_'.length);
-      final count = box.read(key) ?? 0;
-      final timeKey = 'azkar_time_$zikarName';
-      final timeString = box.read(timeKey) ?? '';
-      final time = timeString.isNotEmpty ? DateTime.parse(timeString) : null;
-      // Fetch repeat count, ensuring it's an int
-      final repeatCount = _getRepeatCount(zikarName, azkarData);
-      final zikarDataForWidget = _getZikarData(
-          zikarName, azkarData); // Fetch the zikar data.
-      final title = box.read('azkar_title_$zikarName') ?? zikarName;
-      final azkarType = box.read('azkar_heading_$zikarName') ?? "Azkar";
-      final azkarNameFromStorage = box.read('azkar_name_$zikarName') ?? title;
+    box.getKeys().forEach((key) {
+      if (displayedCount < 3 && key.startsWith('azkar_count_')) {
+        final zikarName = key.substring('azkar_count_'.length);
+        final count = box.read(key) ?? 0;
+        final timeKey = 'azkar_time_$zikarName';
+        final timeString = box.read(timeKey) ?? '';
+        final time = timeString.isNotEmpty ? DateTime.parse(timeString) : null;
+        // Fetch repeat count, ensuring it's an int
+        final repeatCount = _getRepeatCount(zikarName, azkarData);
+        final zikarDataForWidget = _getZikarData(
+            zikarName, azkarData); // Fetch the zikar data.
+        final title = box.read('azkar_title_$zikarName') ?? zikarName;
+        final azkarType = box.read('azkar_heading_$zikarName') ?? "Azkar";
+        final azkarNameFromStorage = box.read('azkar_name_$zikarName') ?? title;
 
-      if (count > 0 && count < repeatCount) { // Use repeatCount
-        azkarWidgets.add(
-          Container(
-            width: 280.w,
-            margin: EdgeInsets.only(right: 8.w),
-            padding: EdgeInsets.all(6.h),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.r),
-              color: index % 2 == 0
-                  ? AppColors.primary.withOpacity(0.1)
-                  : AppColors.primary.withOpacity(0.29),
-            ),
-            child: ListTile(
-              contentPadding: EdgeInsets.zero,
-              dense: true,
-              title: Obx(() =>
-                  CustomText(
-                    title: title,
-                    fontSize: 15.sp,
-                    textColor: themeController.isDarkMode.value ? AppColors
-                        .white : AppColors.black,
-                    fontWeight: FontWeight.w500,
-                    textOverflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    textAlign: TextAlign.start,
-                  ),),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: CustomText(
-                      title: zikarName,
-                      fontSize: 13.sp,
-                      textColor: AppColors.primary,
+        if (count > 0 && count < repeatCount) { // Use repeatCount
+          azkarWidgets.add(
+            Container(
+              width: 280.w,
+              margin: EdgeInsets.only(right: 8.w),
+              padding: EdgeInsets.all(6.h),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.r),
+                color: index % 2 == 0
+                    ? AppColors.primary.withOpacity(0.1)
+                    : AppColors.primary.withOpacity(0.29),
+              ),
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                dense: true,
+                title: Obx(() =>
+                    CustomText(
+                      title: title,
+                      fontSize: 15.sp,
+                      textColor: themeController.isDarkMode.value ? AppColors
+                          .white : AppColors.black,
                       fontWeight: FontWeight.w500,
                       textOverflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      textAlign: TextAlign.end,
+                      textAlign: TextAlign.start,
+                    ),),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: CustomText(
+                        title: zikarName,
+                        fontSize: 13.sp,
+                        textColor: AppColors.primary,
+                        fontWeight: FontWeight.w500,
+                        textOverflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        textAlign: TextAlign.end,
+                      ),
                     ),
-                  ),
-                  AppSizedBox.space5h,
-                  Obx(() =>
-                      CustomText(
-                        title: "Last Accessed ${time != null ? dateFormat
-                            .format(time) : 'No time recorded'}",
-                        fontSize: 12.sp,
-                        textAlign: TextAlign.start,
-                        textColor: themeController.isDarkMode.value ? AppColors
-                            .grey : AppColors.black,
-                      ),),
-                  AppSizedBox.space5h,
-                  LinearProgressIndicator(
-                    value: count / repeatCount, // Use repeatCount here
-                    backgroundColor: AppColors.grey.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(20.r),
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      AppColors.primary,
+                    AppSizedBox.space5h,
+                    Obx(() =>
+                        CustomText(
+                          title: "Last Accessed ${time != null ? dateFormat
+                              .format(time) : 'No time recorded'}",
+                          fontSize: 12.sp,
+                          textAlign: TextAlign.start,
+                          textColor: themeController.isDarkMode.value ? AppColors
+                              .grey : AppColors.black,
+                        ),),
+                    AppSizedBox.space5h,
+                    LinearProgressIndicator(
+                      value: count / repeatCount, // Use repeatCount here
+                      backgroundColor: AppColors.grey.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(20.r),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppColors.primary,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+                onTap: () {
+                  if (zikarDataForWidget != null) {
+                    Get.to(AzkarCounterScreen(
+                      zikar: zikarDataForWidget,
+                      azkarType: azkarType,
+                      azkarName: azkarNameFromStorage,
+                    ));
+                  } else {
+                    print('Zikar data not found for $zikarName');
+                  }
+                },
               ),
-              onTap: () {
-                if (zikarDataForWidget != null) {
-                  Get.to(AzkarCounterScreen(
-                    zikar: zikarDataForWidget,
-                    azkarType: azkarType,
-                    azkarName: azkarNameFromStorage,
-                  ));
-                } else {
-                  print('Zikar data not found for $zikarName');
-                }
-              },
             ),
-          ),
-        );
-        index++;
-        displayedCount++; // Increment the displayed count
+          );
+          index++;
+          displayedCount++; // Increment the displayed count
+        }
       }
-    }
     });
 
     return azkarWidgets;
   }
 
 
-      int _getRepeatCount(String zikarName, List<Map<String, dynamic>> azkarData) {
+  int _getRepeatCount(String zikarName, List<Map<String, dynamic>> azkarData) {
     for (var azkarList in azkarData) {
       for (var azkar in azkarList['content']) {
         if (azkar['zikar'] == zikarName) {
@@ -629,3 +619,5 @@ List<Widget> _buildContinueAzkarList(bool isDarkMode, List<Map<String, dynamic>>
       return false;
     });
   }
+
+}

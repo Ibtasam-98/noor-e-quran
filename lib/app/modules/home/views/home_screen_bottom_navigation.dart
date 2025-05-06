@@ -9,9 +9,6 @@ import 'package:noor_e_quran/app/modules/home/views/app_home_screen.dart';
 import 'package:noor_e_quran/app/modules/home/views/app_setting_screen.dart';
 import '../../../config/app_colors.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
-import '../../additional/views/additional_feature_screen.dart';
-import '../../hadith/views/hadith_collection_screen.dart';
-import '../../ibadat/views/ibadat_category_screen.dart';
 import '../controllers/app_home_screen_bottom_navigation.dart';
 
 class AppHomeScreenBottomNavigation extends StatelessWidget {
@@ -20,9 +17,12 @@ class AppHomeScreenBottomNavigation extends StatelessWidget {
 
   static final List<Widget> widgetOptions = <Widget>[
     AppHomeScreen(),
-    HadithCollectionScreen(),
-    IbadatCategoryScreen(),
-    AdditionalFeatureScreen(),
+    // HadithCollectionScreen(),
+    // IbadatCategoryScreen(),
+    // AdditionalFeatureScreen(),
+    Placeholder(),
+    Placeholder(),
+    Placeholder(),
   ];
 
   @override

@@ -9,8 +9,8 @@ class AppColors {
   static const black = Color(0xff030303);
 
   // Primary colors
-  static const primary = Color(0xffc09b6c);
-  static const secondry = Color(0xff804f17);
+  static const primary = Color(0xffbc935d);
+  static const secondry = Color(0xff6c400e);
 
   // Green colors
   static const green = Color(0xff038128);

@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -70,9 +68,7 @@ class UserPermissionScreen extends StatelessWidget {
   }
 
   Widget _buildConnectionscreen(bool isDarkMode) {
-
     final ConnectivityController connectivitiyController = Get.find<ConnectivityController>();
-
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w),
       child: Column(

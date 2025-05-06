@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -13,7 +12,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../config/app_colors.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
 import '../../../widgets/custom_text.dart';
-import '../controllers/app_home_screen_controller.dart';
+import '../controllers/export_prayer_time_controller.dart';
 
 class ExportPrayerTime extends StatefulWidget {
   @override
@@ -21,56 +20,7 @@ class ExportPrayerTime extends StatefulWidget {
 }
 
 class _ExportPrayerTimeState extends State<ExportPrayerTime> {
-  final AppHomeScreenController controller = Get.find();
-  int selectedMonth = DateTime.now().month;
-  int selectedYear = DateTime.now().year;
-  Map<DateTime, Map<String, String>> monthlyPrayerTimes = {};
-  bool _isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchMonthlyPrayerTimes();
-  }
-
-  Future<void> _fetchMonthlyPrayerTimes() async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      final latitude = controller.locationController.latitude.value;
-      final longitude = controller.locationController.longitude.value;
-      final response = await http.get(Uri.parse(
-          'http://api.aladhan.com/v1/calendar?latitude=$latitude&longitude=$longitude&method=2&month=$selectedMonth&year=$selectedYear'));
-
-      if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
-        monthlyPrayerTimes = {};
-        for (var dayData in jsonData['data']) {
-          final dateString = dayData['date']['gregorian']['date'];
-          final inputFormat = DateFormat('dd-MM-yyyy');
-          final date = inputFormat.parse(dateString);
-          monthlyPrayerTimes[date] = Map<String, String>.from(dayData['timings']);
-        }
-      } else {
-        monthlyPrayerTimes = {};
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to load prayer times.')),
-        );
-      }
-    } catch (e) {
-      monthlyPrayerTimes = {};
-      print('Error fetching monthly prayer times: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred.')),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
+  final ExportPrayerTimeController controller = Get.put(ExportPrayerTimeController()); // Initialize the controller
   final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
 
   Widget _buildShimmerItem() {
@@ -106,7 +56,7 @@ class _ExportPrayerTimeState extends State<ExportPrayerTime> {
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
                 pw.Text(
-                  'Prayer Calendar for ${DateFormat('MMMM yyyy').format(DateTime(selectedYear, selectedMonth))}', // Corrected line
+                  'Prayer Calendar for ${DateFormat('MMMM yyyy').format(DateTime(controller.selectedYear.value, controller.selectedMonth.value))}',
                   style: pw.TextStyle(fontSize: 18),
                 ),
                 pw.Text(
@@ -117,27 +67,27 @@ class _ExportPrayerTimeState extends State<ExportPrayerTime> {
             ),
             pw.SizedBox(height: 5),
             pw.Text(
-              'Location: ${controller.city.value}',
+              'Location: ${controller.homeController.city.value}',
               style: pw.TextStyle(fontSize: 12, fontStyle: pw.FontStyle.italic),
             ),
             pw.SizedBox(height: 10),
             pw.Table.fromTextArray(
               headers: <String>[
                 'Date',
-                ...monthlyPrayerTimes.isNotEmpty
-                    ? monthlyPrayerTimes.values.first.keys.toList()
+                ...controller.monthlyPrayerTimes.isNotEmpty
+                    ? controller.monthlyPrayerTimes.values.first.keys.toList()
                     : []
               ],
               headerStyle: pw.TextStyle(fontSize: 8),
               cellStyle: pw.TextStyle(fontSize: 7),
-              data: monthlyPrayerTimes.entries.map((entry) {
+              data: controller.monthlyPrayerTimes.entries.map((entry) {
                 final date = entry.key;
                 final timings = entry.value;
                 return <String>[
                   DateFormat('d MMMM').format(date),
                   ...timings.values
                       .map((time) =>
-                      controller.formatTime(time, controller.is24HourFormat))
+                      controller.homeController.formatTime(time, controller.homeController.is24HourFormat))
                       .toList(),
                 ];
               }).toList(),
@@ -180,7 +130,7 @@ class _ExportPrayerTimeState extends State<ExportPrayerTime> {
           ),
         ),
       ),
-      body: _isLoading
+      body: Obx(() => controller.isLoading.value
           ? ListView.builder(
         itemCount: 10,
         itemBuilder: (context, index) => _buildShimmerItem(),
@@ -192,9 +142,9 @@ class _ExportPrayerTimeState extends State<ExportPrayerTime> {
             child: Column(
               children: [
                 InkWell(
-                  focusColor:  AppColors.transparent,
-                  hoverColor:  AppColors.transparent,
-                  highlightColor:AppColors.transparent,
+                  focusColor: AppColors.transparent,
+                  hoverColor: AppColors.transparent,
+                  highlightColor: AppColors.transparent,
                   onTap: () {
                     _generatePdf();
                   },
@@ -237,14 +187,14 @@ class _ExportPrayerTimeState extends State<ExportPrayerTime> {
                     color: AppColors.primary.withOpacity(0.29),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: DropdownButton<int>(
-                    value: selectedMonth,
+                  child: Obx(() => DropdownButton<int>(
+                    value: controller.selectedMonth.value,
                     items: List.generate(12, (index) => index + 1)
                         .map((month) => DropdownMenuItem(
                       value: month,
                       child: CustomText(
                         title: DateFormat('MMMM')
-                            .format(DateTime(selectedYear, month)),
+                            .format(DateTime(controller.selectedYear.value, month)),
                         fontSize: 12.sp,
                         capitalize: true,
                         textAlign: TextAlign.start,
@@ -255,10 +205,7 @@ class _ExportPrayerTimeState extends State<ExportPrayerTime> {
                     ))
                         .toList(),
                     onChanged: (value) {
-                      setState(() {
-                        selectedMonth = value!;
-                        _fetchMonthlyPrayerTimes();
-                      });
+                      controller.updateSelectedMonth(value);
                     },
                     underline: Container(),
                     dropdownColor: AppColors.white,
@@ -277,7 +224,8 @@ class _ExportPrayerTimeState extends State<ExportPrayerTime> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: CustomText(
-                              title: DateFormat('MMMM').format(DateTime(selectedYear, item)),
+                              title: DateFormat('MMMM')
+                                  .format(DateTime(controller.selectedYear.value, item)),
                               fontSize: 12.sp,
                               capitalize: true,
                               textAlign: TextAlign.center,
@@ -289,18 +237,18 @@ class _ExportPrayerTimeState extends State<ExportPrayerTime> {
                         );
                       }).toList();
                     },
-                  ),
+                  )),
                 ),
               ],
             ),
           ),
           AppSizedBox.space10h,
           Expanded(
-            child: ListView.builder(
-              itemCount: monthlyPrayerTimes.length,
+            child: Obx(() => ListView.builder(
+              itemCount: controller.monthlyPrayerTimes.length,
               itemBuilder: (context, index) {
-                final date = monthlyPrayerTimes.keys.elementAt(index);
-                final timings = monthlyPrayerTimes[date]!;
+                final date = controller.monthlyPrayerTimes.keys.elementAt(index);
+                final timings = controller.monthlyPrayerTimes[date]!;
                 return Container(
                   margin: EdgeInsets.only(top: 5.h, bottom: 5.h),
                   decoration: BoxDecoration(
@@ -312,7 +260,7 @@ class _ExportPrayerTimeState extends State<ExportPrayerTime> {
                   child: ListTile(
                     title: CustomText(
                       title: DateFormat('d MMMM').format(date),
-                      fontSize: 16.sp,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                       textAlign: TextAlign.start,
                       textColor: AppColors.primary,
@@ -321,44 +269,53 @@ class _ExportPrayerTimeState extends State<ExportPrayerTime> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: timings.entries
-                            .map((entry) => Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 10.h),
-                          child: Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.center,
-                            children: [
-                              CustomText(
-                                title: entry.key,
-                                fontSize: 12.sp,
-                                textColor: themeController.isDarkMode.value
-                                    ? AppColors.white
-                                    : AppColors.black,
-                              ),
-                              CustomText(
-                                title: controller.formatTime(
-                                    entry.value,
-                                    controller.is24HourFormat),
-                                fontSize: 10.sp,
-                                textColor: themeController.isDarkMode.value
-                                    ? AppColors.white
-                                    : AppColors.black,
-                              ),
-                              SizedBox(height: 4),
-                            ],
-                          ),
-                        ))
-                            .toList(),
+                        children: timings.entries.map((entry) {
+                          final prayerName = entry.key;
+                          final prayerTime = controller.homeController.formatTime(
+                              entry.value, controller.homeController.is24HourFormat);
+                          final iconName = controller.getIconForPrayer(prayerName);
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.h),
+                            child: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
+                              children: [
+                                CustomText(
+                                  title: prayerName,
+                                  fontSize: 12.sp,
+                                  textColor: themeController.isDarkMode.value
+                                      ? AppColors.white
+                                      : AppColors.black,
+                                ),
+                                AppSizedBox.space5h,
+                                if (iconName.isNotEmpty)
+                                  SvgPicture.asset(
+                                    "assets/images/$iconName",
+                                    height: 15,
+                                    color: iconColor,
+                                  ),
+                                AppSizedBox.space5h,
+                                CustomText(
+                                  title: prayerTime,
+                                  fontSize: 10.sp,
+                                  textColor: themeController.isDarkMode.value
+                                      ? AppColors.white
+                                      : AppColors.black,
+                                ),
+                                SizedBox(height: 4),
+                              ],
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
                   ),
                 );
               },
-            ),
+            )),
           ),
         ],
-      ),
+      )),
     );
   }
 }

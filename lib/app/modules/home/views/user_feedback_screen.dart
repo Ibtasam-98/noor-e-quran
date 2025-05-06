@@ -7,6 +7,7 @@ import '../../../config/app_colors.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_text.dart';
+import '../../../widgets/custom_textfiield.dart';
 import '../controllers/user_feedback_controller.dart';
 
 class UserFeedbackScreen extends StatelessWidget {
@@ -23,26 +24,27 @@ class UserFeedbackScreen extends StatelessWidget {
       backgroundColor:
       themeController.isDarkMode.value ? AppColors.black : AppColors.white,
       appBar: AppBar(
+        backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
         surfaceTintColor: AppColors.transparent,
         foregroundColor: AppColors.transparent,
-        centerTitle: false,
         title: CustomText(
           firstText: "User",
           secondText: " Feedback",
+          fontSize: 18.sp,
           firstTextColor: isDarkMode ? AppColors.white : AppColors.black,
           secondTextColor: AppColors.primary,
-          fontSize: 18.sp,
         ),
-        backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
+        centerTitle: false,
         leading: InkWell(
+          splashColor: AppColors.transparent,
+          highlightColor: AppColors.transparent,
           onTap: () {
-            userFeedbackController.usernameController.clear();
-            userFeedbackController.emailController.clear();
-            userFeedbackController.suggestionController.clear();
             Get.back();
           },
-          child: Icon(Icons.west,
-              color: isDarkMode ? AppColors.white : AppColors.black),
+          child: Icon(
+            Icons.west,
+            color: isDarkMode ? AppColors.white : AppColors.black,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -53,82 +55,23 @@ class UserFeedbackScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                TextFormField(
+                CustomTextField(
                   controller: userFeedbackController.usernameController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      borderSide: BorderSide.none,
-                    ),
-                    hintText: 'Username',
-                    fillColor: isDarkMode
-                        ? AppColors.grey.withOpacity(0.1)
-                        : AppColors.grey.withOpacity(0.2),
-                    filled: true,
-                    hintStyle: GoogleFonts.quicksand(
-                      color: isDarkMode ? AppColors.white : AppColors.black,
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your username';
-                    }
-                    return null;
-                  },
+                  hintText: 'Username',
+                  validator: userFeedbackController.validateUsername, // Use the new validation method
                 ),
                 AppSizedBox.space10h,
-                TextFormField(
+                CustomTextField(
                   controller: userFeedbackController.emailController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      borderSide: BorderSide.none,
-                    ),
-                    hintText: 'Email',
-                    fillColor: isDarkMode
-                        ? AppColors.grey.withOpacity(0.1)
-                        : AppColors.grey.withOpacity(0.2),
-                    filled: true,
-                    hintStyle: GoogleFonts.quicksand(
-                      color: isDarkMode ? AppColors.white : AppColors.black,
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    if (!RegExp(
-                        r"^[a-zA-Z0-9.+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$")
-                        .hasMatch(value)) {
-                      return 'Please enter a valid email';
-                    }
-                    return null;
-                  },
+                  hintText: 'Email',
+                  validator: userFeedbackController.validateEmail, // Use the new validation method
                 ),
                 AppSizedBox.space10h,
-                TextFormField(
+                CustomTextField(
                   controller: userFeedbackController.suggestionController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      borderSide: BorderSide.none,
-                    ),
-                    hintText: 'Suggestion',
-                    fillColor: isDarkMode
-                        ? AppColors.grey.withOpacity(0.1)
-                        : AppColors.grey.withOpacity(0.2),
-                    filled: true,
-                    hintStyle: GoogleFonts.quicksand(
-                      color: isDarkMode ? AppColors.white : AppColors.black,
-                    ),
-                  ),
+                  hintText: 'Suggestion',
                   maxLines: 5,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your suggestion';
-                    }
-                    return null;
-                  },
+                  validator: userFeedbackController.validateSuggestion, // Use the new validation method
                 ),
                 AppSizedBox.space25h,
                 CustomButton(
@@ -139,6 +82,15 @@ class UserFeedbackScreen extends StatelessWidget {
                   borderRadius: 45.r,
                   onTap: userFeedbackController.sendFeedback,
                   height: 45.h,
+                  useGradient: true,
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.primary,
+                      AppColors.secondry.withOpacity(0.9),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
                 ),
               ],
             ),

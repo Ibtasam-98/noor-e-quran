@@ -6,10 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import '../config/app_colors.dart';
-import '../modules/hadith/views/saved_hadith_screen.dart';
 import '../modules/home/views/about_us_screen.dart';
 import '../modules/home/views/app_setting_screen.dart';
-import '../modules/quran/views/quran_saved_ayat_bookmark_screen.dart';
 import 'custom_text.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -80,7 +78,7 @@ class CustomDrawer extends StatelessWidget {
                       splashColor: AppColors.transparent,
                       hoverColor: AppColors.transparent,
                       onTap: () {
-                         Get.to(SavedHadithScreen());
+                         // Get.to(SavedHadithScreen());
                       },
                       leading: Icon(LineIcons.bookmark, size: 17.h, color: iconColor),
                       title: CustomText(
@@ -98,7 +96,7 @@ class CustomDrawer extends StatelessWidget {
                       splashColor: AppColors.transparent,
                       hoverColor: AppColors.transparent,
                       onTap: () {
-                         Get.to(QuranSavedAyatBookmarkScreen());
+                         // Get.to(QuranSavedAyatBookmarkScreen());
                       },
                       leading: Icon(LineIcons.bookmark, size: 17.h, color: iconColor),
                       title: CustomText(

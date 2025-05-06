@@ -5,8 +5,13 @@ import 'package:get/get.dart';
 import 'package:noor_e_quran/app/config/app_colors.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import 'package:noor_e_quran/app/controllers/user_location_premission_controller.dart';
+import 'package:noor_e_quran/app/modules/home/views/privacy_policy_screen.dart';
+import 'package:noor_e_quran/app/modules/home/views/user_feedback_screen.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
 import '../../../widgets/custom_text.dart';
+import 'delete_data_screen.dart';
+import 'export_data_screen.dart';
+import 'frequently_ask_question_screen.dart';
 
 class MiscItem {
   final String title;
@@ -28,33 +33,27 @@ class AppSettingsScreen extends StatelessWidget {
     MiscItem(
       title: "Export Prayer Time",
       icon: Icons.picture_as_pdf_outlined,
-    //  destinationScreen: ExportPrayerTime(),
-      destinationScreen: Placeholder(),
-
+      destinationScreen: ExportPrayerTime(),
     ),
     MiscItem(
       title: "FAQ",
       icon: Icons.quiz_outlined,
-      // destinationScreen: FAQScreen(),
-      destinationScreen: Placeholder(),
+       destinationScreen: FAQScreen(),
     ),
     MiscItem(
       title: "Feedback",
       icon: Icons.feedback_outlined,
-      // destinationScreen: UserFeedbackScreen(),
-      destinationScreen: Placeholder(),
+      destinationScreen: UserFeedbackScreen(),
     ),
     MiscItem(
       title: "Privacy Policy",
       icon: Icons.privacy_tip_outlined,
-      // destinationScreen: PrivacyPolicyScreen(),
-      destinationScreen: Placeholder(),
+      destinationScreen: PrivacyPolicyScreen(),
     ),
     MiscItem(
       title: "Delete Data",
       icon: Icons.delete_outline,
-      // destinationScreen: DeleteDataScreen(),
-      destinationScreen: Placeholder(),
+      destinationScreen: DeleteDataScreen(),
     ),
   ];
 
@@ -85,7 +84,12 @@ class AppSettingsScreen extends StatelessWidget {
               fontSize: 18.sp,
             ),
             centerTitle: false,
-
+            leading: IconButton(
+              icon: Icon(Icons.west, color:  isDarkMode ? AppColors.white : AppColors.black,),
+              onPressed: () {
+                Get.back();
+              },
+            ),
           ),
         ),
         body: SingleChildScrollView(

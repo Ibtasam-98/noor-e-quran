@@ -36,6 +36,7 @@ class HomeScreenHeader extends StatelessWidget {
               )),
               Obx(() => locationPermissionScreenController.locationAccessed.value
                   ? CustomText(
+
                 title: "${locationPermissionScreenController.cityName}, ${locationPermissionScreenController.countryName}",
                 textColor: AppColors.primary,
                 fontSize: 12.sp,

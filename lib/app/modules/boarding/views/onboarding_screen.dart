@@ -136,7 +136,7 @@ class OnBoardingScreen extends StatelessWidget {
                             },
                             child: CustomButton(
                               haveBgColor: true,
-                              btnTitle: "Continue",
+                              btnTitle: "Let's Get Started",
                               btnTitleColor: AppColors.white,
                               bgColor: AppColors.transparent,
                               btnBorderColor: AppColors.white,

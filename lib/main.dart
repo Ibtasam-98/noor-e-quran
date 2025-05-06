@@ -9,8 +9,8 @@ import 'app/controllers/user_location_premission_controller.dart';
 import 'app/modules/boarding/controllers/onboarding_controller.dart';
 import 'app/modules/boarding/views/onboarding_screen.dart';
 import 'app/modules/home/controllers/app_home_screen_controller.dart';
+import 'app/modules/home/controllers/prayer_controller.dart';
 import 'app/modules/home/views/home_screen_bottom_navigation.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +32,7 @@ void main() async {
   // Initialize and lazily put controllers that might not be immediately needed.
   Get.lazyPut(() => AppHomeScreenController());
   Get.lazyPut(() => UserPermissionController());
+
 
   final box = GetStorage();
   final hasSeenOnboarding = box.read<bool>('hasSeenOnboarding') ?? false;

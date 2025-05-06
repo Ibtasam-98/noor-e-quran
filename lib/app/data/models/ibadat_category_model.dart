@@ -1,9 +1,5 @@
 
-import '../../modules/common/views/dua_details_screen.dart';
-import '../../modules/ibadat/views/99_names_of_Allah_screen.dart';
-import '../../modules/ibadat/views/fasting_menu_screen.dart';
-import '../../modules/ibadat/views/five_pillars_of_islam_screen.dart';
-import '../../modules/ibadat/views/six_kalima_screen.dart';
+import 'package:flutter/cupertino.dart';
 import '../../widgets/pdf_viewer.dart';
 import 'grid_item_model.dart';
 
@@ -11,22 +7,22 @@ final List<GridItem> IbadatCategoryMenu = [
   GridItem(
     title: "Asma Ul Husna",
     subtitle: "Divine Names",
-    destination: NameOfAllahScreen(),
+    destination: Placeholder(),
   ),
   GridItem(
     title: "Fasting",
     subtitle: "Discipline",
-    destination: FastingMenuScreen(),
+    destination: Placeholder(),
   ),
   GridItem(
     title: "Six Kalima",
     subtitle: "Essentials",
-    destination: SixKalimaScreen(),
+    destination: Placeholder(),
   ),
   GridItem(
     title: "Five Pillar",
     subtitle: "Islam",
-    destination: FivePillarIslamScreen(),
+    destination: Placeholder(),
   ),
   GridItem(
     title: "Hajj",
@@ -50,31 +46,33 @@ final List<GridItem> IbadatCategoryMenu = [
   GridItem(
     title: "Darood e Ibrahim",
     subtitle: " Divine Mercy",
-    destination: DuaDetailCommonScreen(
-      arabicDua: 'للَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ اللَّهُمَّ بَارِكْ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ',
-      latinTitle: 'درودِ ابراہیم',
-      audioUrl: 'audios/durood.mp3',
-      duaTranslation: 'O Allah, send prayers upon Muhammad and upon the family of Muhammad just as You have sent prayers upon Ibrahim and upon the family of Ibrahim, verily You are the Praiseworthy, the Glorious. O Allah, bless Muhammad and the family of Muhammad just as You have blessed Ibrahim and the family of Ibrahim, verily You are the Praiseworthy, the Glorious.',
-      duaUrduTranslation: 'اے اللہ محمد اور آل محمد پر درود بھیج جس طرح تو نے ابراہیم اور آل ابراہیم پر درود بھیجے، بے شک تو قابل تعریف اور بزرگی والا ہے۔ اے اللہ رحمت نازل فرما محمد اور آل محمد پر جس طرح تو نے رحمت نازل فرمائی ابراہیم اور آل ابراہیم پر، بے شک تو قابل تعریف اور بزرگی والا ہے۔',
-      engFirstTitle: 'Darood e ',
-      engSecondTitle: 'Ibrahim',
-      isComingFromAllahNameScreen: false,
-      showAudiotWidgets: true,
-    ),
+    // destination: DuaDetailCommonScreen(
+    //   arabicDua: 'للَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ اللَّهُمَّ بَارِكْ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَىٰ إِبْرَاهِيمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ',
+    //   latinTitle: 'درودِ ابراہیم',
+    //   audioUrl: 'audios/durood.mp3',
+    //   duaTranslation: 'O Allah, send prayers upon Muhammad and upon the family of Muhammad just as You have sent prayers upon Ibrahim and upon the family of Ibrahim, verily You are the Praiseworthy, the Glorious. O Allah, bless Muhammad and the family of Muhammad just as You have blessed Ibrahim and the family of Ibrahim, verily You are the Praiseworthy, the Glorious.',
+    //   duaUrduTranslation: 'اے اللہ محمد اور آل محمد پر درود بھیج جس طرح تو نے ابراہیم اور آل ابراہیم پر درود بھیجے، بے شک تو قابل تعریف اور بزرگی والا ہے۔ اے اللہ رحمت نازل فرما محمد اور آل محمد پر جس طرح تو نے رحمت نازل فرمائی ابراہیم اور آل ابراہیم پر، بے شک تو قابل تعریف اور بزرگی والا ہے۔',
+    //   engFirstTitle: 'Darood e ',
+    //   engSecondTitle: 'Ibrahim',
+    //   isComingFromAllahNameScreen: false,
+    //   showAudiotWidgets: true,
+    // ),
+    destination: Placeholder(),
   ),
   GridItem(
       title: "Dua e Qanoot",
       subtitle: "Witr Prayer",
-      destination: DuaDetailCommonScreen(
-        arabicDua: 'اَللَّهُمَّ إنا نَسْتَعِينُكَ وَنَسْتَغْفِرُكَ وَنُؤْمِنُ بِكَ وَنَتَوَكَّلُ عَلَيْكَ وَنُثْنِئْ عَلَيْكَ الخَيْرَ وَنَشْكُرُكَ وَلَا نَكْفُرُكَ وَنَخْلَعُ وَنَتْرُكُ مَنْ ئَّفْجُرُكَ اَللَّهُمَّ إِيَّاكَ نَعْبُدُ وَلَكَ نُصَلِّئ وَنَسْجُدُ وَإِلَيْكَ نَسْعئ وَنَحْفِدُ وَنَرْجُو رَحْمَتَكَ وَنَخْشآئ عَذَابَكَ إِنَّ عَذَابَكَ بِالكُفَّارِ مُلْحَقٌ ❁ ',
-        audioUrl: 'audios/duaQunoot.mp3',
-        duaTranslation: 'O Allah! We implore You for help and beg forgiveness of You and believe in You and rely on You and extol You and we are thankful to You and are not ungrateful to You and we alienate and forsake those who disobey You. O Allah! You alone do we worship and for You do we pray and prostrate and we betake to please You and present ourselves for the service in Your cause and we hope for Your mercy and fear Your chastisement. Undoubtedly, Your torment is going to overtake infidels O Allah!',
-        duaUrduTranslation: 'اے اللہ! ہم آپ سے مدد مانگتے ہیں اور آپ سے معافی طلب کرتے ہیں اور آپ پر ایمان رکھتے ہیں اور آپ پر بھروسہ کرتے ہیں اور آپ کی تسبیح کرتے ہیں اور آپ کا شکر ادا کرتے ہیں اور آپ کے انکار نہیں کرتے اور ہم ان لوگوں سے علیحدہ ہو جاتے ہیں جو آپ کی نافرمانی کرتے ہیں۔ اے اللہ! ہم آپ کی عبادت کرتے ہیں اور آپ کے لیے ہم نماز پڑھتے ہیں اور سجدہ کرتے ہیں اور آپ کی رضا کی تلاش کرتے ہیں اور اپنے آپ کو آپ کے لیے پیش کرتے ہیں اور ہم آپ کی رحمت کی امید رکھتے ہیں اور آپ کے عذاب سے ڈرتے ہیں۔ بے شک، آپ کا عذاب کفار کے لیے ہو کر رہے گا، اے اللہ',
-        engFirstTitle: 'Due e',
-        engSecondTitle: 'Qunoot',
-        showAudiotWidgets: true,
-        latinTitle: 'دعاء قنوت',
-        isComingFromAllahNameScreen: false,
-      )
+      // destination: DuaDetailCommonScreen(
+      //   arabicDua: 'اَللَّهُمَّ إنا نَسْتَعِينُكَ وَنَسْتَغْفِرُكَ وَنُؤْمِنُ بِكَ وَنَتَوَكَّلُ عَلَيْكَ وَنُثْنِئْ عَلَيْكَ الخَيْرَ وَنَشْكُرُكَ وَلَا نَكْفُرُكَ وَنَخْلَعُ وَنَتْرُكُ مَنْ ئَّفْجُرُكَ اَللَّهُمَّ إِيَّاكَ نَعْبُدُ وَلَكَ نُصَلِّئ وَنَسْجُدُ وَإِلَيْكَ نَسْعئ وَنَحْفِدُ وَنَرْجُو رَحْمَتَكَ وَنَخْشآئ عَذَابَكَ إِنَّ عَذَابَكَ بِالكُفَّارِ مُلْحَقٌ ❁ ',
+      //   audioUrl: 'audios/duaQunoot.mp3',
+      //   duaTranslation: 'O Allah! We implore You for help and beg forgiveness of You and believe in You and rely on You and extol You and we are thankful to You and are not ungrateful to You and we alienate and forsake those who disobey You. O Allah! You alone do we worship and for You do we pray and prostrate and we betake to please You and present ourselves for the service in Your cause and we hope for Your mercy and fear Your chastisement. Undoubtedly, Your torment is going to overtake infidels O Allah!',
+      //   duaUrduTranslation: 'اے اللہ! ہم آپ سے مدد مانگتے ہیں اور آپ سے معافی طلب کرتے ہیں اور آپ پر ایمان رکھتے ہیں اور آپ پر بھروسہ کرتے ہیں اور آپ کی تسبیح کرتے ہیں اور آپ کا شکر ادا کرتے ہیں اور آپ کے انکار نہیں کرتے اور ہم ان لوگوں سے علیحدہ ہو جاتے ہیں جو آپ کی نافرمانی کرتے ہیں۔ اے اللہ! ہم آپ کی عبادت کرتے ہیں اور آپ کے لیے ہم نماز پڑھتے ہیں اور سجدہ کرتے ہیں اور آپ کی رضا کی تلاش کرتے ہیں اور اپنے آپ کو آپ کے لیے پیش کرتے ہیں اور ہم آپ کی رحمت کی امید رکھتے ہیں اور آپ کے عذاب سے ڈرتے ہیں۔ بے شک، آپ کا عذاب کفار کے لیے ہو کر رہے گا، اے اللہ',
+      //   engFirstTitle: 'Due e',
+      //   engSecondTitle: 'Qunoot',
+      //   showAudiotWidgets: true,
+      //   latinTitle: 'دعاء قنوت',
+      //   isComingFromAllahNameScreen: false,
+      // )
+    destination: Placeholder(),
   ),
 ];

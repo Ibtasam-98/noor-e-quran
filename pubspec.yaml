@@ -66,6 +66,9 @@ dependencies:
   islamic_hijri_calendar:
   hijri:
   hadith:
+  adhan: ^2.0.0+1
+  timezone:
+  flutter_native_timezone:
 
   # HTML & PDF Packages
   flutter_html:
@@ -76,7 +79,6 @@ dependencies:
   permission_handler:
 
   # Other
-  adhan:
   image_editor_plus:
   marquee:
 

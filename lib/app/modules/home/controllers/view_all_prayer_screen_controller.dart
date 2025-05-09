@@ -295,7 +295,6 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
 
 
   void _calculateNextNamaz() {
-    print("Calculating next namaz...");
     DateTime currentTime = DateTime.now();
     Map<String, DateTime> namazTimes = {};
 

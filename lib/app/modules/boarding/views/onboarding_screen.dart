@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -39,68 +38,31 @@ class OnBoardingScreen extends StatelessWidget {
         ),
         Scaffold(
           backgroundColor: AppColors.transparent,
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 15.w, right: 15.w),
-                child: Column(
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.w),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Align(
                       alignment: Alignment.centerRight,
-                      child: CustomText(
-                        title: "Spiritual",
-                        fontSize: 14.sp,
-                        isGlass: true,
-                        maxLines: 1,
-                        textColor: AppColors.white,
-                        glassPadding: EdgeInsets.all(10.h),
-                      ),
+                      child: _buildGlassText("Spiritual"),
                     ),
+
                     AppSizedBox.space15h,
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: CustomText(
-                        title: "Faith",
-                        fontSize: 14.sp,
-                        isGlass: true,
-                        maxLines: 1,
-                        glassPadding: EdgeInsets.all(10.h),
-                        textColor: AppColors.white,
-                      ),
-                    ),
+                    _buildGlassText("Faith", alignment: Alignment.centerLeft),
                     AppSizedBox.space25h,
-                    Align(
-                      alignment: Alignment.center,
-                      child: CustomText(
-                        title: "Imaan",
-                        fontSize: 14.sp,
-                        isGlass: true,
-                        maxLines: 1,
-                        textColor: AppColors.white,
-                        glassPadding: EdgeInsets.all(10.h),
-                      ),
-                    ),
+                    _buildGlassText("Imaan", alignment: Alignment.center),
                     AppSizedBox.space30h,
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: CustomText(
-                        title: "Deen",
-                        fontSize: 14.sp,
-                        maxLines: 1,
-                        textColor: AppColors.white,
-                        isGlass: true,
-                        glassPadding: EdgeInsets.all(10.h),
-                      ),
-                    ),
+                    _buildGlassText("Deen", alignment: Alignment.centerLeft),
                   ],
+
                 ),
-              ),
-              AppSizedBox.space10h,
-              Padding(
-                padding: EdgeInsets.only(left: 10.w, right: 10.w),
-                child: Column(
+                AppSizedBox.space10h,
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
@@ -120,7 +82,6 @@ class OnBoardingScreen extends StatelessWidget {
                       maxLines: 5,
                     ),
                     AppSizedBox.space25h,
-
                     Obx(() {
                       return AnimatedOpacity(
                         opacity: onBoardingController.showGuestButton.value ? 1.0 : 0.0,
@@ -149,11 +110,25 @@ class OnBoardingScreen extends StatelessWidget {
                     }),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildGlassText(String text, {Alignment alignment = Alignment.centerRight}) {
+    return Align(
+      alignment: alignment,
+      child: CustomText(
+        title: text,
+        fontSize: 14.sp,
+        isGlass: true,
+        maxLines: 1,
+        textColor: AppColors.white,
+        glassPadding: EdgeInsets.all(10.h),
+      ),
     );
   }
 }

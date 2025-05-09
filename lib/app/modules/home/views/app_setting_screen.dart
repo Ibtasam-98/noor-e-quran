@@ -1,18 +1,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:noor_e_quran/app/config/app_colors.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import 'package:noor_e_quran/app/controllers/user_location_premission_controller.dart';
-import 'package:noor_e_quran/app/modules/home/views/privacy_policy_screen.dart';
-import 'package:noor_e_quran/app/modules/home/views/user_feedback_screen.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
 import '../../../widgets/custom_text.dart';
-import 'delete_data_screen.dart';
-import 'export_data_screen.dart';
-import 'frequently_ask_question_screen.dart';
-
 class MiscItem {
   final String title;
   final IconData icon;
@@ -33,27 +28,32 @@ class AppSettingsScreen extends StatelessWidget {
     MiscItem(
       title: "Export Prayer Time",
       icon: Icons.picture_as_pdf_outlined,
-      destinationScreen: ExportPrayerTime(),
+    //  destinationScreen: ExportPrayerTime(),
+      destinationScreen: Placeholder(),
     ),
     MiscItem(
       title: "FAQ",
       icon: Icons.quiz_outlined,
-       destinationScreen: FAQScreen(),
+       // destinationScreen: FAQScreen(),
+      destinationScreen: Placeholder(),
     ),
     MiscItem(
       title: "Feedback",
       icon: Icons.feedback_outlined,
-      destinationScreen: UserFeedbackScreen(),
+      // destinationScreen: UserFeedbackScreen(),
+      destinationScreen: Placeholder(),
     ),
     MiscItem(
       title: "Privacy Policy",
       icon: Icons.privacy_tip_outlined,
-      destinationScreen: PrivacyPolicyScreen(),
+      // destinationScreen: PrivacyPolicyScreen(),
+      destinationScreen: Placeholder(),
     ),
     MiscItem(
       title: "Delete Data",
       icon: Icons.delete_outline,
-      destinationScreen: DeleteDataScreen(),
+      // destinationScreen: DeleteDataScreen(),
+      destinationScreen: Placeholder(),
     ),
   ];
 
@@ -101,7 +101,7 @@ class AppSettingsScreen extends StatelessWidget {
                 CustomText(
                   title: "Location",
                   fontSize: 18.sp,
-                  textColor: isDarkMode ? AppColors.white : AppColors.primary,
+                  textColor: AppColors.primary,
                   fontFamily: 'grenda',
                   maxLines: 1,
                   textOverflow: TextOverflow.ellipsis,
@@ -161,7 +161,7 @@ class AppSettingsScreen extends StatelessWidget {
                 CustomText(
                   title: "Theme",
                   fontSize: 18.sp,
-                  textColor: isDarkMode ? AppColors.white : AppColors.primary,
+                  textColor: AppColors.primary,
                   fontFamily: 'grenda',
                   maxLines: 1,
                   textOverflow: TextOverflow.ellipsis,
@@ -207,7 +207,7 @@ class AppSettingsScreen extends StatelessWidget {
                 CustomText(
                   title: "Misc",
                   fontSize: 18.sp,
-                  textColor: isDarkMode ? AppColors.white : AppColors.primary,
+                  textColor: AppColors.primary,
                   fontFamily: 'grenda',
                   maxLines: 1,
                   textOverflow: TextOverflow.ellipsis,

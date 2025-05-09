@@ -3,13 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'app/controllers/connectivity_controller.dart';
+import 'app/config/app_bindings.dart';
 import 'app/controllers/app_theme_switch_controller.dart';
-import 'app/controllers/user_location_premission_controller.dart';
-import 'app/modules/boarding/controllers/onboarding_controller.dart';
 import 'app/modules/boarding/views/onboarding_screen.dart';
-import 'app/modules/home/controllers/app_home_screen_controller.dart';
-import 'app/modules/home/controllers/prayer_controller.dart';
 import 'app/modules/home/views/home_screen_bottom_navigation.dart';
 
 void main() async {
@@ -24,18 +20,12 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  // Initialize and put global controllers.
-  Get.put(AppThemeSwitchController());
-  Get.put(OnboardingScreenController());
-  Get.put(ConnectivityController());
-
-  // Initialize and lazily put controllers that might not be immediately needed.
-  Get.lazyPut(() => AppHomeScreenController());
-  Get.lazyPut(() => UserPermissionController());
-
-
   final box = GetStorage();
   final hasSeenOnboarding = box.read<bool>('hasSeenOnboarding') ?? false;
+
+  // Initialize the AppThemeSwitchController here
+  final themeController = AppThemeSwitchController();
+  Get.put(themeController);
 
   runApp(MyApp(hasSeenOnboarding: hasSeenOnboarding));
 }
@@ -70,6 +60,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return GetMaterialApp(
+          initialBinding: AppBinding(),
           debugShowCheckedModeBanner: false,
           themeMode: themeController.currentTheme,
           home: child,
@@ -79,3 +70,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

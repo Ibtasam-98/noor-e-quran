@@ -15,7 +15,6 @@ import '../../../controllers/user_location_premission_controller.dart';
 import '../../../widgets/custom_snackbar.dart';
 import '../../home/views/home_screen_bottom_navigation.dart';
 
-
 class UserPermissionScreen extends StatelessWidget {
   final AppThemeSwitchController themeSwitchController = Get.put(AppThemeSwitchController());
   final UserPermissionController userPermissionController = Get.put(UserPermissionController());
@@ -33,28 +32,16 @@ class UserPermissionScreen extends StatelessWidget {
           secondTextColor: AppColors.primary,
           addSpace: true,
         ),
-
         body: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
-              child: SizedBox(
-                height: 4.h,
-                child: LinearProgressIndicator(
-                  value: (userPermissionController.currentPage.value + 1) / 4,
-                  backgroundColor: AppColors.grey.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(5),
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-                ),
-              ),
-            ),
+            _buildProgressIndicator(),
             Expanded(
               child: PageView(
                 controller: userPermissionController.pageController,
                 physics: userPermissionController.canSwipe.value ? null : NeverScrollableScrollPhysics(),
                 onPageChanged: (int page) => userPermissionController.currentPage.value = page,
                 children: [
-                  _buildConnectionscreen(isDarkMode),
+                  _buildConnectionScreen(isDarkMode),
                   _buildLocationScreen(isDarkMode),
                   _buildThemeScreen(isDarkMode),
                   _buildWelcomeScreen(isDarkMode),
@@ -67,108 +54,104 @@ class UserPermissionScreen extends StatelessWidget {
     });
   }
 
-  Widget _buildConnectionscreen(bool isDarkMode) {
-    final ConnectivityController connectivitiyController = Get.find<ConnectivityController>();
+  Widget _buildProgressIndicator() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
+      child: SizedBox(
+        height: 4.h,
+        child: Obx(() => LinearProgressIndicator(
+          value: (userPermissionController.currentPage.value + 1) / 4,
+          backgroundColor: AppColors.grey.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(5),
+          valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+        )),
+      ),
+    );
+  }
+
+  Widget _buildScreenHeader(String title, String description, bool isDarkMode, {int maxLines = 2}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomText(
+          title: title,
+          fontSize: 20.sp,
+          fontFamily: 'grenda',
+          textAlign: TextAlign.start,
+          textColor: AppColors.primary,
+          maxLines: 2,
+          textOverflow: TextOverflow.ellipsis,
+        ),
+        CustomText(
+          fontSize: 15.sp,
+          title: description,
+          textAlign: TextAlign.start,
+          textColor: isDarkMode ? AppColors.white : AppColors.black,
+          maxLines: maxLines,
+          textOverflow: TextOverflow.ellipsis,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildConnectionScreen(bool isDarkMode) {
+    final ConnectivityController connectivityController = Get.find<ConnectivityController>();
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomText(
-            title: "Checking Internet Connection ",
-            fontSize: 20.sp,
-            fontFamily: 'grenda',
-            textAlign: TextAlign.start,
-            textColor: AppColors.primary,
-            maxLines: 2,
-            textOverflow: TextOverflow.ellipsis,
+          _buildScreenHeader(
+            "Checking Internet Connection",
+            "Internet is required to download Quran, Hadith and Prayer timings.",
+            isDarkMode,
           ),
-          CustomText(
+          AppSizedBox.space10h,
+          Obx(() => CustomText(
             fontSize: 15.sp,
-            title: "Internet is required to download Quran, Hadith and Prayer timings.",
+            title: connectivityController.internetCheckCompleted.value
+                ? "Internet connection successfully."
+                : "Please click the Check button below complete the checking process.",
             textAlign: TextAlign.start,
             textColor: isDarkMode ? AppColors.white : AppColors.black,
             maxLines: 2,
             textOverflow: TextOverflow.ellipsis,
-          ),
-          AppSizedBox.space10h,
-          Obx(() {
-            return CustomText(
-              fontSize: 15.sp,
-              title: connectivitiyController.internetCheckCompleted.value
-                  ? "Internet connection successfully."
-                  : "Please click the Check button below complete the checking process.",
-              textAlign: TextAlign.start,
-              textColor: isDarkMode ? AppColors.white : AppColors.black,
-              maxLines: 2,
-              textOverflow: TextOverflow.ellipsis,
-            );
-          }),
+          )),
           const Spacer(),
           Obx(() {
             return Column(
               children: [
-                if (!connectivitiyController.internetCheckCompleted.value)
-                  CustomButton(
-                    height: 45.h,
-                    haveBgColor: true,
-                    borderRadius: 45.r,
-                    btnTitle: 'Check',
-                    btnTitleColor: Colors.white,
-                    bgColor: AppColors.primary,
-                    useGradient: true,
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.primary,
-                        AppColors.secondry.withOpacity(0.9),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                    isLoading: connectivitiyController.isLoading.value,
-                    onTap: () async {
-                      await connectivitiyController.checkConnectivity();
-                      if (connectivitiyController.isConnected.value) {
-                        connectivitiyController.internetCheckCompleted.value =
-                        true;
+                if (!connectivityController.internetCheckCompleted.value)
+                  _buildActionButton(
+                    'Check',
+                    connectivityController.isLoading.value,
+                        () async {
+                      await connectivityController.checkConnectivity();
+                      if (connectivityController.isConnected.value) {
+                        connectivityController.internetCheckCompleted.value = true;
                         Future.delayed(const Duration(seconds: 2), () {
-                          connectivitiyController.showNextButton.value = true;
-                          userPermissionController.enableSwipeFunction(true); // Enable swiping after internet check
+                          connectivityController.showNextButton.value = true;
+                          userPermissionController.enableSwipeFunction(true);
                         });
                       } else {
                         CustomSnackbar.show(
-                            backgroundColor: AppColors.red,
-                            title: "No Internet Connection",
-                            subtitle: "Please connect to Wi-Fi or cellular data.",
-                            icon: Icon(LineIcons.wifi));
+                          backgroundColor: AppColors.red,
+                          title: "No Internet Connection",
+                          subtitle: "Please connect to Wi-Fi or cellular data.",
+                          icon: Icon(LineIcons.wifi),
+                        );
                       }
                     },
                   ),
-                if (connectivitiyController.internetCheckCompleted.value)
+                if (connectivityController.internetCheckCompleted.value)
                   AnimatedOpacity(
-                    opacity: connectivitiyController.showNextButton.value
-                        ? 1.0
-                        : 0.0,
+                    opacity: connectivityController.showNextButton.value ? 1.0 : 0.0,
                     duration: const Duration(seconds: 5),
-                    child: CustomButton(
-                      useGradient: true,
-                      gradient: LinearGradient(
-                        colors: [
-                          AppColors.primary,
-                          AppColors.secondry.withOpacity(0.9),
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ),
-                      height: 45.h,
-                      haveBgColor: true,
-                      borderRadius: 45.r,
-                      btnTitle: 'Next',
-                      btnTitleColor: Colors.white,
-                      bgColor: AppColors.primary,
-                      onTap: () {
-                        userPermissionController.nextPage();
-                      },
+                    child: _buildActionButton(
+                      'Next',
+                      false,
+                          () => userPermissionController.nextPage(),
                     ),
                   ),
                 AppSizedBox.space30h,
@@ -179,7 +162,6 @@ class UserPermissionScreen extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _buildLocationScreen(bool isDarkMode) {
     return Padding(
@@ -187,80 +169,45 @@ class UserPermissionScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomText(
-            title: "Allow Location access",
-            fontSize: 20.sp,
-            fontFamily: 'grenda',
-            textAlign: TextAlign.start,
-            textColor: AppColors.primary,
-            maxLines: 2,
-            textOverflow: TextOverflow.ellipsis,
-          ),
-          CustomText(
-            fontSize: 15.sp,
-            title: "Enabling access allows us to automatically calculate accurate prayer times based on your current location, ensuring you never miss a prayer.",
-            textAlign: TextAlign.start,
+          _buildScreenHeader(
+            "Allow Location access",
+            "Enabling access allows us to automatically calculate accurate prayer times based on your current location, ensuring you never miss a prayer.",
+            isDarkMode,
             maxLines: 3,
-            textOverflow: TextOverflow.ellipsis,
-            textColor: isDarkMode ? AppColors.white : AppColors.black,
           ),
           AppSizedBox.space15h,
           Obx(() {
             if (userPermissionController.locationAccessed.value) {
               return Row(
                 children: [
-                  Icon(Icons.location_on_outlined,color: isDarkMode ? AppColors.white : AppColors.black,),
+                  Icon(Icons.location_on_outlined, color: isDarkMode ? AppColors.white : AppColors.black),
                   AppSizedBox.space10w,
                   CustomText(
-                      title: '${userPermissionController.cityName}, ${userPermissionController.countryName}',
-                      fontSize: 15.sp,
-                      textColor: isDarkMode ? AppColors.white : AppColors.black),
+                    title: '${userPermissionController.cityName}, ${userPermissionController.countryName}',
+                    fontSize: 15.sp,
+                    textColor: isDarkMode ? AppColors.white : AppColors.black,
+                  ),
                 ],
               );
-            } else {
-              return const SizedBox();
             }
+            return const SizedBox();
           }),
           const Spacer(),
-          Obx(() {
-            return Column(
-              children: [
-                CustomButton(
-                  useGradient: true,
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.primary,
-                      AppColors.secondry.withOpacity(0.9),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                  height: 45.h,
-                  haveBgColor: true,
-                  borderRadius: 45.r,
-                  btnTitle: userPermissionController.isLoading.value
-                      ? ''
-                      : userPermissionController.locationAccessed.value &&
-                      userPermissionController.allowSwipe.value
-                      ? 'Next'
-                      : 'Access Location',
-                  btnTitleColor: Colors.white,
-                  bgColor: AppColors.primary,
-                  isLoading: userPermissionController.isLoading.value,
-                  onTap: () {
-                    if (userPermissionController.locationAccessed.value &&
-                        userPermissionController.allowSwipe.value) {
-                      userPermissionController.nextPage();
-                      userPermissionController.enableSwipeForThemeFunction(true);
-                    } else {
-                      userPermissionController.accessLocation();
-                    }
-                  },
-                ),
-                AppSizedBox.space30h,
-              ],
-            );
-          }),
+          Obx(() => _buildActionButton(
+            userPermissionController.locationAccessed.value && userPermissionController.allowSwipe.value
+                ? 'Next'
+                : 'Access Location',
+            userPermissionController.isLoading.value,
+                () {
+              if (userPermissionController.locationAccessed.value && userPermissionController.allowSwipe.value) {
+                userPermissionController.nextPage();
+                userPermissionController.enableSwipeForThemeFunction(true);
+              } else {
+                userPermissionController.accessLocation();
+              }
+            },
+          )),
+          AppSizedBox.space30h,
         ],
       ),
     );
@@ -268,6 +215,11 @@ class UserPermissionScreen extends StatelessWidget {
 
   Widget _buildThemeScreen(bool isDarkMode) {
     final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
+    final List<Map<String, dynamic>> themeOptions = [
+      {'title': 'Light Mode', 'isDark': false, 'image': 'assets/images/theme_light_bg.jpg'},
+      {'title': 'Dark Mode', 'isDark': true, 'image': 'assets/images/theme_dark_bg.jpg'},
+    ];
+
     return Stack(
       children: [
         Padding(
@@ -275,30 +227,23 @@ class UserPermissionScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomText(
-                title: "Choose Theme",
-                fontSize: 20.sp,
-                fontFamily: 'grenda',
-                textAlign: TextAlign.start,
-                textColor: AppColors.primary,
+              _buildScreenHeader(
+                "Choose Theme",
+                "Choose your preferred theme from the options presented below. Select either Light Mode for a bright and vibrant interface, or Dark Mode for a sleek and comfortable experience, especially in low-light environments.",
+                isDarkMode,
                 maxLines: 2,
-                textOverflow: TextOverflow.ellipsis,
-              ),
-              CustomText(
-                title: "Choose your preferred theme from the options presented below. Select either Light Mode for a bright and vibrant interface, or Dark Mode for a sleek and comfortable experience, especially in low-light environments.",
-                textAlign: TextAlign.start,
-                textColor: isDarkMode ? AppColors.white : AppColors.black,
-                fontSize: 15.sp,
-                maxLines: 2,
-                textOverflow: TextOverflow.ellipsis,
               ),
               AppSizedBox.space20h,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildThemeCard("Light Mode", false, themeController.isDarkMode.value == false),
-                  _buildThemeCard("Dark Mode", true, themeController.isDarkMode.value == true),
-                ],
+                children: themeOptions.map((option) =>
+                    _buildThemeCard(
+                      option['title'],
+                      option['isDark'],
+                      themeController.isDarkMode.value == option['isDark'],
+                      option['image'],
+                    )
+                ).toList(),
               ),
             ],
           ),
@@ -307,35 +252,17 @@ class UserPermissionScreen extends StatelessWidget {
           left: 15.w,
           right: 15.w,
           bottom: 30.h,
-          child: InkWell(
-            onTap: (){
-              userPermissionController.nextPage();
-            },
-            child: CustomButton(
-              useGradient: true,
-              gradient: LinearGradient(
-                colors: [
-                  AppColors.primary,
-                  AppColors.secondry.withOpacity(0.9),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-              haveBgColor: true,
-              height: 45.h,
-              btnTitle: "Next",
-              btnTitleColor: Colors.white,
-              bgColor: AppColors.primary,
-              onTap: userPermissionController.nextPage,
-              borderRadius: 45.r,
-            ),
+          child: _buildActionButton(
+            "Next",
+            false,
+            userPermissionController.nextPage,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildThemeCard(String title, bool isDarkMode, bool isSelected) {
+  Widget _buildThemeCard(String title, bool isDarkMode, bool isSelected, String imagePath) {
     final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
     return SizedBox(
       height: 180.h,
@@ -353,12 +280,10 @@ class UserPermissionScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isSelected ? AppColors.primary : isDarkMode ? Colors.black87 : AppColors.primary,
                   borderRadius: BorderRadius.circular(15.r),
-                  border: isSelected
-                      ? Border.all(
+                  border: isSelected ? Border.all(
                     color: isDarkMode ? AppColors.white : AppColors.primary,
                     width: 2.w,
-                  )
-                      : null,
+                  ) : null,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -368,7 +293,7 @@ class UserPermissionScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.r),
                           image: DecorationImage(
-                            image: AssetImage(isDarkMode ? 'assets/images/theme_dark_bg.jpg' : 'assets/images/theme_light_bg.jpg'),
+                            image: AssetImage(imagePath),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -393,7 +318,7 @@ class UserPermissionScreen extends StatelessWidget {
   }
 
   Widget _buildWelcomeScreen(bool isDarkMode) {
-    final ConnectivityController connectivitiyController = Get.put(ConnectivityController());
+    final ConnectivityController connectivityController = Get.put(ConnectivityController());
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w),
       child: Column(
@@ -419,7 +344,7 @@ class UserPermissionScreen extends StatelessWidget {
                     fontSize: 30.sp,
                     textAlign: TextAlign.end,
                     textColor: isDarkMode ? AppColors.white : AppColors.primary,
-                    title: AppConstants.bismillah ,
+                    title: AppConstants.bismillah,
                     maxLines: 2,
                     textOverflow: TextOverflow.ellipsis,
                   ),
@@ -462,7 +387,7 @@ class UserPermissionScreen extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: CustomText(
-                    title:  AppConstants.appWelcomeQuranicVerseReference,
+                    title: AppConstants.appWelcomeQuranicVerseReference,
                     fontSize: 12.sp,
                     textAlign: TextAlign.start,
                     textColor: isDarkMode ? AppColors.white.withOpacity(0.3) : AppColors.black,
@@ -479,35 +404,22 @@ class UserPermissionScreen extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: EdgeInsets.only(bottom: 30.h),
-              child: CustomButton(
-                haveBgColor: true,
-                btnTitle: AppConstants.exploreAppHeading,
-                btnTitleColor: Colors.white,
-                bgColor: AppColors.primary,
-                borderRadius: 45.r,
-                height: 45.h,
-                useGradient: true,
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.primary,
-                    AppColors.secondry.withOpacity(0.9),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-                onTap: () {
-                  if(connectivitiyController.internetCheckCompleted.value && userPermissionController.locationAccessed.value){
+              child: _buildActionButton(
+                AppConstants.exploreAppHeading,
+                false,
+                    () {
+                  if (connectivityController.internetCheckCompleted.value && userPermissionController.locationAccessed.value) {
                     final box = GetStorage();
                     box.write('hasSeenOnboarding', true);
                     Get.offAll(AppHomeScreenBottomNavigation());
-                  } else if (!connectivitiyController.internetCheckCompleted.value && !userPermissionController.locationAccessed.value){
+                  } else if (!connectivityController.internetCheckCompleted.value && !userPermissionController.locationAccessed.value) {
                     CustomSnackbar.show(
                       backgroundColor: AppColors.red,
                       title: "Complete Setup",
                       subtitle: "Ensure you've enabled both internet and location services.",
                       icon: Icon(LineIcons.exclamationTriangle),
                     );
-                  } else if (!connectivitiyController.internetCheckCompleted.value){
+                  } else if (!connectivityController.internetCheckCompleted.value) {
                     CustomSnackbar.show(
                       backgroundColor: AppColors.red,
                       title: "Check Internet Connection",
@@ -530,5 +442,26 @@ class UserPermissionScreen extends StatelessWidget {
       ),
     );
   }
-}
 
+  Widget _buildActionButton(String title, bool isLoading, VoidCallback onTap) {
+    return CustomButton(
+      useGradient: true,
+      gradient: LinearGradient(
+        colors: [
+          AppColors.primary,
+          AppColors.secondry.withOpacity(0.9),
+        ],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ),
+      height: 45.h,
+      haveBgColor: true,
+      borderRadius: 45.r,
+      btnTitle: title,
+      btnTitleColor: Colors.white,
+      bgColor: AppColors.primary,
+      isLoading: isLoading,
+      onTap: onTap,
+    );
+  }
+}

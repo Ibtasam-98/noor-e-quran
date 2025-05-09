@@ -47,25 +47,16 @@ class ConnectivityController extends GetxController with SingleGetTickerProvider
   Future<void> checkConnectivity() async {
     try {
       isLoading(true);
-      print("Checking connection...");
-      print("isLoading: ${isLoading.value}");
-
       isConnected.value = await internetConnectionChecker.hasConnection;
-
-      print("Internet Connection Status: ${isConnected.value}");
     } catch (e) {
-      print("Error checking connectivity: $e");
       isConnected.value = false;
       CustomSnackbar.show(
         backgroundColor: AppColors.red,
           title: "Connectivity Error",
           subtitle: "Failed to check internet connection. Please try again.",
           icon: Icon(Icons.error),);
-
     } finally {
       isLoading(false);
-      print("isLoading: ${isLoading.value}");
-      print("isConnected: ${isConnected.value}");
     }
   }
 

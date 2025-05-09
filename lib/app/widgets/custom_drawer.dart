@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import '../config/app_colors.dart';
-import '../modules/home/views/about_us_screen.dart';
 import '../modules/home/views/app_setting_screen.dart';
 import 'custom_text.dart';
 
@@ -114,7 +113,7 @@ class CustomDrawer extends StatelessWidget {
                       splashColor: AppColors.transparent,
                       hoverColor: AppColors.transparent,
                       onTap: () {
-                         Get.to(AppSettingsScreen());
+                          Get.to(AppSettingsScreen());
                       },
                       leading: Icon(LineIcons.cog, size: 18.h, color: iconColor),
                       title: CustomText(
@@ -132,7 +131,7 @@ class CustomDrawer extends StatelessWidget {
                       splashColor: AppColors.transparent,
                       hoverColor: AppColors.transparent,
                       onTap: () {
-                         Get.to(AboutUsScreen());
+                         // Get.to(AboutUsScreen());
                       },
                       leading: Icon(LineIcons.infoCircle, size: 18.h, color: iconColor),
                       title: CustomText(

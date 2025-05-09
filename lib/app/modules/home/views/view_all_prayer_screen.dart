@@ -1,145 +1,40 @@
-import 'package:adhan/adhan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // Import the flutter_svg package
+import 'package:line_icons/line_icons.dart';
+import 'package:noor_e_quran/app/config/app_colors.dart';
+import 'package:noor_e_quran/app/config/app_sizedbox.dart';
+import 'package:noor_e_quran/app/controllers/app_theme_switch_controller.dart';
+import 'package:noor_e_quran/app/modules/home/views/prayer_method_settings_screen.dart';
+import 'package:noor_e_quran/app/widgets/custom_text.dart';
+import 'package:shimmer/shimmer.dart';
 
-
-import '../../../config/app_colors.dart';
-import '../../../config/app_sizedbox.dart';
-import '../../../controllers/app_theme_switch_controller.dart';
 import '../../../controllers/user_location_premission_controller.dart';
 import '../../../widgets/custom_card.dart';
-import '../../../widgets/custom_text.dart';
-import '../controllers/app_home_screen_controller.dart';
-import '../controllers/prayer_controller.dart';
-
-class CalculationMethodDropdown extends StatelessWidget {
-  final PrayerController prayerController = Get.find<PrayerController>();
-  final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
-
-  CalculationMethodDropdown({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.29),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Obx(
-            () => DropdownButton<CalculationMethod>(
-          value: prayerController.selectedMethod.value,
-          items: CalculationMethod.values.map((method) {
-            return DropdownMenuItem<CalculationMethod>(
-              value: method,
-              child: CustomText(
-                title: _getMethodName(method),
-                fontSize: 12.sp,
-                capitalize: true,
-                textAlign: TextAlign.start,
-                textColor: themeController.isDarkMode.value
-                    ? AppColors.black
-                    : AppColors.black,
-              ),
-            );
-          }).toList(),
-          onChanged: (value) async {
-            if (value != null) {
-              prayerController.updateCalculationMethod(value);
-              prayerController.startPrayerTimeLoading();
-              await Future.delayed(const Duration(seconds: 2));
-              prayerController.stopPrayerTimeLoading();
-            }
-          },
-          underline: Container(),
-          dropdownColor: AppColors.white,
-          icon: Icon(
-            Icons.arrow_drop_down,
-            color: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-          ),
-          iconSize: 24,
-          isExpanded: true,
-          selectedItemBuilder: (BuildContext context) {
-            return CalculationMethod.values.map<Widget>((CalculationMethod item) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: CustomText(
-                    title: _getMethodName(item),
-                    fontSize: 12.sp,
-                    capitalize: true,
-                    textAlign: TextAlign.center,
-                    textColor: themeController.isDarkMode.value
-                        ? AppColors.white
-                        : AppColors.black,
-                  ),
-                ),
-              );
-            }).toList();
-          },
-        ),
-      ),
-    );
-  }
-
-  String _getMethodName(CalculationMethod method) {
-    switch (method) {
-      case CalculationMethod.muslim_world_league:
-        return 'Muslim World League';
-      case CalculationMethod.egyptian:
-        return 'Egyptian General Authority of Survey';
-      case CalculationMethod.karachi:
-        return 'University of Islamic Sciences, Karachi';
-      case CalculationMethod.umm_al_qura:
-        return 'Umm al-Qura University, Makkah';
-      case CalculationMethod.dubai:
-        return 'Dubai';
-      case CalculationMethod.qatar:
-        return 'Qatar';
-      case CalculationMethod.kuwait:
-        return 'Kuwait';
-      case CalculationMethod.moon_sighting_committee:
-        return 'Moonsighting Committee';
-      case CalculationMethod.singapore:
-        return 'Singapore';
-      case CalculationMethod.north_america:
-        return 'North America (ISNA)';
-      case CalculationMethod.turkey:
-        return 'Turkey';
-      case CalculationMethod.tehran:
-        return 'Tehran';
-      case CalculationMethod.other:
-        return 'Other';
-      default:
-        return method.toString().split('.').last;
-    }
-  }
-}
+import '../../../widgets/custom_shimmer.dart';
+import '../controllers/view_all_prayer_screen_controller.dart';
 
 class ViewAllPrayerScreen extends StatelessWidget {
-  final AppHomeScreenController homeScreenController = Get.find<AppHomeScreenController>();
+  final NamazController namazController = Get.find<NamazController>();
   final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
-  final prayerController = Get.find<PrayerController>();
-  final userPermissionController = Get.find<UserPermissionController>();
-
-  ViewAllPrayerScreen({super.key});
+  final UserPermissionController locationController = Get.find<UserPermissionController>();
+  final RxBool showDropdown = false.obs;
 
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = themeController.isDarkMode.value;
     final iconColor = isDarkMode ? AppColors.white : AppColors.black;
+    final is24HourFormat = MediaQuery.of(context).alwaysUse24HourFormat;
 
     return Scaffold(
       backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
         surfaceTintColor: AppColors.transparent,
-        foregroundColor: AppColors.transparent,
+        elevation: 0,
+        centerTitle: false,
+        backgroundColor: isDarkMode ? AppColors.black : AppColors.white,
         title: CustomText(
           firstText: "Prayer",
           secondText: " Timing",
@@ -147,133 +42,181 @@ class ViewAllPrayerScreen extends StatelessWidget {
           firstTextColor: isDarkMode ? AppColors.white : AppColors.black,
           secondTextColor: AppColors.primary,
         ),
-        centerTitle: false,
-        leading: InkWell(
-          onTap: () {
-            Get.back();
-          },
-          child: Icon(
-            Icons.west,
-            color: iconColor,
-          ),
+        leading: IconButton(
+          icon: Icon(Icons.west, color: iconColor),
+          onPressed: () => Get.back(),
         ),
-        actions: [],
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: IconButton(
+              icon: Icon(LineIcons.cog, color: iconColor),
+              onPressed: () {
+                Get.to(PrayerMethodSettingsView());
+              },
+            ),
+          )
+        ],
       ),
       body: Padding(
-        padding: EdgeInsets.only(left: 10.w, right: 10.w, bottom: 5.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomCard(
-              title: prayerController.formattedHijriDate(),
-              subtitle: 'Date ${DateFormat('yyyy.MM.dd').format(DateTime.now())}',
+            CustomCard( // Removed Obx here if formattedHijriDate isn't reactive
+              title: namazController.formattedHijriDate(),
+              subtitle:
+              'Date ${DateFormat('yyyy.MM.dd').format(DateTime.now())}',
               imageUrl: isDarkMode ? 'assets/images/sajdah_bg_dark.jpg' : 'assets/images/sajdah_bg_light.jpg',
               mergeWithGradientImage: true,
             ),
-            AppSizedBox.space10h,
+            AppSizedBox.space15h,
+            Obx(() => CustomText(
+              textAlign: TextAlign.start,
+              fontSize: 16.sp,
+              textColor: isDarkMode ? AppColors.white : AppColors.black,
+              title: '${namazController.selectedMethodName.value}',
+              maxLines: 2,
+              textOverflow: TextOverflow.ellipsis,
+            )),
+            AppSizedBox.space15h,
             Expanded(
-              child: Obx(
-                    () {
-                  if (!userPermissionController.locationAccessed.value) {
-                    return const Center(
-                      child: Text('Please enable location access to view prayer times.'),
-                    );
-                  }
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CalculationMethodDropdown(),
-                      AppSizedBox.space10h,
-                      Expanded(
-                        child: Obx(() {
-                          final pt = prayerController.prayerTimes.value;
-                          if (prayerController.isLoadingPrayerTimes.value) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-
-                            );
-                          } else if (pt != null) {
-                            return  Container(
-                              margin: EdgeInsets.only(top: 5.h, bottom: 5.h),
-                              child: _buildPrayerTimeList(pt),
-                            );
-                          } else {
-                            return const Text('Prayer times not available.');
-                          }
-                        }),
-                      )
-                    ],
-                  );
-                },
-              ),
-            )
+              child: _buildPrayerTimesList(isDarkMode, iconColor, is24HourFormat),
+            ),
           ],
         ),
       ),
     );
   }
-  Widget _buildPrayerTimeList(PrayerTimes pt) {
-    final themeController = Get.find<AppThemeSwitchController>();
-    final List<Map<String, String>> prayerTimesList = [
-      {'name': 'Fajr', 'time': prayerController.formatTime(pt.fajr), 'icon': 'assets/images/fajr.svg'},
-      {'name': 'Sunrise', 'time': prayerController.formatTime(pt.sunrise), 'icon': 'assets/images/dhuhr.svg'},
-      {'name': 'Dhuhr', 'time': prayerController.formatTime(pt.dhuhr), 'icon': 'assets/images/dhuhr.svg'},
-      {'name': 'Asr', 'time': prayerController.formatTime(pt.asr), 'icon': 'assets/images/asr.svg'},
-      {'name': 'Maghrib', 'time': prayerController.formatTime(pt.maghrib), 'icon': 'assets/images/maghrib.svg'},
-      {'name': 'Isha', 'time': prayerController.formatTime(pt.isha), 'icon': 'assets/images/isha.svg'},
-    ];
 
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const AlwaysScrollableScrollPhysics(),
-      itemCount: prayerTimesList.length,
-      itemBuilder: (context, index) {
-        final prayer = prayerTimesList[index];
-        return Container(
-          margin: EdgeInsets.only(top: 5.h, bottom: 5.h),
-          padding: EdgeInsets.all(15.h),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.r),
-            color: (index % 2 == 1)
-                ? AppColors.primary.withOpacity(0.29)
-                : AppColors.primary.withOpacity(0.1),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildPrayerTimesList(bool isDarkMode, Color iconColor, bool is24HourFormat) {
+    return Obx(() {
+      if (namazController.isNamazLoading.value) {
+        return Shimmer.fromColors(
+          baseColor: themeController.isDarkMode.value
+              ? AppColors.black.withOpacity(0.02)
+              : AppColors.black.withOpacity(0.2),
+          highlightColor: themeController.isDarkMode.value
+              ? AppColors.lightGrey.withOpacity(0.1)
+              : AppColors.grey.withOpacity(0.2),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    // Use SvgPicture.asset for SVG rendering
-                    SvgPicture.asset(
-                      prayer['icon']!,
-                      width: 18.w,
-                      colorFilter: ColorFilter.mode( // Use colorFilter
-                        themeController.isDarkMode.value ? Colors.white : Colors.black,
-                        BlendMode.srcIn,
-                      ),
+                for (int i = 0; i <= namazController.namazTimes.length; i++)
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                      child: buildShimmerContainer(height: 50.h),
                     ),
-                    SizedBox(width: 8.w),
-                    CustomText(
-                      title: prayer['name']!,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.normal,
-                      textColor:  themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-                    ),
-                  ],
-                ),
-
-                CustomText(
-                  title: prayer['time']!,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.normal,
-                  textColor: themeController.isDarkMode.value ? AppColors.grey : AppColors.black,
-                ),
-              ],
-            ),
-          ),
+                  ),
+              ]),
         );
-      },
+      }
+      return ListView.separated(
+        itemCount: namazController.namazTimes.length,
+        separatorBuilder: (context, index) => AppSizedBox.space5h,
+        itemBuilder: (context, index) {
+          final namazName = namazController.namazTimes[index];
+          final namazTime = namazController.namazTimings[namazName] ?? "--";
+          final formattedTime = namazController.formatTime(namazTime, is24HourFormat);
+          final iconName = namazController.icons[index];
+          final isNextNamaz = namazName == namazController.nextNamazName.value;
+
+          return InkWell(
+            onTap: () {
+              namazController.addToCalendar(namazName, namazTime);
+            },
+            child: AnimatedBuilder(
+              animation: namazController.animationController,
+              builder: (BuildContext context, Widget? child) {
+                return Transform.scale(
+                  scale: isNextNamaz ? namazController.scaleAnimation.value : 1.0,
+                  child: Container(
+                    padding: EdgeInsets.all(20.h),
+                    margin: EdgeInsets.only(top: 5.h),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.r),
+                      color: (index % 2 == 1)
+                          ? AppColors.primary.withOpacity(0.29)
+                          : AppColors.primary.withOpacity(0.1),
+                      boxShadow: [
+                        BoxShadow(
+                          color: isDarkMode ? AppColors.black.withOpacity(0.2) : AppColors.grey.withOpacity(0.1),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              "assets/images/$iconName",
+                              width: 14.w,
+                              height: 14.h,
+                              color: isNextNamaz
+                                  ? AppColors.primary
+                                  : (isDarkMode ? AppColors.white : AppColors.black),
+                            ),
+                            AppSizedBox.space15w,
+                            _buildPrayerName(namazName, isNextNamaz, isDarkMode),
+                          ],
+                        ),
+                        Obx(() => _buildPrayerTime(
+                            namazController.formatTime(namazController.namazTimings[namazName] ?? "--", is24HourFormat),
+                            isNextNamaz,
+                            isDarkMode,
+                            namazName)),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      );
+    });
+  }
+
+  Widget _buildPrayerName(String name, bool isNextNamaz, bool isDarkMode) {
+    return Text(
+      name,
+      style: TextStyle(
+        fontSize: 16.sp,
+        fontWeight: isNextNamaz ? FontWeight.bold : FontWeight.normal,
+        color: isNextNamaz ? AppColors.primary : (isDarkMode ? AppColors.white : AppColors.black),
+      ),
+    );
+  }
+
+  Widget _buildPrayerTime(String time, bool isNextNamaz, bool isDarkMode, String name) {
+    return Row(
+      children: [
+        Text(
+          time,
+          style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: isNextNamaz ? FontWeight.bold : FontWeight.normal,
+            color: isDarkMode ? AppColors.white : AppColors.black,
+          ),
+        ),
+        AppSizedBox.space10w,
+        Obx(() => InkWell(
+          onTap: () async {
+            await namazController.addToCalendar(name, time);
+          },
+          child: Icon(
+            Icons.notifications,
+            size: 16.h,
+            color: namazController.reminderSet[name]?.value == true
+                ? AppColors.green
+                : (isDarkMode ? AppColors.white : AppColors.black),
+          ),
+        )),
+      ],
     );
   }
 }

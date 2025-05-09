@@ -10,6 +10,7 @@ class AppColors {
 
   // Primary colors
   static const primary = Color(0xffbc935d);
+  static const primaryOpacity = Color(0xfffff1dc);
   static const secondry = Color(0xff6c400e);
 
   // Green colors

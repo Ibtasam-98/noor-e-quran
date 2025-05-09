@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:http/http.dart' as http; // For making HTTP requests
+import 'dart:convert'; // For JSON decoding
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
-
-import '../modules/home/controllers/prayer_controller.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:flutter/foundation.dart';
 
 class UserPermissionController extends GetxController {
   var cityName = ''.obs;
@@ -14,9 +14,6 @@ class UserPermissionController extends GetxController {
   var latitude = 0.0.obs;
   var longitude = 0.0.obs;
   var allowSwipe = false.obs;
-  var _timeZoneName = Rx<String>('');
-
-  String get timeZoneName => _timeZoneName.value;
 
   final pageController = PageController();
   final currentPage = 0.obs;
@@ -35,7 +32,6 @@ class UserPermissionController extends GetxController {
   final enableSwipeForTheme = false.obs;
   final enableSwipe = true.obs;
 
-
   Future<void> toggleLocation(bool value) async {
     locationAccessed.value = value;
 
@@ -47,7 +43,6 @@ class UserPermissionController extends GetxController {
       cityName.value = "N/A";
       countryName.value = "N/A";
       allowSwipe.value = false;
-      _timeZoneName.value = '';
       update();
     }
   }
@@ -99,20 +94,17 @@ class UserPermissionController extends GetxController {
         locationAccessed(true);
         allowSwipe.value = true;
         enableSwipeForLocation.value = true;
-        _timeZoneName.value = await FlutterNativeTimezone.getLocalTimezone();
       } else {
         cityName.value = 'City not found.';
         countryName.value = 'Country not found.';
         allowSwipe.value = false;
         enableSwipeForLocation.value = false;
-        _timeZoneName.value = '';
       }
     } catch (e) {
       cityName.value = 'Error: ${e.toString()}';
       countryName.value = 'Error: ${e.toString()}';
       allowSwipe.value = false;
       enableSwipeForLocation.value = false;
-      _timeZoneName.value = '';
     } finally {
       isLoading(false);
       update();

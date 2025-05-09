@@ -1,4 +1,5 @@
 
+
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +15,7 @@ import '../../../controllers/flying_bird_animation_controller.dart';
 import '../../../controllers/user_location_premission_controller.dart';
 import '../../../widgets/custom_shimmer.dart';
 import '../controllers/app_home_screen_controller.dart';
+import '../controllers/view_all_prayer_screen_controller.dart';
 
 class AppHomeBaseScreen extends StatelessWidget {
   final Widget child;
@@ -39,6 +41,7 @@ class AppHomeBaseScreen extends StatelessWidget {
     final AppHomeScreenController homeScreenController = Get.find<AppHomeScreenController>();
     final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
     final UserPermissionController locationPermissionScreenController = Get.find<UserPermissionController>();
+    final NamazController namazController = Get.find<NamazController>();
 
     return AdvancedDrawer(
       backdrop: Obx(() => Container(
@@ -130,7 +133,7 @@ class AppHomeBaseScreen extends StatelessWidget {
           body: RefreshIndicator(
             color: AppColors.primary,
             onRefresh: () async {
-              homeScreenController.isNamazLoading.value;
+              namazController.isNamazLoading.value;
               homeScreenController.loadLastAccessedSurahs();
               locationPermissionScreenController.locationAccessed.value;
               return Future.delayed(const Duration(seconds: 1));

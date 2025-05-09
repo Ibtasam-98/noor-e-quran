@@ -6,23 +6,21 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:noor_e_quran/app/modules/home/views/app_home_screen.dart';
-import 'package:noor_e_quran/app/modules/home/views/app_setting_screen.dart';
 import '../../../config/app_colors.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
+import '../../additional/views/additional_feature_screen.dart';
+import '../../hadith/views/hadith_collection_screen.dart';
+import '../../ibadat/views/ibadat_category_screen.dart';
 import '../controllers/app_home_screen_bottom_navigation.dart';
 
 class AppHomeScreenBottomNavigation extends StatelessWidget {
 
   final AppHomeScreenBottomNavigationController controller = Get.put(AppHomeScreenBottomNavigationController());
-
   static final List<Widget> widgetOptions = <Widget>[
     AppHomeScreen(),
-    // HadithCollectionScreen(),
-    // IbadatCategoryScreen(),
-    // AdditionalFeatureScreen(),
-    Placeholder(),
-    Placeholder(),
-    Placeholder(),
+    HadithCollectionScreen(),
+    IbadatCategoryScreen(),
+    AdditionalFeatureScreen(),
   ];
 
   @override

@@ -34,7 +34,7 @@ class QuranMenuScreen extends StatelessWidget {
       GridItem(
         title: "Quran",
         subtitle: "Digital",
-        destination: QuranPdfViewer(),
+        destination: QuranDigitalScreen(),
       ),
       GridItem(
         title: "Sajdaas",

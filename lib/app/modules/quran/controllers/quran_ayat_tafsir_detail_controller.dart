@@ -1,16 +1,12 @@
-
-// controllers/ayat_tafsir_controller.dart
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class AyatTafsirController extends GetxController {
+class AyatTafsirDetailController extends GetxController {
   final int surahNumber;
   final int ayahNumber;
-  final String? surahName, ayat, surahArabicName;
 
-
-  AyatTafsirController({required this.surahNumber, required this.ayahNumber, this.surahName, this.ayat, this.surahArabicName});
+  AyatTafsirDetailController({required this.surahNumber, required this.ayahNumber});
 
   var tafsirText = "".obs;
   var isLoading = false.obs;
@@ -33,6 +29,15 @@ class AyatTafsirController extends GetxController {
     {"author": "Sayyid Ibrahim Qutb", "name": "Fi Zilal al-Quran", "language": "Urdu", "slug": "ur-tafsir-fe-zalul-quran-syed-qatab"},
     {"author": "Maulana Wahid Uddin Khan", "name": "Tazkirul Quran(Maulana Wahiduddin Khan)", "language": "Urdu", "slug": "ur-tazkirul-quran"},
   ];
+
+  @override
+  void onInit() {
+    // Initialize with the first available author if any
+    if (tafsirData.isNotEmpty) {
+      onAuthorSelected(tafsirData.first["author"] as String?);
+    }
+    super.onInit();
+  }
 
   void onAuthorSelected(String? author) {
     if (author == null) return;
@@ -87,7 +92,8 @@ class AyatTafsirController extends GetxController {
     isLoading.value = true;
     tafsirText.value = "Fetching Tafsir...";
 
-    final url = "https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/tafsir/${selectedLanguageSlug.value}/${surahNumber}/${ayahNumber}.json";
+    final url =
+        "https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/tafsir/${selectedLanguageSlug.value}/$surahNumber/$ayahNumber.json";
 
     try {
       final response = await http.get(Uri.parse(url));
@@ -109,5 +115,4 @@ class AyatTafsirController extends GetxController {
   void updateFontSize(double value) {
     currentFontSize.value = value;
   }
-
 }

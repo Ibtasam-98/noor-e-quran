@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -9,43 +8,30 @@ import 'package:shimmer/shimmer.dart';
 import '../../../config/app_colors.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
 import '../../../widgets/custom_text.dart';
-import '../controllers/quran_ayat_tafsir_detail_controller.dart';
+import '../controllers/quran_ayat_tafsir_detail_controller.dart'; // Updated import
 
-class QuranAyatTafsirDetailScreen extends StatefulWidget {
+class QuranAyatTafsirDetailScreen extends StatelessWidget {
   final int surahNumber;
   final int ayahNumber;
   final String surahName, ayat, surahArabicName;
+  final AyatTafsirDetailController controller; // Declare the controller here
+  final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
 
-  const QuranAyatTafsirDetailScreen({
+  QuranAyatTafsirDetailScreen({
     Key? key,
     required this.surahNumber,
     required this.ayahNumber,
     required this.surahName,
     required this.ayat,
-    required this.surahArabicName
-  }) : super(key: key);
-
-  @override
-  _QuranAyatTafsirDetailScreenState createState() => _QuranAyatTafsirDetailScreenState();
-}
-
-class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScreen> {
-  late AyatTafsirController controller;
-  late AppThemeSwitchController themeController;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = Get.put(AyatTafsirController(
-      surahNumber: widget.surahNumber,
-      ayahNumber: widget.ayahNumber,
-    ));
-    themeController = Get.put(AppThemeSwitchController());
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _showFilterBottomSheet(context);
-    // });
-  }
-
+    required this.surahArabicName,
+  })  : controller = Get.put( // Initialize the controller in the initializer list
+    AyatTafsirDetailController(
+      surahNumber: surahNumber,
+      ayahNumber: ayahNumber,
+    ),
+    tag: '${surahNumber}_${ayahNumber}', // Unique tag
+  ),
+        super(key: key);
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = themeController.isDarkMode.value;
@@ -74,8 +60,9 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
         ),
         actions: [
           InkWell(
-            onTap: (){
-              Share.share('Check out this Ayah tafsir: \nSurah Name ${widget.surahArabicName} \n\n Ayat \n${widget.ayat} Tasfir\n\n${controller.tafsirText.value}');
+            onTap: () {
+              Share.share(
+                  'Check out this Ayah tafsir: \nSurah Name $surahArabicName \n\n Ayat \n$ayat Tasfir\n\n${controller.tafsirText.value}');
             },
             child: Icon(
               Icons.share,
@@ -84,7 +71,11 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
             ),
           ),
           IconButton(
-            icon: Icon(LineIcons.filter, color: iconColor,size: 20.h,),
+            icon: Icon(
+              LineIcons.filter,
+              color: iconColor,
+              size: 20.h,
+            ),
             onPressed: () {
               _showFilterBottomSheet(context);
             },
@@ -143,14 +134,14 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
                 CustomText(
                   textColor: textColor,
                   fontSize: 18.sp,
-                  title: widget.surahName,
+                  title: surahName,
                   fontFamily: 'grenda',
                   capitalize: true,
                 ),
                 CustomText(
                   textColor: textColor,
                   fontSize: 18.sp,
-                  title: widget.surahArabicName,
+                  title: surahArabicName,
                   fontFamily: 'grenda',
                   capitalize: true,
                 ),
@@ -159,8 +150,7 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
             CustomText(
               textColor: AppColors.primary,
               fontSize: 15.sp,
-              title:
-              'Surah Number ${widget.surahNumber} | Ayat ${widget.ayahNumber}',
+              title: 'Surah Number $surahNumber | Ayat $ayahNumber',
               fontFamily: 'quicksand',
               capitalize: true,
               fontWeight: FontWeight.bold,
@@ -190,7 +180,7 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
                 child: Padding(
                   padding: EdgeInsets.only(top: 3.h, bottom: 3.h),
                   child: Text(
-                    widget.ayahNumber.toString(),
+                    ayahNumber.toString(),
                     style: TextStyle(
                       fontSize: 13.sp,
                       color: textColor,
@@ -204,7 +194,7 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 CustomText(
-                  title: widget.ayat,
+                  title: ayat,
                   textAlign: TextAlign.end,
                   fontSize: controller.currentFontSize.value,
                   textColor: textColor,
@@ -239,14 +229,14 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
                 CustomText(
                   textColor: textColor,
                   fontSize: 18.sp,
-                  title: widget.surahName,
+                  title: surahName,
                   fontFamily: 'grenda',
                   capitalize: true,
                 ),
                 CustomText(
                   textColor: textColor,
                   fontSize: 18.sp,
-                  title: widget.surahArabicName,
+                  title: surahArabicName,
                   fontFamily: 'grenda',
                   capitalize: true,
                 ),
@@ -255,8 +245,7 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
             CustomText(
               textColor: AppColors.primary,
               fontSize: 15.sp,
-              title:
-              'Surah Number ${widget.surahNumber} | Ayat ${widget.ayahNumber}',
+              title: 'Surah Number $surahNumber | Ayat $ayahNumber',
               fontFamily: 'quicksand',
               capitalize: true,
               fontWeight: FontWeight.bold,
@@ -286,7 +275,7 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
                 child: Padding(
                   padding: EdgeInsets.only(top: 3.h, bottom: 3.h),
                   child: Text(
-                    widget.ayahNumber.toString(),
+                    ayahNumber.toString(),
                     style: TextStyle(
                       fontSize: 13.sp,
                       color: textColor,
@@ -300,7 +289,7 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  widget.ayat,
+                  ayat,
                   textAlign: TextAlign.end,
                   style: TextStyle(color: textColor),
                 ),
@@ -309,10 +298,10 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
           ),
         ),
         AppSizedBox.space10h,
-        controller.isLoading.value
+        Obx(() => controller.isLoading.value
             ? Center(
           child: Shimmer.fromColors(
-            period: Duration(milliseconds: 1000),
+            period: const Duration(milliseconds: 1000),
             baseColor: themeController.isDarkMode.value
                 ? AppColors.black.withOpacity(0.1)
                 : AppColors.black.withOpacity(0.2),
@@ -342,9 +331,7 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
               child: CustomText(
                 title: controller.tafsirText.value,
                 textAlign: controller.isUrdu ||
-                    controller.selectedLanguageSlug.value
-                        ?.startsWith("ar") ==
-                        true
+                    controller.selectedLanguageSlug.value?.startsWith("ar") == true
                     ? TextAlign.right
                     : TextAlign.left,
                 fontSize: controller.currentFontSize.value,
@@ -352,7 +339,7 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
               ),
             ),
           ),
-        ),
+        )),
       ],
     );
   }
@@ -361,7 +348,7 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor:AppColors.white,
+      backgroundColor: AppColors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
@@ -383,10 +370,7 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
                       title: "Select Author",
                       hint: "Choose an Author",
                       value: controller.selectedAuthor.value,
-                      items: controller.tafsirData
-                          .map((item) => item["author"].toString())
-                          .toSet()
-                          .toList(),
+                      items: controller.tafsirData.map((item) => item["author"].toString()).toSet().toList(),
                       onChanged: (value) {
                         controller.onAuthorSelected(value);
                         setState(() {});
@@ -436,8 +420,10 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
     required List<String> items,
     required ValueChanged<String?> onChanged,
   }) {
-    final AppThemeSwitchController controller =
-    Get.put(AppThemeSwitchController());
+    final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
+    final isDarkMode = themeController.isDarkMode.value;
+    final dropdownColor = isDarkMode ? AppColors.white : AppColors.white;
+    final textColor = isDarkMode ? AppColors.white : AppColors.black;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -455,8 +441,7 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
               contentPadding: EdgeInsets.zero,
               border: InputBorder.none,
             ),
-            alignment: Alignment.center,
-            dropdownColor: AppColors.white,
+            dropdownColor: dropdownColor,
             hint: Align(
               alignment: Alignment.centerLeft,
               child: CustomText(

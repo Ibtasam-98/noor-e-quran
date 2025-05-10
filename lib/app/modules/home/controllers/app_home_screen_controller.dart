@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:noor_e_quran/app/modules/home/controllers/view_all_prayer_screen_controller.dart';
 import '../../../controllers/user_location_premission_controller.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
+import 'package:quran/quran.dart' as quran;
 
 class AppHomeScreenController extends GetxController with GetSingleTickerProviderStateMixin {
   final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
@@ -97,5 +98,17 @@ class AppHomeScreenController extends GetxController with GetSingleTickerProvide
     final islamicDate = getIslamicDate();
     final currentDate = getCurrentDate();
     marqueeText.value = 'As of $currentDate, in $cityName, the Islamic date is $islamicDate';
+  }
+
+  String getSurahName(int surahNumber) {
+    return quran.getSurahName(surahNumber);
+  }
+
+  String getSurahNameArabic(int surahNumber) {
+    return quran.getSurahNameArabic(surahNumber);
+  }
+
+  DateTime parseAccessTime(String isoTime) {
+    return DateTime.parse(isoTime);
   }
 }

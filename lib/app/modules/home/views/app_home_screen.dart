@@ -13,6 +13,8 @@ import 'package:noor_e_quran/app/widgets/custom_text.dart';
 
 import '../../../controllers/flying_bird_animation_controller.dart';
 import '../../../controllers/user_location_premission_controller.dart';
+import '../../../widgets/custom_frame.dart';
+import '../../quran/views/quran_menu_screen.dart';
 import '../controllers/view_all_prayer_screen_controller.dart';
 import 'app_home_screen_header.dart';
 
@@ -201,7 +203,7 @@ class AppHomeScreen extends StatelessWidget {
                                 alignment: Alignment.center,
                                 children: [
                                   SvgPicture.asset(
-                                    height: 20.h,
+                                    height: 16.h,
                                     "assets/images/$iconName",
                                     color: isNextNamaz
                                         ? (themeController.isDarkMode.value ? AppColors.white : AppColors.primary)
@@ -209,8 +211,8 @@ class AppHomeScreen extends StatelessWidget {
                                   ),
                                   if (isNextNamaz)
                                     Container(
-                                      height: 25.h,
-                                      width: 25.w,
+                                      height: 20.h,
+                                      width: 20.w,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(60.r),
                                         color: AppColors.transparent,
@@ -243,9 +245,108 @@ class AppHomeScreen extends StatelessWidget {
               ],
             ),
           )),
+          AppSizedBox.space15h,
+          Obx(()=>CustomText(
+            title: "Strengthen Your Iman Daily",
+            textColor:  themeController.isDarkMode.value ? AppColors.white : AppColors.black,
+            fontSize: 16.sp,
+            fontFamily: 'grenda',
+            maxLines: 1,
+            textOverflow: TextOverflow.ellipsis,
+          ),),
+          AppSizedBox.space15h,
+          Column(
+            children: [
+              SingleChildScrollView(
+                child: GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(), // To disable GridView's scrolling
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
+                    childAspectRatio: 1,
+                  ),
+                  itemCount: menuItems.length,
+                  itemBuilder: (context, index) {
+                    final menuItem = menuItems[index];
+                    return Obx(
+                          () => InkWell(
+                        highlightColor: AppColors.transparent,
+                        splashColor: AppColors.transparent,
+                        onTap: () {
+                          Get.to(menuItem['destination']());
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(5.h),
+                          decoration: BoxDecoration(
+                            color: themeController.isDarkMode.value ? AppColors.black : AppColors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primary.withOpacity(0.2),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              CustomFrame(
+                                leftImageAsset: "assets/frames/topLeftFrame.png",
+                                rightImageAsset: "assets/frames/topRightFrame.png",
+                                imageHeight: 30.h,
+                                imageWidth: 30.w,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CustomText(
+                                      title: menuItem['title']!,
+                                      fontSize: 18.sp,
+                                      textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
+                                      fontWeight: FontWeight.normal,
+                                      textOverflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                      capitalize: true,
+                                      maxLines: 2,
+                                      fontFamily: 'grenda',
+                                    ),
+                                    CustomText(
+                                      title: menuItem['subtitle']!,
+                                      fontSize: 12.sp,
+                                      textColor: AppColors.primary,
+                                      fontWeight: FontWeight.w500,
+                                      textAlign: TextAlign.center,
+                                      textOverflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              CustomFrame(
+                                leftImageAsset: "assets/frames/bottomLeftFrame.png",
+                                rightImageAsset: "assets/frames/bottomRightFrame.png",
+                                imageHeight: 30.h,
+                                imageWidth: 30.w,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              )
+            ],
+          )
         ],
       ),
     );
   }
+  final List<Map<String, dynamic>> menuItems = [
+    {"title": "Quran", "subtitle": "Recitation", "destination": () => QuranMenuScreen()},
+    {"title": "Tasbeeh", "subtitle": "Counter", "destination": () => Placeholder()},
+    {"title": "Salah", "subtitle": "Practices", "destination": () => Placeholder()},
+    {"title": "Islamic", "subtitle": "Calender", "destination": () => Placeholder()},
 
+  ];
 }

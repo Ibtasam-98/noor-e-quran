@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:noor_e_quran/app/config/app_colors.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import 'package:noor_e_quran/app/controllers/user_location_premission_controller.dart';
+import 'package:noor_e_quran/app/modules/home/views/prayer_calculation_method_settings_screen.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
 import '../../../widgets/custom_text.dart';
 class MiscItem {
@@ -27,19 +29,19 @@ class AppSettingsScreen extends StatelessWidget {
 
     MiscItem(
       title: "Export Prayer Time",
-      icon: Icons.picture_as_pdf_outlined,
+      icon: FontAwesomeIcons.filePdf,
     //  destinationScreen: ExportPrayerTime(),
       destinationScreen: Placeholder(),
     ),
     MiscItem(
       title: "FAQ",
-      icon: Icons.quiz_outlined,
+      icon: FontAwesomeIcons.question,
        // destinationScreen: FAQScreen(),
       destinationScreen: Placeholder(),
     ),
     MiscItem(
       title: "Feedback",
-      icon: Icons.feedback_outlined,
+      icon: FontAwesomeIcons.comments,
       // destinationScreen: UserFeedbackScreen(),
       destinationScreen: Placeholder(),
     ),
@@ -51,7 +53,7 @@ class AppSettingsScreen extends StatelessWidget {
     ),
     MiscItem(
       title: "Delete Data",
-      icon: Icons.delete_outline,
+      icon: FontAwesomeIcons.trash,
       // destinationScreen: DeleteDataScreen(),
       destinationScreen: Placeholder(),
     ),
@@ -157,7 +159,7 @@ class AppSettingsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                AppSizedBox.space15h,
+                AppSizedBox.space10h,
                 CustomText(
                   title: "Theme",
                   fontSize: 18.sp,
@@ -203,7 +205,45 @@ class AppSettingsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                AppSizedBox.space15h,
+                AppSizedBox.space10h,
+                CustomText(
+                  title: "Prayer",
+                  fontSize: 18.sp,
+                  textColor: AppColors.primary,
+                  fontFamily: 'grenda',
+                  maxLines: 1,
+                  textOverflow: TextOverflow.ellipsis,
+                ),
+                AppSizedBox.space10h,
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 5.h),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(15.r),
+                  ),
+                  child: InkWell(
+                    onTap: () => Get.to(() => PrayerCalculationMethodSettingsScreen()),
+                    child: ListTile(
+                      leading: Icon(
+                        LineIcons.moon,
+                        size: 18.h,
+                        color: isDarkMode ? AppColors.white : AppColors.black,
+                      ),
+                      title: CustomText(
+                        title: "Calculation Method",
+                        fontSize: 14.sp,
+                        textAlign: TextAlign.start,
+                        textColor: isDarkMode ? AppColors.white : AppColors.black,
+                      ),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 10.h,
+                        color: isDarkMode ? AppColors.white : AppColors.black,
+                      ),
+                    ),
+                  ),
+                ),
+                AppSizedBox.space10h,
                 CustomText(
                   title: "Misc",
                   fontSize: 18.sp,
@@ -228,7 +268,7 @@ class AppSettingsScreen extends StatelessWidget {
                             child: ListTile(
                               leading: Icon(
                                 item.icon,
-                                size: 16.h,
+                                size: 14.h,
                                 color: isDarkMode ? AppColors.white : AppColors.black,
                               ),
                               title: CustomText(

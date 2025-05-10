@@ -7,7 +7,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:noor_e_quran/app/config/app_colors.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import 'package:noor_e_quran/app/controllers/app_theme_switch_controller.dart';
-import 'package:noor_e_quran/app/modules/home/views/prayer_method_settings_screen.dart';
+import 'package:noor_e_quran/app/modules/home/views/prayer_calculation_method_settings_screen.dart';
 import 'package:noor_e_quran/app/widgets/custom_text.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -50,9 +50,9 @@ class ViewAllPrayerScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: IconButton(
-              icon: Icon(LineIcons.cog, color: iconColor),
+              icon: Icon(LineIcons.moon, color: iconColor,size: 22.h,),
               onPressed: () {
-                Get.to(PrayerMethodSettingsView());
+                Get.to(PrayerCalculationMethodSettingsScreen());
               },
             ),
           )
@@ -70,7 +70,7 @@ class ViewAllPrayerScreen extends StatelessWidget {
               imageUrl: isDarkMode ? 'assets/images/sajdah_bg_dark.jpg' : 'assets/images/sajdah_bg_light.jpg',
               mergeWithGradientImage: true,
             ),
-            AppSizedBox.space15h,
+            AppSizedBox.space10h,
             Obx(() => CustomText(
               textAlign: TextAlign.start,
               fontSize: 16.sp,
@@ -79,7 +79,7 @@ class ViewAllPrayerScreen extends StatelessWidget {
               maxLines: 2,
               textOverflow: TextOverflow.ellipsis,
             )),
-            AppSizedBox.space15h,
+            AppSizedBox.space10h,
             Expanded(
               child: _buildPrayerTimesList(isDarkMode, iconColor, is24HourFormat),
             ),

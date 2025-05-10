@@ -20,4 +20,31 @@ class AppConstants {
   // Local Storage Keys
   static const String hasSeenOnboardingKey = 'hasSeenOnboarding';
   static const String hasCompletedPermissionsKey = 'hasCompletedPermissions';
+
+  // Prayer Calculation Methods Full Names
+  static const Map<String, String> prayerCalculationMethodsFullNames = {
+    'MWL': 'Muslim World League',
+    'ISNA': 'Islamic Society of North America',
+    'EGYPT': 'Egyptian General Authority of Survey',
+    'MAKKAH': 'Umm Al-Qura University, Makkah',
+    'KARACHI': 'University of Islamic Sciences, Karachi',
+    'TEHRAN': 'Institute of Geophysics, University of Tehran',
+    'JAFARI': 'Shia Ithna Ashari, Leva Institute, Qum',
+    'GULF': 'Gulf Region',
+    'KUWAIT': 'Kuwait',
+    'QATAR': 'Qatar',
+    'SINGAPORE': 'Majlis Ugama Islam Singapura, Singapore',
+    'FRANCE': 'Union Organization Islamic de France',
+    'TURKEY': 'Diyanet İşleri Başkanlığı, Turkey',
+    'RUSSIA': 'Spiritual Administration of Muslims of Russia',
+    'MOONSIGHTING': 'Moonsighting Committee Worldwide ',
+    'DUBAI': 'Dubai',
+    'JAKIM': 'Jabatan Kemajuan Islam Malaysia ',
+    'TUNISIA': 'Tunisia',
+    'ALGERIA': 'Algeria',
+    'KEMENAG': 'Kementerian Agama Republik Indonesia',
+    'MOROCCO': 'Morocco',
+    'PORTUGAL': 'Comunidade Islamica de Lisboa',
+    'JORDAN': 'Ministry of Awqaf, Islamic Affairs and Holy Places, Jordan',
+  };
 }

@@ -10,68 +10,37 @@ import 'custom_text.dart';
 class CustomCard extends StatelessWidget {
   final String? title;
   final String? subtitle;
-  final IconData? icon;
   final String? imageUrl;
-  final String? arabicTitle;
   final bool mergeWithGradientImage;
-  final double titleFontSize;
-  final double subtitleFontSize;
-  final double arabicTitleFontSize;
-  final double iconSize;
-  final Alignment titleAlignment;
-  final Alignment subtitleAlignment;
-  final bool useIconInRow;
   final TextStyle? titleStyle;
   final TextStyle? subtitleStyle;
-  final double? containerHeight;
   final EdgeInsetsGeometry? padding;
-  final Color? iconColor;
-  final Color? textColor;
-  final Color? decorationColor;
   final bool addPadding;
-  final bool addBoxShadow;
-  final bool useLinearGradient;
-  final List<Color>? gradientColors;
-  final int? titleMaxLines; // Added titleMaxLines
-  final int? subtitleMaxLines; // Added subtitleMaxLines
+  final int? titleMaxLines;
+  final int? subtitleMaxLines;
+  final double titleFontSize; // Added
+  final double subtitleFontSize; // Added
 
   const CustomCard({
     super.key,
     this.title,
     this.subtitle,
-    this.icon,
     this.imageUrl,
-    this.arabicTitle,
     this.mergeWithGradientImage = false,
-    this.titleFontSize = 15.0,
-    this.subtitleFontSize = 14.0,
-    this.arabicTitleFontSize = 30.0,
-    this.iconSize = 12.0,
-    this.titleAlignment = Alignment.centerLeft,
-    this.subtitleAlignment = Alignment.centerRight,
-    this.useIconInRow = true,
     this.titleStyle,
     this.subtitleStyle,
-    this.containerHeight,
     this.padding,
-    this.iconColor,
-    this.textColor,
-    this.decorationColor,
     this.addPadding = true,
-    this.addBoxShadow = true,
-    this.useLinearGradient = true,
-    this.gradientColors,
-    this.titleMaxLines, // Initialize titleMaxLines
-    this.subtitleMaxLines, // Initialize subtitleMaxLines
+    this.titleMaxLines,
+    this.subtitleMaxLines,
+    this.titleFontSize = 16.0, // Default value
+    this.subtitleFontSize = 14.0, // Default value
   });
 
   @override
   Widget build(BuildContext context) {
-    final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
+    final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
     bool isDarkMode = themeController.isDarkMode.value;
-    Color effectiveTitleColor = isDarkMode ? AppColors.primary : AppColors.primary;
-    Color effectiveSubtitleColor = isDarkMode ? AppColors.white : AppColors.black;
-    Color effectiveIconColor = isDarkMode ? AppColors.white : AppColors.black;
 
     if (mergeWithGradientImage && imageUrl != null) {
       return Stack(
@@ -88,17 +57,15 @@ class CustomCard extends StatelessWidget {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                gradient: useLinearGradient
-                    ? LinearGradient(
-                  colors: gradientColors ?? [
-                    AppColors.black.withOpacity(0.9),
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.black.withOpacity(0.7),
                     AppColors.transparent,
-                    AppColors.black.withOpacity(0.9),
+                    AppColors.black.withOpacity(0.7),
                   ],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
-                )
-                    : null,
+                ),
                 borderRadius: BorderRadius.circular(15.r),
               ),
               child: Padding(
@@ -106,43 +73,27 @@ class CustomCard extends StatelessWidget {
                   vertical: addPadding ? 25.h : 0,
                   horizontal: 10.w,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (title != null)
-                            CustomText(
-                              textColor: AppColors.white,
-                              fontSize: titleFontSize.sp,
-                              title: title!,
-                              textAlign: TextAlign.start,
-                              fontFamily: 'grenda',
-                              maxLines: titleMaxLines, // Apply titleMaxLines
-                            ),
-                          if (subtitle != null)
-                            CustomText(
-                              textColor: AppColors.white.withOpacity(0.7),
-                              fontSize: subtitleFontSize.sp,
-                              title: subtitle!,
-                              textAlign: TextAlign.start,
-                              textStyle: const TextStyle(fontStyle: FontStyle.italic),
-                              maxLines: subtitleMaxLines, // Apply subtitleMaxLines
-                            ),
-                        ],
+                    if (title != null)
+                      CustomText(
+                        textColor: AppColors.white,
+                        title: title!,
+                        textAlign: TextAlign.start,
+                        fontFamily: 'grenda',
+                        textStyle: titleStyle,
+                        maxLines: titleMaxLines,
+                        fontSize: titleFontSize.sp, // Added fontSize
                       ),
-                    ),
-                    if (arabicTitle != null)
-                      Padding(
-                        padding: EdgeInsets.only(right: 5.w, top: 5.h),
-                        child: CustomText(
-                          textColor: AppColors.white,
-                          fontSize: arabicTitleFontSize.sp,
-                          title: arabicTitle!,
-                          textAlign: TextAlign.end,
-                        ),
+                    if (subtitle != null)
+                      CustomText(
+                        textColor: AppColors.white.withOpacity(0.7),
+                        title: subtitle!,
+                        textAlign: TextAlign.start,
+                        textStyle: subtitleStyle ?? const TextStyle(fontStyle: FontStyle.italic),
+                        maxLines: subtitleMaxLines,
+                        fontSize: subtitleFontSize.sp, // Added fontSize
                       ),
                   ],
                 ),
@@ -160,66 +111,42 @@ class CustomCard extends StatelessWidget {
           ),
           child: Container(
             padding: padding ?? EdgeInsets.all(12.h),
-            height: containerHeight,
             decoration: BoxDecoration(
-              color: decorationColor ?? (isDarkMode ? AppColors.black : AppColors.white),
+              color: isDarkMode ? AppColors.black : AppColors.white,
               borderRadius: BorderRadius.circular(15.r),
-              boxShadow: addBoxShadow
-                  ? [
+              boxShadow: [
                 BoxShadow(
                   color: AppColors.primary.withOpacity(0.3),
                   blurRadius: 5,
                 ),
-              ]
-                  : [],
+              ],
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (title != null && icon != null && useIconInRow)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Align(
-                          alignment: titleAlignment,
-                          child: Text(
-                            title!,
-                            style: titleStyle ??
-                                TextStyle(
-                                  color: effectiveTitleColor,
-                                  fontSize: titleFontSize.sp,
-                                  fontFamily: 'grenda',
-                                ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: titleMaxLines ?? 1, // Apply titleMaxLines with default
-                            softWrap: false,
-                          ),
-                        ),
-                      ),
-                      Icon(
-                        icon!,
-                        color: effectiveIconColor,
-                        size: iconSize.h,
-                      ),
-                    ],
+                if (title != null)
+                  CustomText(
+                    title: title!,
+                    textColor: AppColors.primary,
+                    textOverflow: TextOverflow.ellipsis,
+                    textStyle: titleStyle,
+                    maxLines: titleMaxLines ?? 1,
+                    fontSize: titleFontSize.sp, // Added fontSize
                   ),
                 if (subtitle != null)
-                  Align(
-                    alignment: subtitleAlignment,
-                    child: Text(
-                      subtitle!,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: subtitleMaxLines ?? 3, // Apply subtitleMaxLines with default
-                      style: subtitleStyle ??
-                          GoogleFonts.quicksand(
-                            textStyle: TextStyle(
-                              color: effectiveSubtitleColor,
-                              fontSize: subtitleFontSize.sp,
-                            ),
+                  CustomText(
+                    title: subtitle!,
+                    textOverflow: TextOverflow.ellipsis,
+                    maxLines: subtitleMaxLines ?? 3,
+                    textStyle: subtitleStyle ??
+                        GoogleFonts.quicksand(
+                          textStyle: TextStyle(
+                            color: isDarkMode ? AppColors.white : AppColors.black,
+                            fontStyle: FontStyle.italic,
                           ),
-                    ),
+                        ),
+                    fontSize: subtitleFontSize.sp, // Added fontSize
                   ),
               ],
             ),

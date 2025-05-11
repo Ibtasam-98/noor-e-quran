@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:noor_e_quran/app/config/app_colors.dart';
@@ -14,6 +15,7 @@ import '../../../controllers/user_location_premission_controller.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_shimmer.dart';
 import '../controllers/view_all_prayer_screen_controller.dart';
+import 'global_prayer_time_screen.dart';
 
 class ViewAllPrayerScreen extends StatelessWidget {
   final NamazController namazController = Get.find<NamazController>();
@@ -46,6 +48,12 @@ class ViewAllPrayerScreen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         actions: [
+          IconButton(
+            icon: Icon(LineIcons.globe, color: iconColor,size: 22.h,),
+            onPressed: () {
+              Get.to(GlobalPrayerTimeScreen());
+            },
+          ),
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: IconButton(
@@ -64,19 +72,12 @@ class ViewAllPrayerScreen extends StatelessWidget {
           children: [
             CustomCard( // Removed Obx here if formattedHijriDate isn't reactive
               title: namazController.formattedHijriDate(),
-              subtitle: 'Date ${DateFormat('yyyy.MM.dd').format(DateTime.now())}',
+              subtitle: 'Date ${DateFormat('yyyy.MM.dd').format(DateTime.now())}\n${namazController.selectedMethodName.value}',
               imageUrl: isDarkMode ? 'assets/images/sajdah_bg_dark.jpg' : 'assets/images/sajdah_bg_light.jpg',
               mergeWithGradientImage: true,
+              subtitleStyle: GoogleFonts.quicksand(),
+              subtitleFontSize: 10.sp,
             ),
-            AppSizedBox.space10h,
-            Obx(() => CustomText(
-              textAlign: TextAlign.start,
-              fontSize: 16.sp,
-              textColor: isDarkMode ? AppColors.white : AppColors.black,
-              title: '${namazController.selectedMethodName.value}',
-              maxLines: 2,
-              textOverflow: TextOverflow.ellipsis,
-            )),
             AppSizedBox.space10h,
             Expanded(
               child: _buildPrayerTimesList(isDarkMode, iconColor, is24HourFormat),
@@ -116,7 +117,6 @@ class ViewAllPrayerScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final namazName = namazController.namazTimes[index];
           final namazTime = namazController.namazTimings[namazName] ?? "--";
-          final formattedTime = namazController.formatTime(namazTime, is24HourFormat);
           final iconName = namazController.icons[index];
           final isNextNamaz = namazName == namazController.nextNamazName.value;
 
@@ -166,7 +166,8 @@ class ViewAllPrayerScreen extends StatelessWidget {
                             namazController.formatTime(namazController.namazTimings[namazName] ?? "--", is24HourFormat),
                             isNextNamaz,
                             isDarkMode,
-                            namazName)),
+                            namazName,)
+                        ),
                       ],
                     ),
                   ),
@@ -180,26 +181,20 @@ class ViewAllPrayerScreen extends StatelessWidget {
   }
 
   Widget _buildPrayerName(String name, bool isNextNamaz, bool isDarkMode) {
-    return Text(
-      name,
-      style: TextStyle(
-        fontSize: 16.sp,
-        fontWeight: isNextNamaz ? FontWeight.bold : FontWeight.normal,
-        color: isNextNamaz ? AppColors.primary : (isDarkMode ? AppColors.white : AppColors.black),
-      ),
+    return CustomText(
+      title: name,
+      textColor: isNextNamaz ? AppColors.primary : (isDarkMode ? AppColors.white : AppColors.black),
+      fontSize: 14.sp,
     );
   }
 
   Widget _buildPrayerTime(String time, bool isNextNamaz, bool isDarkMode, String name) {
     return Row(
       children: [
-        Text(
-          time,
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: isNextNamaz ? FontWeight.bold : FontWeight.normal,
-            color: isDarkMode ? AppColors.white : AppColors.black,
-          ),
+        CustomText(
+         title:time,
+          fontSize: 12.sp,
+          textColor: isDarkMode ? AppColors.white : AppColors.black,
         ),
         AppSizedBox.space10w,
         Obx(() => InkWell(

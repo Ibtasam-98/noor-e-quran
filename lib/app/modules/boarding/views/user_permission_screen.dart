@@ -75,7 +75,7 @@ class UserPermissionScreen extends StatelessWidget {
       children: [
         CustomText(
           title: title,
-          fontSize: 20.sp,
+          fontSize: 18.sp,
           fontFamily: 'grenda',
           textAlign: TextAlign.start,
           textColor: AppColors.primary,
@@ -83,7 +83,7 @@ class UserPermissionScreen extends StatelessWidget {
           textOverflow: TextOverflow.ellipsis,
         ),
         CustomText(
-          fontSize: 15.sp,
+          fontSize: 12.sp,
           title: description,
           textAlign: TextAlign.start,
           textColor: isDarkMode ? AppColors.white : AppColors.black,
@@ -109,13 +109,13 @@ class UserPermissionScreen extends StatelessWidget {
           ),
           AppSizedBox.space10h,
           Obx(() => CustomText(
-            fontSize: 15.sp,
+            fontSize: 12.sp,
             title: connectivityController.internetCheckCompleted.value
                 ? "Internet connection successfully."
                 : "Please click the Check button below complete the checking process.",
             textAlign: TextAlign.start,
             textColor: isDarkMode ? AppColors.white : AppColors.black,
-            maxLines: 2,
+            maxLines: 3,
             textOverflow: TextOverflow.ellipsis,
           )),
           const Spacer(),
@@ -173,7 +173,7 @@ class UserPermissionScreen extends StatelessWidget {
             "Allow Location access",
             "Enabling access allows us to automatically calculate accurate prayer times based on your current location, ensuring you never miss a prayer.",
             isDarkMode,
-            maxLines: 3,
+            maxLines: 5,
           ),
           AppSizedBox.space15h,
           Obx(() {
@@ -184,7 +184,7 @@ class UserPermissionScreen extends StatelessWidget {
                   AppSizedBox.space10w,
                   CustomText(
                     title: '${userPermissionController.cityName}, ${userPermissionController.countryName}',
-                    fontSize: 15.sp,
+                    fontSize: 12.sp,
                     textColor: isDarkMode ? AppColors.white : AppColors.black,
                   ),
                 ],
@@ -231,19 +231,27 @@ class UserPermissionScreen extends StatelessWidget {
                 "Choose Theme",
                 "Choose your preferred theme from the options presented below. Select either Light Mode for a bright and vibrant interface, or Dark Mode for a sleek and comfortable experience, especially in low-light environments.",
                 isDarkMode,
-                maxLines: 2,
+                maxLines: 7,
               ),
               AppSizedBox.space20h,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: themeOptions.map((option) =>
-                    _buildThemeCard(
-                      option['title'],
-                      option['isDark'],
-                      themeController.isDarkMode.value == option['isDark'],
-                      option['image'],
-                    )
-                ).toList(),
+              // Use LayoutBuilder or ConstrainedBox for responsive sizing
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: 200.h, // Maximum height you want
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: themeOptions.map((option) =>
+                      Flexible( // Use Flexible to allow the card to expand
+                        child: _buildThemeCard(
+                          option['title'],
+                          option['isDark'],
+                          themeController.isDarkMode.value == option['isDark'],
+                          option['image'],
+                        ),
+                      )
+                  ).toList(),
+                ),
               ),
             ],
           ),
@@ -264,58 +272,62 @@ class UserPermissionScreen extends StatelessWidget {
 
   Widget _buildThemeCard(String title, bool isDarkMode, bool isSelected, String imagePath) {
     final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
-    return SizedBox(
-      height: 180.h,
-      width: 150.w,
-      child: Column(
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                if (themeController.isDarkMode.value != isDarkMode) {
-                  themeController.toggleTheme();
-                }
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: isSelected ? AppColors.primary : isDarkMode ? Colors.black87 : AppColors.primary,
-                  borderRadius: BorderRadius.circular(15.r),
-                  border: isSelected ? Border.all(
-                    color: isDarkMode ? AppColors.white : AppColors.primary,
-                    width: 2.w,
-                  ) : null,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15.r),
-                          image: DecorationImage(
-                            image: AssetImage(imagePath),
-                            fit: BoxFit.cover,
+    return AspectRatio(
+      aspectRatio: 0.8,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.w),
+        child: Column(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  if (themeController.isDarkMode.value != isDarkMode) {
+                    themeController.toggleTheme();
+                  }
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: isSelected ? AppColors.primary : isDarkMode ? Colors.black87 : AppColors.primary,
+                    borderRadius: BorderRadius.circular(20.r),
+                    border: isSelected ? Border.all(
+                      color: isDarkMode ? AppColors.white : AppColors.primary,
+                      width: 4.w,
+                    ) : null,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.r),
+                            image: DecorationImage(
+                              image: AssetImage(imagePath),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 8.h),
-            child: CustomText(
-              title: title,
-              fontSize: 15.sp,
-              textColor: isSelected ? AppColors.primary : isDarkMode ? AppColors.black : AppColors.white,
+            Padding(
+              padding: EdgeInsets.only(top: 12.h),
+              child: CustomText(
+                title: title,
+                fontSize: 12.sp,
+                textColor: isSelected ? AppColors.primary : isDarkMode ? AppColors.black : AppColors.white,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+
+
 
   Widget _buildWelcomeScreen(bool isDarkMode) {
     final ConnectivityController connectivityController = Get.put(ConnectivityController());
@@ -329,7 +341,7 @@ class UserPermissionScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomText(
-                  fontSize: 20.sp,
+                  fontSize: 18.sp,
                   title: AppConstants.onboardingTitle,
                   fontFamily: 'grenda',
                   textColor: AppColors.primary,
@@ -339,10 +351,10 @@ class UserPermissionScreen extends StatelessWidget {
                 ),
                 AppSizedBox.space10h,
                 Align(
-                  alignment: Alignment.centerRight,
+                  alignment: Alignment.center,
                   child: CustomText(
-                    fontSize: 30.sp,
-                    textAlign: TextAlign.end,
+                    fontSize: 40.sp,
+                    textAlign: TextAlign.center,
                     textColor: isDarkMode ? AppColors.white : AppColors.primary,
                     title: AppConstants.bismillah,
                     maxLines: 2,
@@ -354,7 +366,7 @@ class UserPermissionScreen extends StatelessWidget {
                   title: AppConstants.appWelcomeHeaderLine,
                   textAlign: TextAlign.start,
                   textColor: isDarkMode ? AppColors.white : AppColors.black,
-                  fontSize: 15.sp,
+                  fontSize: 12.sp,
                   maxLines: 4,
                   textOverflow: TextOverflow.ellipsis,
                 ),
@@ -367,7 +379,7 @@ class UserPermissionScreen extends StatelessWidget {
                   ),
                   child: CustomText(
                     title: AppConstants.appWelcomeQuranicVerseArabic,
-                    fontSize: 15.sp,
+                    fontSize: 12.sp,
                     textAlign: TextAlign.end,
                     maxLines: 3,
                     textOverflow: TextOverflow.ellipsis,
@@ -377,7 +389,7 @@ class UserPermissionScreen extends StatelessWidget {
                 AppSizedBox.space15h,
                 CustomText(
                   title: AppConstants.appWelcomeQuranicVerseTranslation,
-                  fontSize: 14.sp,
+                  fontSize: 12.sp,
                   textAlign: TextAlign.start,
                   textColor: isDarkMode ? AppColors.white : AppColors.black,
                   maxLines: 4,
@@ -388,7 +400,7 @@ class UserPermissionScreen extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: CustomText(
                     title: AppConstants.appWelcomeQuranicVerseReference,
-                    fontSize: 12.sp,
+                    fontSize: 10.sp,
                     textAlign: TextAlign.start,
                     textColor: isDarkMode ? AppColors.white.withOpacity(0.3) : AppColors.black,
                     textStyle: TextStyle(fontStyle: FontStyle.italic),

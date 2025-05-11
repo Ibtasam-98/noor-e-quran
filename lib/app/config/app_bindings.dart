@@ -22,5 +22,6 @@ class AppBinding extends Bindings {
     Get.lazyPut(() => NamazController());
     Get.lazyPut(() => FlyingBirdAnimationController());
 
+
   }
 }

@@ -10,25 +10,25 @@ import '../../../widgets/custom_text.dart';
 import '../../home/controllers/app_home_screen_controller.dart';
 import '../../home/views/app_home_screen_header.dart';
 
-class HadithCollectionScreen extends StatelessWidget {
+class QuranMemorizerMainScreen extends StatelessWidget {
   final Map<String, dynamic>? userData;
 
-  HadithCollectionScreen({super.key, this.userData});
+  QuranMemorizerMainScreen({super.key, this.userData});
   @override
   Widget build(BuildContext context) {
-    final FlyingBirdAnimationController _hadithBirdController = Get.find<FlyingBirdAnimationController>();
+    final FlyingBirdAnimationController _hifzBirdController = Get.find<FlyingBirdAnimationController>();
     final AppHomeScreenController controller = Get.put(AppHomeScreenController());
 
     return AppHomeBaseScreen(
       titleFirstPart: "Noor e",
       titleSecondPart: " Quran",
-      birdController: _hadithBirdController,
+      birdController: _hifzBirdController,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          HomeScreenHeader(birdController: _hadithBirdController),
+          HomeScreenHeader(birdController: _hifzBirdController),
           Obx(() => CustomText(
-            title: "Hadith of the Hour",
+            title: "Holy Quran Memorizer",
             textColor: controller.themeController.isDarkMode.value ? AppColors.white : AppColors.black,
             fontSize: 14.sp,
             fontFamily: 'grenda',

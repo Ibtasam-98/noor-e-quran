@@ -47,4 +47,25 @@ class AppConstants {
     'PORTUGAL': 'Comunidade Islamica de Lisboa',
     'JORDAN': 'Ministry of Awqaf, Islamic Affairs and Holy Places, Jordan',
   };
+
+  static const List<Map<String, String>> sliderItems = [
+    {
+      'image': 'assets/images/sadaqah.jpg',
+      'title': 'Give Sadaqah',
+      'subtitle': 'Charity does not decrease wealth, no one forgives another except that Allah increases his honor, and no one humbles himself for the sake of Allah except that Allah raises his status.',
+      'reference': 'Sahih Muslim 2588 Book 45 Hadith 90'
+    },
+    {
+      'image': 'assets/images/orphan.png',
+      'title': 'Support Orphans',
+      'subtitle': 'The Prophet (ﷺ) said, "I and the person who looks after an orphan and provides for him, will be in Paradise like this," putting his index and middle fingers together.',
+      'reference': 'Sahih Al Bukhari 6005 Book 78 Hadith 36'
+    },
+    {
+      'image': 'assets/images/hungry.png',
+      'title': 'Feed the Hungry',
+      'subtitle': 'The Prophet (ﷺ) said, "Feed the hungry, visit the sick, and set free the captives."',
+      'reference': 'Sahih Al Bukhari 5649 Book 75, Hadith 9'
+    },
+  ];
 }

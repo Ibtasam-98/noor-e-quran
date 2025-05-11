@@ -71,7 +71,7 @@ class CustomButton extends StatelessWidget {
                 child: Center(
                   child: CustomText(
                     textColor: btnTitleColor,
-                    fontSize: 14.sp,
+                    fontSize: 12.sp,
                     title: btnTitle,
                     maxLines: 1,
                     textOverflow: TextOverflow.ellipsis,

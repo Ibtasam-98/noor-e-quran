@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,7 +32,6 @@ class AppHomeBaseScreen extends StatelessWidget {
     this.marqueeText,
     this.birdAnimationWidget,
   }) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +112,7 @@ class AppHomeBaseScreen extends StatelessWidget {
               firstText: titleFirstPart,
               secondText: titleSecondPart,
               fontSize: 15.sp,
-              firstTextColor: defaultTextColor, // Use default text color
+              firstTextColor: defaultTextColor,
               secondTextColor: AppColors.primary,
             ),
             actions: [
@@ -133,12 +130,21 @@ class AppHomeBaseScreen extends StatelessWidget {
           body: RefreshIndicator(
             color: AppColors.primary,
             onRefresh: () async {
-              namazController.isNamazLoading.value;
-              homeScreenController.loadLastAccessedSurahs();
-              locationPermissionScreenController.locationAccessed.value;
-              return Future.delayed(const Duration(seconds: 1));
+              homeScreenController.isLoading.value = true;
+              await Future.wait([
+                locationPermissionScreenController.accessLocation(),
+                if (locationPermissionScreenController.locationAccessed.value)
+                  namazController.getNamazTimings(
+                    locationPermissionScreenController.latitude.value,
+                    locationPermissionScreenController.longitude.value,
+                    method: namazController.selectedCalculationMethod.value,
+                  ),
+                Future.delayed(const Duration(seconds: 1)), // Minimum shimmer time
+              ]);
+              homeScreenController.isLoading.value = false;
             },
             child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
               child: Padding(
                 padding: EdgeInsets.only(left: 15.w, right: 15.w),
                 child: Column(
@@ -156,80 +162,25 @@ class AppHomeBaseScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              buildShimmerContainer(widthFactor: 0.4, height: 18.sp),
-                              SizedBox(width: 5.w),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  buildShimmerContainer(widthFactor: 0.3, height: 14.sp),
-                                ],
-                              ),
-                            ],
-                          ),
-                          AppSizedBox.space10h,
-                          buildShimmerContainer(height: 45.h),
+                          buildShimmerContainer(widthFactor: 0.4, height: 18.sp),
+                          AppSizedBox.space5h,
+                          buildShimmerContainer(widthFactor: 0.2, height: 18.sp),
                           AppSizedBox.space10h,
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               buildShimmerContainer(widthFactor: 0.4, height: 18.sp),
-                              buildShimmerContainer(widthFactor: 0.2, height: 14.sp),
+                              buildShimmerContainer(widthFactor: 0.2, height: 18.sp),
                             ],
                           ),
                           AppSizedBox.space10h,
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: List.generate(
-                                3, (index) => Container(
-                                width: 280.w,
-                                margin: EdgeInsets.only(right: 8.w),
-                                padding: EdgeInsets.all(6.h),
-                                decoration: shimmerBoxDecoration(),
-                                child: ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  dense: true,
-                                  title: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      buildShimmerContainer(widthFactor: 0.4, height: 15.sp),
-                                      AppSizedBox.space5h,
-                                      buildShimmerContainer(widthFactor: 0.5, height: 14.sp),
-                                    ],
-                                  ),
-                                  subtitle: buildShimmerContainer(widthFactor: 0.3, height: 12.sp),
-                                  trailing: Container(
-                                    width: 25.sp,
-                                    height: 25.sp,
-                                    decoration: const BoxDecoration(
-                                      color: AppColors.white,
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              ),
-                            ),
-                          ),
+                          buildShimmerContainer(height: 140.h),
                           AppSizedBox.space10h,
                           buildShimmerContainer(widthFactor: 0.4, height: 18.sp),
                           AppSizedBox.space10h,
-                          buildShimmerContainer(height: 150.h, borderRadius: 15.r),
+                          buildShimmerContainer(height: 140.h),
                           AppSizedBox.space10h,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              buildShimmerContainer(widthFactor: 0.4, height: 18.sp),
-                              buildShimmerContainer(widthFactor: 0.2, height: 14.sp),
-                            ],
-                          ),
-                          AppSizedBox.space10h,
-                          buildShimmerContainer(height: 180.h, borderRadius: 15.r),
-                          AppSizedBox.space15h,
-                          buildShimmerContainer(widthFactor: 0.5, height: 18.sp),
+                          buildShimmerContainer(widthFactor: 0.4, height: 18.sp),
                           AppSizedBox.space10h,
                           ...List.generate(
                             2,
@@ -240,15 +191,15 @@ class AppHomeBaseScreen extends StatelessWidget {
                                     2,
                                         (colIndex) => Expanded(
                                       child: Container(
-                                        margin: EdgeInsets.symmetric(horizontal: 2.5.w),
+                                        margin: EdgeInsets.only(right: 10.w,),
                                         padding: EdgeInsets.all(8.0),
                                         decoration: shimmerBoxDecoration(borderRadius: 10.r),
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            buildShimmerContainer(widthFactor: 0.2, height: 130.sp, borderRadius: 5.r),
+                                            buildShimmerContainer(widthFactor: 0.25, height: 80.sp, borderRadius: 5.r),
                                             AppSizedBox.space5h,
-                                            buildShimmerContainer(widthFactor: 0.15, height: 12.sp),
+                                            buildShimmerContainer(widthFactor: 0.15, height: 80.sp),
                                           ],
                                         ),
                                       ),
@@ -262,7 +213,7 @@ class AppHomeBaseScreen extends StatelessWidget {
                         ],
                       ),
                     )
-                        : child,
+                        : child
                     ),
                   ],
                 ),

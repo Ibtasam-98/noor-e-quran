@@ -55,7 +55,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           firstText:
           firstText,
           secondText: secondText != null && addSpace ? ' $secondText' : secondText,
-          fontSize: titleFontSize ?? 18.sp,
+          fontSize: titleFontSize ?? 16.sp,
           textColor: isDarkMode ? AppColors.white : AppColors.black,
           firstTextColor: firstTextColor,
           secondTextColor: secondTextColor,

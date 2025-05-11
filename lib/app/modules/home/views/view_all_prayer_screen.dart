@@ -10,7 +10,6 @@ import 'package:noor_e_quran/app/controllers/app_theme_switch_controller.dart';
 import 'package:noor_e_quran/app/modules/home/views/prayer_calculation_method_settings_screen.dart';
 import 'package:noor_e_quran/app/widgets/custom_text.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../../../controllers/user_location_premission_controller.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_shimmer.dart';
@@ -65,8 +64,7 @@ class ViewAllPrayerScreen extends StatelessWidget {
           children: [
             CustomCard( // Removed Obx here if formattedHijriDate isn't reactive
               title: namazController.formattedHijriDate(),
-              subtitle:
-              'Date ${DateFormat('yyyy.MM.dd').format(DateTime.now())}',
+              subtitle: 'Date ${DateFormat('yyyy.MM.dd').format(DateTime.now())}',
               imageUrl: isDarkMode ? 'assets/images/sajdah_bg_dark.jpg' : 'assets/images/sajdah_bg_light.jpg',
               mergeWithGradientImage: true,
             ),

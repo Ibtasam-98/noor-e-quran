@@ -7,6 +7,7 @@ import 'app/config/app_bindings.dart';
 import 'app/controllers/app_theme_switch_controller.dart';
 import 'app/modules/boarding/views/onboarding_screen.dart';
 import 'app/modules/home/views/home_screen_bottom_navigation.dart';
+import 'app/modules/home/controllers/app_home_screen_bottom_navigation_controller.dart'; // Import the missing controller
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +27,9 @@ void main() async {
   // Initialize the AppThemeSwitchController here
   final themeController = AppThemeSwitchController();
   Get.put(themeController);
+
+  // Initialize the AppHomeScreenBottomNavigationController
+  Get.put(AppHomeScreenBottomNavigationController()); // Add this line
 
   runApp(MyApp(hasSeenOnboarding: hasSeenOnboarding));
 }
@@ -70,4 +74,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

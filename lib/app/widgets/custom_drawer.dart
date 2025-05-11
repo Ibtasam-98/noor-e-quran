@@ -7,7 +7,6 @@ import 'package:line_icons/line_icons.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import '../config/app_colors.dart';
 import '../modules/home/views/app_setting_screen.dart';
-import '../modules/quran/views/quran_saved_ayat_bookmark_screen.dart';
 import 'custom_text.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -38,7 +37,7 @@ class CustomDrawer extends StatelessWidget {
                         children: [
                           CustomText(
                             textColor: isDarkMode ? AppColors.primary : AppColors.black,
-                            fontSize: 22.sp,
+                            fontSize: 20.sp,
                             title: username,
                             maxLines: 1,
                             textOverflow: TextOverflow.ellipsis,
@@ -47,7 +46,7 @@ class CustomDrawer extends StatelessWidget {
                           ),
                           CustomText(
                             textColor: textColor,
-                            fontSize: 15.sp,
+                            fontSize: 12.sp,
                             title: welcomeMsg,
                             maxLines: 1,
                             textOverflow: TextOverflow.ellipsis,
@@ -62,10 +61,10 @@ class CustomDrawer extends StatelessWidget {
                       splashColor: AppColors.transparent,
                       hoverColor: AppColors.transparent,
                       onTap: () {},
-                      leading: Icon(LineIcons.home, size: 20.h, color: iconColor),
+                      leading: Icon(LineIcons.home, size: 16.h, color: iconColor),
                       title: CustomText(
                         textColor: textColor,
-                        fontSize: 15.sp,
+                        fontSize: 14.sp,
                         title: "Home",
                         maxLines: 2,
                         textOverflow: TextOverflow.ellipsis,
@@ -74,52 +73,52 @@ class CustomDrawer extends StatelessWidget {
                       ),
                       trailing: Icon(Icons.arrow_forward_ios_outlined, size: 10.h, color: iconColor),
                     ),
-                    ListTile(
-                      splashColor: AppColors.transparent,
-                      hoverColor: AppColors.transparent,
-                      onTap: () {
-                         // Get.to(SavedHadithScreen());
-                      },
-                      leading: Icon(LineIcons.bookmark, size: 17.h, color: iconColor),
-                      title: CustomText(
-                        textColor: textColor,
-                        fontSize: 15.sp,
-                        title: "Saved Hadith",
-                        maxLines: 2,
-                        textOverflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.start,
-                        textStyle: GoogleFonts.quicksand(color: textColor),
-                      ),
-                      trailing: Icon(Icons.arrow_forward_ios_outlined, size: 10.h, color: iconColor),
-                    ),
-                    ListTile(
-                      splashColor: AppColors.transparent,
-                      hoverColor: AppColors.transparent,
-                      onTap: () {
-                        Get.to(QuranSavedAyatBookmarkScreen());
-                      },
-                      leading: Icon(LineIcons.bookmark, size: 17.h, color: iconColor),
-                      title: CustomText(
-                        textColor: textColor,
-                        fontSize: 15.sp,
-                        title: "Saved Ayat",
-                        maxLines: 2,
-                        textOverflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.start,
-                        textStyle: GoogleFonts.quicksand(color: textColor,),
-                      ),
-                      trailing: Icon(Icons.arrow_forward_ios_outlined, size: 10.h, color: iconColor),
-                    ),
+                    // ListTile(
+                    //   splashColor: AppColors.transparent,
+                    //   hoverColor: AppColors.transparent,
+                    //   onTap: () {
+                    //       Get.to(SavedHadithScreen());
+                    //   },
+                    //   leading: Icon(LineIcons.bookmark, size: 16.h, color: iconColor),
+                    //   title: CustomText(
+                    //     textColor: textColor,
+                    //     fontSize: 14.sp,
+                    //     title: "Saved Hadith",
+                    //     maxLines: 2,
+                    //     textOverflow: TextOverflow.ellipsis,
+                    //     textAlign: TextAlign.start,
+                    //     textStyle: GoogleFonts.quicksand(color: textColor),
+                    //   ),
+                    //   trailing: Icon(Icons.arrow_forward_ios_outlined, size: 10.h, color: iconColor),
+                    // ),
+                    // ListTile(
+                    //   splashColor: AppColors.transparent,
+                    //   hoverColor: AppColors.transparent,
+                    //   onTap: () {
+                    //      Get.to(QuranSavedAyatBookmarkScreen());
+                    //   },
+                    //   leading: Icon(LineIcons.bookmark, size: 16.h, color: iconColor),
+                    //   title: CustomText(
+                    //     textColor: textColor,
+                    //     fontSize: 14.sp,
+                    //     title: "Saved Ayat",
+                    //     maxLines: 2,
+                    //     textOverflow: TextOverflow.ellipsis,
+                    //     textAlign: TextAlign.start,
+                    //     textStyle: GoogleFonts.quicksand(color: textColor,),
+                    //   ),
+                    //   trailing: Icon(Icons.arrow_forward_ios_outlined, size: 10.h, color: iconColor),
+                    // ),
                     ListTile(
                       splashColor: AppColors.transparent,
                       hoverColor: AppColors.transparent,
                       onTap: () {
                           Get.to(AppSettingsScreen());
                       },
-                      leading: Icon(LineIcons.cog, size: 18.h, color: iconColor),
+                      leading: Icon(LineIcons.cog, size: 16.h, color: iconColor),
                       title: CustomText(
                         textColor: textColor,
-                        fontSize: 15.sp,
+                        fontSize: 14.sp,
                         title: "Setting",
                         maxLines: 2,
                         textOverflow: TextOverflow.ellipsis,
@@ -134,10 +133,10 @@ class CustomDrawer extends StatelessWidget {
                       onTap: () {
                          // Get.to(AboutUsScreen());
                       },
-                      leading: Icon(LineIcons.infoCircle, size: 18.h, color: iconColor),
+                      leading: Icon(LineIcons.infoCircle, size: 16.h, color: iconColor),
                       title: CustomText(
                         textColor: textColor,
-                        fontSize: 15.sp,
+                        fontSize: 14.sp,
                         title: "About",
                         maxLines: 2,
                         textOverflow: TextOverflow.ellipsis,
@@ -152,10 +151,10 @@ class CustomDrawer extends StatelessWidget {
               ListTile(
                 splashColor: AppColors.transparent,
                 hoverColor: AppColors.transparent,
-                leading: Icon(Icons.rocket_launch, size: 17.h, color: iconColor),
+                leading: Icon(Icons.rocket_launch, size: 16.h, color: iconColor),
                 title: CustomText(
                   textColor: textColor,
-                  fontSize: 15.sp,
+                  fontSize: 14.sp,
                   title: "App Version 1.0",
                   maxLines: 2,
                   textOverflow: TextOverflow.ellipsis,

@@ -140,17 +140,7 @@ class QuranMainScreen extends StatelessWidget {
                 );
               }),
             ),
-            AppSizedBox.space15h,
-            CustomText(
-              title: "Last Accessed Surahs",
-              textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-              fontSize: 14.sp,
-              fontFamily: 'grenda',
-              textAlign: TextAlign.start,
-              maxLines: 1,
-              textOverflow: TextOverflow.ellipsis,
-            ),
-            AppSizedBox.space15h,
+
             CustomText(
               title: "Quran Explorer",
               textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,

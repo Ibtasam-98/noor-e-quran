@@ -168,10 +168,19 @@ class TasbeehController extends GetxController {
         actions: [
           CustomButton(
             haveBgColor: true,
-            btnTitle: "Done",
+            btnTitle: "Add",
             btnTitleColor: AppColors.white,
             bgColor: AppColors.primary,
             borderRadius: 50.r,
+            gradient: LinearGradient(
+              colors: [
+                AppColors.primary,
+                AppColors.secondry.withOpacity(0.9),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+            useGradient: true,
             height: 45.h,
             onTap: () {
               if (int.tryParse(count) != null) {

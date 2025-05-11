@@ -24,8 +24,7 @@ class AppHomeScreenBottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppThemeSwitchController themeController =
-    Get.put(AppThemeSwitchController());
+    final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
 
     return Obx(() {
       bool isDarkMode = themeController.isDarkMode.value;
@@ -36,9 +35,6 @@ class AppHomeScreenBottomNavigation extends StatelessWidget {
           child: widgetOptions.elementAt(controller.currentIndex),
         ),
         bottomNavigationBar: Container(
-          // Use MediaQuery to get the screen width
-          width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.only(bottom: 10.h),
           decoration: BoxDecoration(
             color: isDarkMode ? AppColors.black : AppColors.white,
             boxShadow: [
@@ -49,35 +45,53 @@ class AppHomeScreenBottomNavigation extends StatelessWidget {
               ),
             ],
           ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.w),
-            child: GNav(
-              // Remove the expanded and let GNav control the width.
-              // GNav will try to fit the available space
-              gap: 15,
-              activeColor: AppColors.white,
-              textStyle: GoogleFonts.quicksand(color: AppColors.white),
-              padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.w),
-              duration: Duration(milliseconds: 400),
-              tabBorderRadius: 45.r,
-              iconSize: 20.sp,
-              color: isDarkMode ? AppColors.white : AppColors.black,
-              tabBackgroundGradient: LinearGradient(
-                colors: [
-                  AppColors.primary,
-                  AppColors.secondry.withOpacity(0.9),
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+              child: GNav(
+                gap: 10.w,
+                activeColor: AppColors.white,
+                textStyle: GoogleFonts.quicksand(
+                  color: AppColors.white,
+                  fontSize: 12.sp, // Smaller font size
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                duration: Duration(milliseconds: 400),
+                tabBorderRadius: 45.r,
+                iconSize: 20.sp,
+                color: isDarkMode ? AppColors.white : AppColors.black,
+                tabBackgroundGradient: LinearGradient(
+                  colors: [
+                    AppColors.primary,
+                    AppColors.secondry.withOpacity(0.9),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                tabs: [
+                  GButton(
+                    icon: LineIcons.home,
+                    text: 'Home',
+                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                  ),
+                  GButton(
+                    icon: LineIcons.quran,
+                    text: 'Hadith',
+                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                  ),
+                  GButton(
+                    icon: LineIcons.prayingHands,
+                    text: 'Ibadat',
+                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),),
+                  GButton(
+                    icon: Icons.pending_outlined,
+                    text: 'More',
+                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                   ),
                 ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+                selectedIndex: controller.currentIndex,
+                onTabChange: controller.updateSelectedIndex,
               ),
-              tabs: [
-                GButton(icon: LineIcons.home, text: 'Home'),
-                GButton(icon: LineIcons.quran, text: 'Hadith'),
-                GButton(icon: LineIcons.prayingHands, text: 'Ibadat'),
-                GButton(icon: Icons.pending_outlined, text: 'More'),
-              ],
-              selectedIndex: controller.currentIndex,
-              onTabChange: controller.updateSelectedIndex,
             ),
           ),
         ),

@@ -14,9 +14,12 @@ import 'package:noor_e_quran/app/widgets/custom_text.dart';
 import '../../../controllers/flying_bird_animation_controller.dart';
 import '../../../controllers/user_location_premission_controller.dart';
 import '../../../widgets/custom_frame.dart';
+import '../../prayer/views/prayer_tracker_screen.dart';
 import '../../quran/views/quran_menu_screen.dart';
+import '../../tasbeeh/views/tasbeeh_counter_screen.dart';
 import '../controllers/view_all_prayer_screen_controller.dart';
 import 'app_home_screen_header.dart';
+import 'islamic_calender_screen.dart';
 
 class AppHomeScreen extends StatelessWidget {
   final Map<String, dynamic>? userData;
@@ -344,9 +347,9 @@ class AppHomeScreen extends StatelessWidget {
   }
   final List<Map<String, dynamic>> menuItems = [
     {"title": "Quran", "subtitle": "Recitation", "destination": () => QuranMenuScreen()},
-    {"title": "Tasbeeh", "subtitle": "Counter", "destination": () => Placeholder()},
-    {"title": "Salah", "subtitle": "Practices", "destination": () => Placeholder()},
-    {"title": "Islamic", "subtitle": "Calender", "destination": () => Placeholder()},
+    {"title": "Tasbeeh", "subtitle": "Counter", "destination": () => TasbeehCounterScreen()},
+    {"title": "Prayer", "subtitle": "Tracker", "destination": () => PrayerTrackerScreen()},
+    {"title": "Islamic", "subtitle": "Calender", "destination": () => IslamicCalendarScreen()},
 
   ];
 }

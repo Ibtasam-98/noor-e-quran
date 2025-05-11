@@ -18,6 +18,7 @@ class CustomButton extends StatelessWidget {
   final double? height;
   final VoidCallback? onTap;
   final bool isLoading;
+  final bool isHaveIcon; // New parameter to control icon presence
 
 
   const CustomButton({
@@ -35,7 +36,8 @@ class CustomButton extends StatelessWidget {
     required this.borderRadius,
     this.height,
     this.onTap,
-    this.isLoading = false, // Default is false
+    this.isLoading = false,
+    this.isHaveIcon = false, // Default is false
   });
 
   @override
@@ -60,18 +62,21 @@ class CustomButton extends StatelessWidget {
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           )
               : Row(
-            mainAxisAlignment:
-            icon == null ? MainAxisAlignment.center : MainAxisAlignment.start,
+            mainAxisAlignment: (icon == null && !isHaveIcon)
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.start,
             children: [
-              AppSizedBox.space10w,
+              if (icon != null || isHaveIcon) AppSizedBox.space10w,
               Expanded(
-                child: CustomText(
-                  textColor: btnTitleColor,
-                  fontSize: 14.sp,
-                  title: btnTitle,
-                  maxLines: 1,
-                  textOverflow: TextOverflow.ellipsis,
-                  fontWeight: FontWeight.w500,
+                child: Center(
+                  child: CustomText(
+                    textColor: btnTitleColor,
+                    fontSize: 14.sp,
+                    title: btnTitle,
+                    maxLines: 1,
+                    textOverflow: TextOverflow.ellipsis,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
               if (icon != null) ...[
@@ -82,6 +87,7 @@ class CustomButton extends StatelessWidget {
                   size: iconSize ?? 24.0,
                 ),
               ],
+              if (isHaveIcon && icon == null) AppSizedBox.space10w,
             ],
           ),
         ),

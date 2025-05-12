@@ -5,6 +5,7 @@ import '../controllers/app_theme_switch_controller.dart';
 import '../controllers/flying_bird_animation_controller.dart';
 import '../controllers/user_location_premission_controller.dart';
 import '../modules/boarding/controllers/onboarding_controller.dart';
+import '../modules/hadith/controllers/hadith_collectinon_screen_controller.dart';
 import '../modules/home/controllers/app_home_screen_controller.dart';
 
 class AppBinding extends Bindings {
@@ -21,7 +22,6 @@ class AppBinding extends Bindings {
     Get.lazyPut(() => UserPermissionController());
     Get.lazyPut(() => NamazController());
     Get.lazyPut(() => FlyingBirdAnimationController());
-
-
+    Get.lazyPut(() => HadithCollectionController());
   }
 }

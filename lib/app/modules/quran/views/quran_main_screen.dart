@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:noor_e_quran/app/controllers/app_theme_switch_controller.dart';
 import 'package:noor_e_quran/app/modules/home/views/app_home_base_screen.dart';
+import 'package:noor_e_quran/app/modules/quran/views/quran_surah_detail_screen.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:noor_e_quran/app/controllers/flying_bird_animation_controller.dart';
 import '../../../config/app_colors.dart';
@@ -14,6 +16,8 @@ import '../../home/controllers/app_home_screen_controller.dart';
 import '../../home/views/app_home_screen_header.dart';
 import '../controllers/quran_main_screen_controller.dart';
 import 'dart:math';
+
+import 'last_access_surah_list_screen.dart';
 
 class QuranMainScreen extends StatelessWidget {
   final Map<String, dynamic>? userData;
@@ -26,6 +30,7 @@ class QuranMainScreen extends StatelessWidget {
     final FlyingBirdAnimationController _quranBirdController = Get.find<FlyingBirdAnimationController>();
     final AppHomeScreenController controller = Get.find<AppHomeScreenController>();
     final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
+    final QuranMainScreenController quranMainScreenController = Get.find<QuranMainScreenController>();
 
     return AppHomeBaseScreen(
       titleFirstPart: "Noor e",
@@ -140,8 +145,134 @@ class QuranMainScreen extends StatelessWidget {
                 );
               }),
             ),
-
-            CustomText(
+            AppSizedBox.space10h,
+            if (quranMainScreenController.lastAccessedSurahs.isNotEmpty) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Obx(() => CustomText(
+                      title: "Last Accessed Surah",
+                      textColor: themeController.isDarkMode.value
+                          ? AppColors.white
+                          : AppColors.black,
+                      fontSize: 14.sp,
+                      fontFamily: 'grenda',
+                      textAlign: TextAlign.start,
+                      textOverflow: TextOverflow.ellipsis,
+                    )),
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => Get.to(() => LastAccessSurahListScreen()),
+                      child: CustomText(
+                        title: "View All",
+                        textColor: AppColors.primary,
+                        fontSize: 12.sp,
+                        fontFamily: 'quicksand',
+                        textAlign: TextAlign.end,
+                        fontWeight: FontWeight.w600,
+                        textOverflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              AppSizedBox.space10h,
+              GetBuilder<AppHomeScreenController>(
+                builder: (controller) {
+                  if (quranMainScreenController.lastAccessedSurahs.isEmpty) {
+                    return Center(child: Text('No recent activity.'));
+                  }
+                  final sortedSurahs = List<Map<String, dynamic>>.from(quranMainScreenController.lastAccessedSurahs)
+                    ..sort((a, b) => quranMainScreenController.parseAccessTime(b['accessTime']).compareTo(quranMainScreenController.parseAccessTime(a['accessTime'])));
+                  final latestSurahs = sortedSurahs.take(3).toList();
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: latestSurahs.map((surahData) {
+                        final surahNumber = surahData['surahNumber'] as int;
+                        final accessTime = quranMainScreenController.parseAccessTime(surahData['accessTime'] as String);
+                        final formattedTime = DateFormat('yyyy-MM-dd HH:mm').format(accessTime);
+                        final placeOfRevelation = quran.getPlaceOfRevelation(surahNumber);
+                        final verseCount = quran.getVerseCount(surahNumber);
+                        final surahName = quranMainScreenController.getSurahName(surahNumber);
+                        final surahNameArabic = quranMainScreenController.getSurahNameArabic(surahNumber);
+                        final isEvenIndex = latestSurahs.indexOf(surahData) % 2 == 0;
+                        return Container(
+                          width: 280.w,
+                          margin: EdgeInsets.only(right: 8.w),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              padding: EdgeInsets.all(6.h),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.r),
+                                color: isEvenIndex ? AppColors.primary.withOpacity(0.1) : AppColors.primary.withOpacity(0.29),
+                              ),
+                              child: ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                dense: true,
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Obx(()=>CustomText(
+                                      title: surahName,
+                                      fontSize: 15.sp,
+                                      textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
+                                      fontWeight: FontWeight.w500,
+                                      textOverflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      textAlign: TextAlign.start,),
+                                    ),
+                                    CustomText(
+                                      title: '${placeOfRevelation == 'Makkiyah' ? 'Makkah' : 'Madinah'} | $verseCount Verses',
+                                      fontSize: 14.sp,
+                                      textColor: AppColors.primary,
+                                      textAlign: TextAlign.start,
+                                      textOverflow: TextOverflow.ellipsis,
+                                      fontWeight: FontWeight.w500,
+                                      maxLines: 1,
+                                    ),
+                                    AppSizedBox.space5h,
+                                  ],
+                                ),
+                                subtitle: Obx(()=>CustomText(
+                                  title: 'Last Accessed $formattedTime',
+                                  fontSize: 12.sp,
+                                  textColor: themeController.isDarkMode.value  ? AppColors.grey : AppColors.black,
+                                  fontWeight: FontWeight.w500,
+                                  textOverflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  textAlign: TextAlign.start,),
+                                ),
+                                trailing: SizedBox(
+                                  width: 80.w, // Adjust width as needed
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: CustomText(
+                                      title: surahNameArabic,
+                                      fontSize: 25.sp,
+                                      textColor: AppColors.primary,
+                                      maxLines: 1,
+                                      textOverflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                                onTap: () => Get.to(() => QuranSurahDetailScreen(surahNumber: surahNumber)),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  );
+                },
+              ),
+            ],
+            AppSizedBox.space10h,
+            Obx(()=>CustomText(
               title: "Quran Explorer",
               textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
               fontSize: 14.sp,
@@ -149,7 +280,7 @@ class QuranMainScreen extends StatelessWidget {
               textAlign: TextAlign.start,
               maxLines: 1,
               textOverflow: TextOverflow.ellipsis,
-            ),
+            ),),
             AppSizedBox.space15h,
             Column(
               children: [
@@ -159,6 +290,7 @@ class QuranMainScreen extends StatelessWidget {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
                     childAspectRatio: 1,
+                    crossAxisSpacing: 8,
                   ),
                   itemCount: quranMainScreenController.quranMenuGridItems.length,
                   itemBuilder: (context, index) {
@@ -167,13 +299,13 @@ class QuranMainScreen extends StatelessWidget {
                       highlightColor: AppColors.transparent,
                       splashColor: AppColors.transparent,
                       onTap: () {
-                        //  Use menuItem['destination']
+
                         if (menuItem['destination'] != null) {
                           Get.to(menuItem['destination']());
                         }
                       },
                       child: Container(
-                        margin: EdgeInsets.only(right: 10.h, bottom: 10.h),
+                        margin: EdgeInsets.only(bottom: 10.h),
                         decoration: BoxDecoration(
                           color: controller.themeController.isDarkMode.value
                               ? AppColors.black
@@ -181,9 +313,9 @@ class QuranMainScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10.r),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withOpacity(0.2),
+                              color: AppColors.primary.withOpacity(0.1),
                               spreadRadius: 1,
-                              blurRadius: 4,
+                              blurRadius: 2,
                             ),
                           ],
                         ),

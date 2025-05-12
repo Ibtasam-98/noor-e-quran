@@ -69,13 +69,11 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
     });
     _loadReminderStatusFromStorage();
     _startRemainingTimeTimer();
-    // Initialize animation controller
     animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 1000),
     );
 
-    // Initialize scale animation
     scaleAnimation = Tween<double>(begin: 0.9, end: 1.0).animate(
       CurvedAnimation(
         parent: animationController,
@@ -88,8 +86,6 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
         animationController.forward();
       }
     });
-
-    // Start the animation
     animationController.forward();
   }
 
@@ -103,7 +99,6 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
   @override
   void onReady() {
     super.onReady();
-    // Load method when controller is ready, after methods are fetched
     _methodsFetchedCompleter?.future.then((_) {
       loadSelectedMethodAndRefresh();
     });
@@ -113,17 +108,14 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
     await _box.write('selected_calculation_method', methodId);
     selectedCalculationMethod.value = methodId;
 
-    // Update the method name for display
-    final method = calculationMethods.firstWhere(
-            (m) => m['id'] == methodId,
+    final method = calculationMethods.firstWhere((m) => m['id'] == methodId,
         orElse: () => calculationMethods.firstWhere(
-                (m) => m['id'] == 3, // Fallback to MWL
+                (m) => m['id'] == 3,
             orElse: () => calculationMethods.first
         )
     );
     selectedMethodName.value = method['name'] ?? "MWL (Muslim World League)";
 
-    // If location is already accessed, refresh timings
     final locationController = Get.find<UserPermissionController>();
     if (locationController.locationAccessed.value) {
       await getNamazTimings(
@@ -133,24 +125,19 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
       );
     }
 
-    update(); // Notify listeners
+    update();
   }
 
   Future<void> getNamazTimings(double latitude, double longitude, {int? method}) async {
     isNamazLoading.value = true;
-    print("Fetching namaz timings for lat: $latitude, long: $longitude, method: $method");
 
     String apiUrl = 'http://api.aladhan.com/v1/timings?latitude=$latitude&longitude=$longitude';
     if (method != null) apiUrl += '&method=$method';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
-      print("Namaz timings response: ${response.statusCode}");
-
       if (response.statusCode == 200) {
         final data = json.decode(response.body)['data']['timings'];
-        print("Received timings: $data");
-
         namazTimings.value = {
           'Fajr': data['Fajr'] ?? "--",
           'Sunrise': data['Sunrise'] ?? "--",
@@ -178,23 +165,15 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
 
 
   Future<void> fetchCalculationMethods() async {
-    print("Fetching calculation methods from API...");
     try {
       final response = await http.get(
         Uri.parse('http://api.aladhan.com/v1/methods'),
       ).timeout(const Duration(seconds: 10));
 
-      print("API Response Status: ${response.statusCode}");
-
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        print("Raw API Data: $data");
-
         if (data['data'] != null) {
           final methodsData = data['data'] as Map<String, dynamic>;
-          print("Found ${methodsData.length} calculation methods");
-
-          // Create a mapping from method codes to their numeric IDs
           final methodIdMapping = {
             'MWL': 3,
             'ISNA': 2,
@@ -221,16 +200,10 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
             'JORDAN': 23,
           };
 
-          // Filter out the CUSTOM method and any methods not in our mapping
-          calculationMethods.value = methodsData.entries
-              .where((entry) => entry.key != 'CUSTOM' && methodIdMapping.containsKey(entry.key))
-              .map((entry) {
+          calculationMethods.value = methodsData.entries.where((entry) => entry.key != 'CUSTOM' && methodIdMapping.containsKey(entry.key)).map((entry) {
             final methodCode = entry.key;
             final numericId = methodIdMapping[methodCode]!;
             final methodName = entry.value['name']?.toString() ?? methodCode;
-
-            print("Processing method: $methodCode (ID: $numericId) - $methodName");
-
             return {
               'id': numericId,
               'name': methodName,
@@ -238,12 +211,8 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
               'code': methodCode,
             };
           }).toList();
-
-          print("Processed methods: ${calculationMethods.value}");
-
-          // Set default method if none is selected
           if (selectedCalculationMethod.value == null && calculationMethods.isNotEmpty) {
-            selectedCalculationMethod.value = 3; // Default to MWL
+            selectedCalculationMethod.value = 3;
             selectedMethodName.value = calculationMethods.firstWhere(
                     (m) => m['id'] == 3,
                 orElse: () => calculationMethods.first
@@ -267,11 +236,8 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
     final savedMethodId = _box.read<int>('selected_calculation_method');
     if (savedMethodId != null) {
       selectedCalculationMethod.value = savedMethodId;
-      // Set the method name for display
-      final method = calculationMethods.firstWhere(
-              (m) => m['id'] == savedMethodId,
-          orElse: () => calculationMethods.firstWhere(
-                  (m) => m['id'] == 3, // Fallback to MWL
+      final method = calculationMethods.firstWhere((m) => m['id'] == savedMethodId,
+          orElse: () => calculationMethods.firstWhere((m) => m['id'] == 3,
               orElse: () => calculationMethods.first
           )
       );
@@ -282,7 +248,6 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
 
   Future<void> loadSelectedMethodAndRefresh() async {
     await _loadSelectedMethod();
-    // Refresh prayer times if location is available
     final locationController = Get.find<UserPermissionController>();
     if (locationController.locationAccessed.value) {
       await getNamazTimings(
@@ -297,7 +262,6 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
   void _calculateNextNamaz() {
     DateTime currentTime = DateTime.now();
     Map<String, DateTime> namazTimes = {};
-
     namazTimings.forEach((namazName, timeStr) {
       if (timeStr != "--") {
         try {
@@ -317,7 +281,6 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
 
     DateTime? nextTime;
     String nextNamaz = "";
-
     namazTimes.forEach((namazName, namazTime) {
       if (namazTime.isAfter(currentTime) && (nextTime == null || namazTime.isBefore(nextTime!))) {
         nextTime = namazTime;
@@ -327,11 +290,9 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
 
     nextNamazTime.value = nextTime;
     nextNamazName.value = nextNamaz.isNotEmpty ? nextNamaz : "None Today";
-    print("Next namaz: $nextNamaz at $nextTime");
   }
 
   void _startRemainingTimeTimer() {
-    print("Starting namaz timer...");
     _namazTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (nextNamazTime.value != null) {
         final remaining = nextNamazTime.value!.difference(DateTime.now());
@@ -355,36 +316,30 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
       return "--:--";
     }
     try {
-      // Handle cases like "90 min" for Isha time
       if (timeStr.contains("min")) {
-        return timeStr; // Return as-is for special cases
+        return timeStr;
       }
 
       DateTime prayerTime = DateFormat("HH:mm").parse(timeStr);
       return is24HourFormat ? DateFormat("HH:mm").format(prayerTime) : DateFormat("h:mm a").format(prayerTime);
     } catch (e) {
-      print('Error formatting time "$timeStr": $e');
-      return timeStr; // Return original string if formatting fails
+      return timeStr;
     }
   }
 
   Future<void> _loadReminderStatusFromStorage() async {
-    print("Loading reminder status from storage...");
     for (var namaz in namazTimes) {
       final savedStatus = _box.read<bool>('reminder_$namaz');
       reminderSet[namaz] = RxBool(savedStatus ?? false);
     }
-    print("Initial reminderSet: $reminderSet");
   }
 
   Future<void> saveReminderStatus(String namazName, bool isSet) async {
-    print("Saving reminder for $namazName: $isSet");
     await _box.write('reminder_$namazName', isSet);
     update();
   }
 
   void onCalculationMethodChanged(int? methodId) {
-    print("Calculation method changed to: $methodId");
     selectedCalculationMethod.value = methodId;
     update();
   }
@@ -403,9 +358,7 @@ class NamazController extends GetxController with GetSingleTickerProviderStateMi
         ),
         androidParams: const AndroidParams(),
       );
-
       final bool? success = await Add2Calendar.addEvent2Cal(event);
-
       if (success != null && success) {
         await saveReminderStatus(namazName, true);
         reminderSet[namazName]?.value = true; // Update the observable

@@ -2,14 +2,25 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:noor_e_quran/app/controllers/user_location_premission_controller.dart';
 import 'package:quran/quran.dart';
 import 'package:quran/quran.dart' as quran;
 import '../../../controllers/app_theme_switch_controller.dart';
+import '../../../widgets/pdf_viewer.dart';
+import '../views/quran_complete_list_surahs.dart';
+import '../views/quran_digital_screen.dart';
+import '../views/quran_sajjdas_list_screen.dart';
+import '../views/quran_saved_ayat_bookmark_screen.dart';
+import '../views/quran_write_note_screen.dart';
 
 class QuranMainScreenController extends GetxController with GetSingleTickerProviderStateMixin {
   final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
   final UserPermissionController locationController = Get.put(UserPermissionController());
+
+  List<Map<String, dynamic>> lastAccessedSurahs = [];
+  final GetStorage _box = GetStorage();
+
 
   var randomVerse = RandomVerse().obs;
   Timer? timer;
@@ -17,6 +28,7 @@ class QuranMainScreenController extends GetxController with GetSingleTickerProvi
   @override
   void onInit() {
     super.onInit();
+    loadLastAccessedSurahs();
     startRandomVerseTimer();
   }
 
@@ -31,6 +43,20 @@ class QuranMainScreenController extends GetxController with GetSingleTickerProvi
     timer = Timer.periodic(const Duration(hours: 1), (timer) {
       _getRandomVerse();
     });
+  }
+
+  Future<void> loadLastAccessedSurahs() async {
+    print("Loading last accessed surahs...");
+    final List<dynamic>? storedSurahs = _box.read('lastAccessedSurahs');
+    print("Stored surahs from GetStorage: $storedSurahs");
+    if (storedSurahs != null) {
+      lastAccessedSurahs.assignAll(storedSurahs.map((item) => item as Map<String, dynamic>).toList());
+      print("Last accessed surahs loaded: $lastAccessedSurahs");
+    } else {
+      print("No last accessed surahs found in GetStorage.");
+    }
+    update(['lastAccessedSurahs']);
+    print("Controller updated.");
   }
 
   void _getRandomVerse() {
@@ -61,32 +87,36 @@ class QuranMainScreenController extends GetxController with GetSingleTickerProvi
     {
       "title": "Navigate",
       "subtitle": "Explore Surahs",
-      "destination": () => const Placeholder(),
+      "destination": () =>  QuranCompleteListSurahs(),
     },
     {
       "title": "Quran",
       "subtitle": "Read Quran",
-      "destination": () => const Placeholder(), // Replace Placeholder() with your actual widget
+      "destination": () =>  QuranPdfViewer(),
     },
     {
       "title": "Sajdaas",
       "subtitle": "Verses In Quran",
-      "destination": () => const Placeholder(), // Replace Placeholder()
+      "destination": () =>  QuranSajdahListScreen(),
     },
     {
       "title": "Notes",
       "subtitle": "Write & Reflect",
-      "destination": () => const Placeholder(), // Replace Placeholder()
+      "destination": () => QuranNotesScreen(),
     },
     {
       "title": "Tajweed",
       "subtitle": "Learn Tajweed",
-      "destination": () => const Placeholder(), // Replace Placeholder()
+      "destination": () => PdfViewer(
+        assetPath: "assets/pdf/basic_tajweed.pdf",
+        firstTitle: "Tajweed",
+        secondTitle: " Guide",
+      ),
     },
     {
       "title": "Bookmark",
       "subtitle": "Resume Reading",
-      "destination": () => const Placeholder(), // Replace Placeholder()
+      "destination": () => QuranSavedAyatBookmarkScreen(),
     },
   ];
 }

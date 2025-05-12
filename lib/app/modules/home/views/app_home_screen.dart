@@ -431,6 +431,7 @@ class AppHomeScreen extends StatelessWidget {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
                     childAspectRatio: 1,
+                    crossAxisSpacing: 8,
                   ),
                   itemCount: controller.menuItems.length,
                   itemBuilder: (context, index) {
@@ -440,7 +441,7 @@ class AppHomeScreen extends StatelessWidget {
                       splashColor: AppColors.transparent,
                       onTap: () {Get.to(menuItem['destination']());},
                       child: Container(
-                        margin: EdgeInsets.only(right:10.h,bottom: 10.h),
+                        margin: EdgeInsets.only(bottom: 10.h),
                         decoration: BoxDecoration(
                           color: controller.themeController.isDarkMode.value
                               ? AppColors.black
@@ -448,9 +449,9 @@ class AppHomeScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10.r),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withOpacity(0.2),
+                              color: AppColors.primary.withOpacity(0.1),
                               spreadRadius: 1,
-                              blurRadius: 4,
+                              blurRadius: 2,
                             ),
                           ],
                         ),

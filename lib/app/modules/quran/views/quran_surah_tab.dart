@@ -14,7 +14,8 @@ import '../controllers/quran_main_screen_controller.dart';
 
 class QuranSurahTab extends StatelessWidget {
 
-  final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());final GetStorage _box = GetStorage();
+  final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
+  final GetStorage _box = GetStorage();
 
   @override
   Widget build(BuildContext context) {

@@ -15,7 +15,7 @@ import '../../../widgets/custom_text.dart';
 import '../controllers/navigate_explore_surah_controller.dart';
 
 class QuranCompleteListSurahs extends StatelessWidget {
-  final NavigteExploreSurahsController controller = Get.put(NavigteExploreSurahsController());
+  final NavigteExploreSurahsController navigteExploreSurahsController = Get.put(NavigteExploreSurahsController());
   final AppThemeSwitchController themeController = Get.find();
 
   @override
@@ -58,7 +58,7 @@ class QuranCompleteListSurahs extends StatelessWidget {
               size: 20.h,
             ),
             onPressed: () {
-              controller.showQuranInfoSheet(context);
+              navigteExploreSurahsController.showQuranInfoSheet(context);
             },
           ),
         ],
@@ -88,7 +88,7 @@ class QuranCompleteListSurahs extends StatelessWidget {
                 border: Border.all(color: AppColors.primary, width: 1),
                 borderRadius: BorderRadius.circular(50.r),
               ),
-              controller: controller.tabController,
+              controller: navigteExploreSurahsController.tabController,
               tabs: const[
                 Tab(text: 'Surahs'),
                 Tab(text: 'Juz'),
@@ -98,7 +98,7 @@ class QuranCompleteListSurahs extends StatelessWidget {
             AppSizedBox.space10h,
             Expanded(
               child: TabBarView(
-                controller: controller.tabController,
+                controller: navigteExploreSurahsController.tabController,
                 children: [
                   QuranSurahTab(),
                   QuranJuzTab(),

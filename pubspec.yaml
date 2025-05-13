@@ -66,6 +66,7 @@ dependencies:
   quran:
   hijri:
   hadith:
+  islamic_hijri_calendar:
 
 
   # HTML & PDF Packages

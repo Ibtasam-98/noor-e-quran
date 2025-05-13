@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:noor_e_quran/app/controllers/app_theme_switch_controller.dart';
 import 'package:noor_e_quran/app/modules/home/views/app_home_base_screen.dart';
 import 'package:noor_e_quran/app/modules/quran/views/quran_surah_detail_screen.dart';
+import 'package:noor_e_quran/app/modules/quran/views/quran_verse_of_the_hour_screen.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:noor_e_quran/app/controllers/flying_bird_animation_controller.dart';
 import '../../../config/app_colors.dart';
@@ -41,11 +42,10 @@ class QuranMainScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             HomeScreenHeader(birdController: _quranBirdController),
-            AppSizedBox.space10h,
             CustomText(
               title: "Verse of the Hour",
               textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-              fontSize: 14.sp,
+              fontSize: 16.sp,
               fontFamily: 'grenda',
               textAlign: TextAlign.start,
               maxLines: 1,
@@ -56,7 +56,14 @@ class QuranMainScreen extends StatelessWidget {
               splashColor: AppColors.transparent,
               highlightColor: AppColors.transparent,
               onTap: () {
-                // Handle tap on the verse of the hour
+                Get.to(VerseOfHourScreen(
+                  surahNumber: quranMainScreenController.randomVerse.value.surahNumber,
+                  verseNumber: quranMainScreenController.randomVerse.value.verseNumber,
+                  arabicText: quranMainScreenController.randomVerse.value.verse,
+                  translation: quranMainScreenController.randomVerse.value.translation,
+                  title: quran.getSurahName(quranMainScreenController.randomVerse.value.surahNumber),
+                  surahArabicTitle: quran.getSurahNameArabic(quranMainScreenController.randomVerse.value.surahNumber),
+                ));
               },
               child: Obx(() {
                 final verse = quranMainScreenController.randomVerse.value;
@@ -156,7 +163,7 @@ class QuranMainScreen extends StatelessWidget {
                       textColor: themeController.isDarkMode.value
                           ? AppColors.white
                           : AppColors.black,
-                      fontSize: 14.sp,
+                      fontSize: 16.sp,
                       fontFamily: 'grenda',
                       textAlign: TextAlign.start,
                       textOverflow: TextOverflow.ellipsis,
@@ -275,13 +282,13 @@ class QuranMainScreen extends StatelessWidget {
             Obx(()=>CustomText(
               title: "Quran Explorer",
               textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-              fontSize: 14.sp,
+              fontSize: 16.sp,
               fontFamily: 'grenda',
               textAlign: TextAlign.start,
               maxLines: 1,
               textOverflow: TextOverflow.ellipsis,
             ),),
-            AppSizedBox.space15h,
+            AppSizedBox.space10h,
             Column(
               children: [
                 GridView.builder(
@@ -290,7 +297,7 @@ class QuranMainScreen extends StatelessWidget {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
                     childAspectRatio: 1,
-                    crossAxisSpacing: 8,
+                    crossAxisSpacing: 10,
                   ),
                   itemCount: quranMainScreenController.quranMenuGridItems.length,
                   itemBuilder: (context, index) {

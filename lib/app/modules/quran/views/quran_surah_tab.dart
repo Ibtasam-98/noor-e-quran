@@ -14,15 +14,12 @@ import '../controllers/quran_main_screen_controller.dart';
 
 class QuranSurahTab extends StatelessWidget {
 
-  final AppThemeSwitchController themeController =
-  Get.put(AppThemeSwitchController());
-  final GetStorage _box = GetStorage();
+  final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());final GetStorage _box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = themeController.isDarkMode.value;
     final textColor = isDarkMode ? AppColors.white : AppColors.black;
-
     return ListView.builder(
       itemCount: quran.totalSurahCount,
       itemBuilder: (context, index) {

@@ -8,7 +8,9 @@ import 'package:noor_e_quran/app/config/app_colors.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import 'package:noor_e_quran/app/controllers/app_theme_switch_controller.dart';
 import 'package:noor_e_quran/app/modules/home/views/app_home_base_screen.dart';
+import 'package:noor_e_quran/app/modules/home/views/qibla_direction_screen.dart';
 import 'package:noor_e_quran/app/modules/home/views/view_all_prayer_screen.dart';
+import 'package:noor_e_quran/app/widgets/custom_card.dart';
 import 'package:noor_e_quran/app/widgets/custom_text.dart';
 import '../../../config/app_contants.dart';
 import '../../../controllers/flying_bird_animation_controller.dart';
@@ -17,12 +19,15 @@ import '../../../widgets/custom_frame.dart';
 import '../controllers/app_home_screen_controller.dart';
 import '../controllers/view_all_prayer_screen_controller.dart';
 import 'app_home_screen_header.dart';
+import 'donation_organization_profile.dart';
 
 class AppHomeScreen extends StatelessWidget {
   AppHomeScreen({super.key});
 
   final AppHomeScreenController controller = Get.put(AppHomeScreenController());
   final FlyingBirdAnimationController _homeBirdController = Get.put(FlyingBirdAnimationController(), tag: 'home_bird');
+  final UserPermissionController locationPermissionScreenController = Get.find<UserPermissionController>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +46,7 @@ class AppHomeScreen extends StatelessWidget {
                 child: Obx(() => CustomText(
                   title: "Upcoming Prayers",
                   textColor: controller.themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-                  fontSize: 14.sp,
+                  fontSize: 16.sp,
                   fontFamily: 'grenda',
                   textAlign: TextAlign.start,
                 )),
@@ -61,7 +66,7 @@ class AppHomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          AppSizedBox.space10h,
+          AppSizedBox.space15h,
           Obx(() {
             final namazController = Get.find<NamazController>();
             return Container(
@@ -292,14 +297,30 @@ class AppHomeScreen extends StatelessWidget {
             );
           }),
           AppSizedBox.space15h,
-          Obx(() => CustomText(
-            title: "Make a Difference",
-            textColor: controller.themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-            fontSize: 14.sp,
-            fontFamily: 'grenda',
-            maxLines: 1,
-            textOverflow: TextOverflow.ellipsis,
-          )),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Obx(() => CustomText(
+                title: "Make a Difference",
+                textColor: controller.themeController.isDarkMode.value ? AppColors.white : AppColors.black,
+                fontSize: 16.sp,
+                fontFamily: 'grenda',
+                maxLines: 1,
+                textOverflow: TextOverflow.ellipsis,
+              )),
+              InkWell(
+                onTap: (){Get.to(OrganizationProfileScreen());},
+                child: CustomText(
+                  title: "View All",
+                  textColor: AppColors.primary,
+                  fontSize: 12.sp,
+                  fontFamily: 'grenda',
+                  maxLines: 1,
+                  textOverflow: TextOverflow.ellipsis,
+                ),
+              )
+            ],
+          ),
           AppSizedBox.space15h,
           Column(
             children: [
@@ -416,7 +437,7 @@ class AppHomeScreen extends StatelessWidget {
           Obx(() => CustomText(
             title: "Explore Features",
             textColor: controller.themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-            fontSize: 14.sp,
+            fontSize: 16.sp,
             fontFamily: 'grenda',
             maxLines: 1,
             textOverflow: TextOverflow.ellipsis,
@@ -431,7 +452,7 @@ class AppHomeScreen extends StatelessWidget {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
                     childAspectRatio: 1,
-                    crossAxisSpacing: 8,
+                    crossAxisSpacing: 12,
                   ),
                   itemCount: controller.menuItems.length,
                   itemBuilder: (context, index) {
@@ -510,7 +531,30 @@ class AppHomeScreen extends StatelessWidget {
               )
             ],
           ),
+          AppSizedBox.space5h,
+          Obx(() => CustomText(
+            title: "Qibla Direction",
+            textColor: controller.themeController.isDarkMode.value ? AppColors.white : AppColors.black,
+            fontSize: 16.sp,
+            fontFamily: 'grenda',
+            maxLines: 1,
+            textOverflow: TextOverflow.ellipsis,
+          )),
           AppSizedBox.space10h,
+          InkWell(
+            onTap: (){
+              Get.to(QiblaDirectionScreen(city: locationPermissionScreenController.cityName.toString(),));
+            },
+            child: CustomCard(
+              title:"Locate the Kaaba",
+              subtitle:"Ensuring Correct Prayer Direction",
+              imageUrl: controller.themeController.isDarkMode.value ? "assets/images/sajdah_bg_dark.jpg" : "assets/images/sajdah_bg_light.jpg",
+              mergeWithGradientImage: true,
+              titleFontSize: 18.sp,
+              subtitleFontSize: 12.sp,
+            ),
+          ),
+          AppSizedBox.space15h,
         ],
       ),
     );

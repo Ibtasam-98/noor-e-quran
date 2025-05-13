@@ -30,8 +30,7 @@ class QuranSurahDetailScreen extends StatefulWidget {
   _QuranSurahDetailScreenState createState() => _QuranSurahDetailScreenState();
 }
 
-class _QuranSurahDetailScreenState extends State<QuranSurahDetailScreen>
-    with SingleTickerProviderStateMixin {
+class _QuranSurahDetailScreenState extends State<QuranSurahDetailScreen>  with SingleTickerProviderStateMixin {
   final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
   bool isDarkMode = false;
   bool isTranslationEnabled = false;
@@ -244,9 +243,9 @@ class _QuranSurahDetailScreenState extends State<QuranSurahDetailScreen>
                 _isFavorite
                     ? 'assets/images/heart_filled.svg'
                     : 'assets/images/heart.svg',
-                height: 21.h, // You can scale the SVG image like an icon
-                width: 21.w, // You can also use this to control the width
-                color: AppColors.dayColor
+                height: 18.h, // You can scale the SVG image like an icon
+                width: 18.w, // You can also use this to control the width
+                color: AppColors.white
             ),
           ),
           AppSizedBox.space5w,

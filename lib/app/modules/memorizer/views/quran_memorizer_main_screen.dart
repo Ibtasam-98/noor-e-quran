@@ -157,20 +157,7 @@ class _QuranMemorizerMainScreenState extends State<QuranMemorizerMainScreen> wit
               ],
             ),
             AppSizedBox.space10h,
-            Obx(() => CustomText(
-              title: "Holy Quran Memorizer",
-              textColor:
-              appHomeScreencontroller.themeController.isDarkMode.value
-                  ? AppColors.white
-                  : AppColors.black,
-              fontSize: 14.sp,
-              fontFamily: 'grenda',
-              textAlign: TextAlign.start,
-              maxLines: 1,
-            )),
-            AppSizedBox.space10h,
 
-            // Add TabBar here
             Container(
               height: 40.h,
 
@@ -216,7 +203,7 @@ class _QuranMemorizerMainScreenState extends State<QuranMemorizerMainScreen> wit
   Widget _buildAllSurahsList(bool isDarkMode) {
     return ListView.builder(
       shrinkWrap: true,
-      physics: const ClampingScrollPhysics(),
+      physics: AlwaysScrollableScrollPhysics(),
       itemCount: quran.totalSurahCount,
       itemBuilder: (context, index) {
         int surahNumber = index + 1;

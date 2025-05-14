@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import '../config/app_colors.dart';
-import '../modules/home/views/app_setting_screen.dart';
+import '../modules/settings/views/app_setting_screen.dart';
 import 'custom_text.dart';
 
 class CustomDrawer extends StatelessWidget {

@@ -13,34 +13,7 @@ class UserFeedbackController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-  }
-
-  String? validateUsername(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your username';
-    }
-    if (RegExp(r'[0-9!@#%^&*(),.?":{}|<>]').hasMatch(value)) {
-      return 'Username should not contain digits or special characters';
-    }
-    return null;
-  }
-
-  String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your email';
-    }
-    if (!RegExp(r"^[a-zA-Z0-9.+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$")
-        .hasMatch(value)) {
-      return 'Please enter a valid email';
-    }
-    return null;
-  }
-
-  String? validateSuggestion(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your suggestion';
-    }
-    return null;
+    // No need to re-initialize controllers here.
   }
 
   Future<void> sendFeedback() async {
@@ -60,6 +33,12 @@ class UserFeedbackController extends GetxController {
 
       try {
         await launchUrl(emailLaunchUri);
+        CustomSnackbar.show(
+          backgroundColor: AppColors.green,
+          title: "Success",
+          subtitle: "Your suggestion has been sent to the developer",
+          icon: Icon(Icons.check),
+        );
       } catch (e) {
         CustomSnackbar.show(
           backgroundColor: AppColors.red,
@@ -73,6 +52,8 @@ class UserFeedbackController extends GetxController {
 
   @override
   void onClose() {
+    // It's generally a good practice to dispose of TextEditingController
+    // when they are no longer needed to prevent memory leaks.
     usernameController.dispose();
     emailController.dispose();
     suggestionController.dispose();

@@ -8,8 +8,13 @@ import 'package:noor_e_quran/app/config/app_colors.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import 'package:noor_e_quran/app/controllers/user_location_premission_controller.dart';
 import 'package:noor_e_quran/app/modules/home/views/prayer_calculation_method_settings_screen.dart';
+import 'package:noor_e_quran/app/modules/settings/views/privacy_policy_screen.dart';
+import 'package:noor_e_quran/app/modules/settings/views/user_feedback_screen.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
 import '../../../widgets/custom_text.dart';
+import 'app_data_delete_screen.dart';
+import 'export_data_screen.dart';
+import 'frequently_ask_question_screen.dart';
 class MiscItem {
   final String title;
   final IconData icon;
@@ -30,32 +35,27 @@ class AppSettingsScreen extends StatelessWidget {
     MiscItem(
       title: "Export Prayer Time",
       icon: FontAwesomeIcons.filePdf,
-    //  destinationScreen: ExportPrayerTime(),
-      destinationScreen: Placeholder(),
+      destinationScreen: ExportPrayerTime(),
     ),
     MiscItem(
       title: "FAQ",
       icon: FontAwesomeIcons.question,
-       // destinationScreen: FAQScreen(),
-      destinationScreen: Placeholder(),
+        destinationScreen: FAQScreen(),
     ),
     MiscItem(
       title: "Feedback",
       icon: FontAwesomeIcons.comments,
-      // destinationScreen: UserFeedbackScreen(),
-      destinationScreen: Placeholder(),
+       destinationScreen: UserFeedbackScreen(),
     ),
     MiscItem(
       title: "Privacy Policy",
       icon: Icons.privacy_tip_outlined,
-      // destinationScreen: PrivacyPolicyScreen(),
-      destinationScreen: Placeholder(),
+       destinationScreen: PrivacyPolicyScreen(),
     ),
     MiscItem(
       title: "Delete Data",
       icon: FontAwesomeIcons.trash,
-      // destinationScreen: DeleteDataScreen(),
-      destinationScreen: Placeholder(),
+       destinationScreen: AppDataDeleteScreen(),
     ),
   ];
 

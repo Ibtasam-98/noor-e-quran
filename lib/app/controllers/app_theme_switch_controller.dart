@@ -23,8 +23,7 @@ class AppThemeSwitchController extends GetxController {
     Get.changeThemeMode(isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
   }
 
-  ThemeMode get currentTheme =>
-      isDarkMode.value ? ThemeMode.dark : ThemeMode.light;
+  ThemeMode get currentTheme => isDarkMode.value ? ThemeMode.dark : ThemeMode.light;
 
   bool _loadThemeFromStorage() {
     return _storage.read<bool>(_themeKey) ?? false;
@@ -47,6 +46,5 @@ class AppThemeSwitchController extends GetxController {
     _saveFontSizeToStorage(value);
   }
 
-  // Helper getter for dynamic font size scaling
   RxDouble get fontSizeFactor => RxDouble(currentFontSize.value / 18.0);
 }

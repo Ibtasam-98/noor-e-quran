@@ -33,6 +33,7 @@ dependencies:
   flutter_pdfview:
   table_calendar:
   simple_animation_progress_bar: ^1.8.2
+  syncfusion_flutter_charts:
 
   # Location Packages
   geolocator: ^13.0.2

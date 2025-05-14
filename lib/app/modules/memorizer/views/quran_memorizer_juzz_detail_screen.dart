@@ -9,44 +9,41 @@ import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:vibration/vibration.dart';
-import 'package:audioplayers/audioplayers.dart';
-
 import '../../../config/app_colors.dart';
 import '../../../config/app_sizedbox.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
 import '../../../widgets/custom_frame.dart';
 import '../../../widgets/custom_text.dart';
+import 'package:audioplayers/audioplayers.dart';
 
-class QuranMemorizerSurahDetailScreen extends StatefulWidget {
-  final int surahNumber;
 
-  QuranMemorizerSurahDetailScreen({required this.surahNumber});
+class QuranMemorizerJuzDetailScreen extends StatefulWidget {
+  final int juzNumber;
+
+  QuranMemorizerJuzDetailScreen({required this.juzNumber});
 
   @override
-  _QuranMemorizerSurahDetailScreenState createState() =>
-      _QuranMemorizerSurahDetailScreenState();
+  _QuranMemorizerJuzDetailScreenState createState() =>
+      _QuranMemorizerJuzDetailScreenState();
 }
 
-class _QuranMemorizerSurahDetailScreenState
-    extends State<QuranMemorizerSurahDetailScreen> {
+class _QuranMemorizerJuzDetailScreenState
+    extends State<QuranMemorizerJuzDetailScreen> {
   late PageController _pageController;
   int _currentPage = 0;
-  int _totalVerses = 0;
   final RxSet<String> _memorizedVerses = <String>{}.obs;
   final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
   final GetStorage _storage = GetStorage();
   final String _memorizedVersesKey = 'memorizedVerses';
-  final String _lastAccessedSurahKey = 'lastAccessedSurah';
-  final String _totalVersesKey = 'totalVerses';
+  final String _lastAccessedJuzKey = 'lastAccessedJuz';
   final String _lastAccessedTimeKey = 'lastAccessedTime';
-  final String _surahNameKey = 'surahName';
   final String _lastViewedPageKey = 'lastViewedPage';
   final String _showTranslationKey = 'showTranslation';
   final String _arabicFontSizeKey = 'arabicFontSize';
   final String _translationFontSizeKey = 'translationFontSize';
 
-  late List<String> _verses;
-  bool _isSurahFullyMemorized = false;
+  late List<Map<String, dynamic>> _verses;
+  bool _isJuzFullyMemorized = false;
 
   final RxBool _showTranslation = true.obs;
   final RxDouble _arabicFontSize = 22.0.obs;
@@ -55,33 +52,24 @@ class _QuranMemorizerSurahDetailScreenState
   // Audio player variables
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isPlaying = false;
+  bool _isLoading = false;
+  int? _currentlyPlayingSurah;
   int? _currentlyPlayingVerse;
 
   @override
   void initState() {
     super.initState();
-    // For debugging/logging
-    _audioPlayer.onLog.listen((event) {
-      print('AudioPlayer log: $event');
-    });
-    _totalVerses = quran.getVerseCount(widget.surahNumber);
-    _currentPage =
-        _storage.read<int?>('$_lastViewedPageKey${widget.surahNumber}') ?? 0;
+    _currentPage = _storage.read<int?>('${_lastViewedPageKey}Juz${widget.juzNumber}') ?? 0;
     _pageController = PageController(initialPage: _currentPage);
 
-    // Load settings and ensure they are within the valid range
+    // Load settings
     _showTranslation.value = _storage.read<bool?>(_showTranslationKey) ?? true;
-    _arabicFontSize.value =
-        (_storage.read<double?>(_arabicFontSizeKey) ?? 22.0).clamp(16.0, 60.0);
-    _translationFontSize.value =
-        (_storage.read<double?>(_translationFontSizeKey) ?? 20.0).clamp(
-            16.0, 60.0);
+    _arabicFontSize.value = (_storage.read<double?>(_arabicFontSizeKey) ?? 22.0).clamp(16.0, 60.0);
+    _translationFontSize.value = (_storage.read<double?>(_translationFontSizeKey) ?? 20.0).clamp(16.0, 60.0);
 
     _loadMemorizedVerses();
-    _saveLastAccessedSurah();
-    _saveTotalVerses();
-    _saveSurahName();
-    _loadVerses();
+    _saveLastAccessedJuz();
+    _loadJuzVerses();
 
     // Set up audio player listeners
     _audioPlayer.onPlayerStateChanged.listen((state) {
@@ -105,11 +93,25 @@ class _QuranMemorizerSurahDetailScreenState
     });
   }
 
-  void _loadVerses() {
-    _verses = List.generate(
-      _totalVerses,
-          (index) => quran.getVerse(widget.surahNumber, index + 1),
-    );
+  void _loadJuzVerses() {
+    final juzData = quran.getSurahAndVersesFromJuz(widget.juzNumber);
+    _verses = [];
+
+    juzData.forEach((surahNumber, verseRange) {
+      final startVerse = verseRange[0];
+      final endVerse = verseRange[1];
+
+      for (int verseNumber = startVerse; verseNumber <= endVerse; verseNumber++) {
+        _verses.add({
+          'surahNumber': surahNumber,
+          'verseNumber': verseNumber,
+          'text': quran.getVerse(surahNumber, verseNumber),
+          'translation': quran.getVerseTranslation(surahNumber, verseNumber,
+              translation: quran.Translation.enSaheeh) ??
+              "Translation not available",
+        });
+      }
+    });
   }
 
   @override
@@ -132,21 +134,12 @@ class _QuranMemorizerSurahDetailScreenState
     await _storage.write(_memorizedVersesKey, _memorizedVerses.toList());
   }
 
-  Future<void> _saveLastAccessedSurah() async {
+  Future<void> _saveLastAccessedJuz() async {
     final now = DateTime.now();
     final formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
-    await _storage.write(_lastAccessedSurahKey, formattedDate);
-    await _storage.write('lastAccessedSurahNumber', widget.surahNumber);
+    await _storage.write(_lastAccessedJuzKey, formattedDate);
+    await _storage.write('lastAccessedJuzNumber', widget.juzNumber);
     await _storage.write(_lastAccessedTimeKey, formattedDate);
-  }
-
-  Future<void> _saveTotalVerses() async {
-    await _storage.write('$_totalVersesKey${widget.surahNumber}', _totalVerses);
-  }
-
-  Future<void> _saveSurahName() async {
-    final surahName = quran.getSurahName(widget.surahNumber);
-    await _storage.write('$_surahNameKey${widget.surahNumber}', surahName);
   }
 
   void _goToPreviousPage() {
@@ -159,7 +152,7 @@ class _QuranMemorizerSurahDetailScreenState
   }
 
   void _goToNextPage() {
-    if (_currentPage < _totalVerses - 1) {
+    if (_currentPage < _verses.length - 1) {
       _pageController.nextPage(
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -167,26 +160,41 @@ class _QuranMemorizerSurahDetailScreenState
     }
   }
 
-  void _toggleMemorized(int verseNumber) async {
-    final verseKey = '${widget.surahNumber}:${verseNumber}';
+  void _toggleMemorized(int index) async {
+    final verse = _verses[index];
+    final verseKey = '${verse['surahNumber']}:${verse['verseNumber']}';
+    final surahNumber = verse['surahNumber'];
+
     if (_memorizedVerses.contains(verseKey)) {
       _memorizedVerses.remove(verseKey);
     } else {
       _memorizedVerses.add(verseKey);
     }
-    _saveMemorizedVerses();
+
+    await _saveMemorizedVerses();
+
+    final juzVerses = _verses.map((v) => '${v['surahNumber']}:${v['verseNumber']}').toSet();
     setState(() {
-      _isSurahFullyMemorized = _memorizedVerses
-          .where((v) => v.startsWith('${widget.surahNumber}:'))
-          .length == _totalVerses;
+      _isJuzFullyMemorized = juzVerses.every((v) => _memorizedVerses.contains(v));
     });
 
     if (await Vibration.hasVibrator() ?? false) {
       Vibration.vibrate(duration: 50);
     }
+
+    if (_isJuzFullyMemorized) {
+      CustomSnackbar.show(
+        title: "Ma Sha Allah",
+        subtitle: "You have memorized Juz ${widget.juzNumber}!",
+        icon: Icon(LineIcons.checkCircle),
+        backgroundColor: AppColors.green,
+      );
+    }
   }
 
-  Future<void> _playVerseAudio(int verseNumber) async {
+  Future<void> _playVerseAudio(int verseNumber, int index) async {
+    final verse = _verses[index];
+    final surahNumber = verse['surahNumber'];
     try {
       if (_isPlaying && _currentlyPlayingVerse == verseNumber) {
         // Pause if same verse is playing
@@ -202,7 +210,7 @@ class _QuranMemorizerSurahDetailScreenState
         await _audioPlayer.stop();
 
         // Get audio URL for this verse
-        final audioUrl = quran.getAudioURLByVerse(widget.surahNumber, verseNumber);
+        final audioUrl = quran.getAudioURLByVerse(surahNumber, verseNumber);
 
         // Play with error handling
         try {
@@ -384,16 +392,13 @@ class _QuranMemorizerSurahDetailScreenState
       appBar: AppBar(
         backgroundColor: themeController.isDarkMode.value ? AppColors.black : AppColors.white,
         title: CustomText(
-          firstText: "Surah ",
-          secondText: quran.getSurahName(widget.surahNumber),
-          secondTextColor: AppColors.primary,
+          title: 'Juz ${widget.juzNumber}',
           fontSize: 18.sp,
           textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
         ),
         centerTitle: false,
         leading: IconButton(
           onPressed: () {
-            // Stop audio when navigating back
             _audioPlayer.stop();
             Navigator.pop(context);
           },
@@ -415,15 +420,23 @@ class _QuranMemorizerSurahDetailScreenState
           Expanded(
             child: PageView.builder(
               controller: _pageController,
-              itemCount: _totalVerses,
+              itemCount: _verses.length,
               onPageChanged: (int page) {
                 setState(() {
                   _currentPage = page;
-                  _storage.write('$_lastViewedPageKey${widget.surahNumber}', page);
+                  _storage.write('${_lastViewedPageKey}Juz${widget.juzNumber}', page);
                 });
               },
               itemBuilder: (context, index) {
-                final verseNumber = index + 1;
+                final verse = _verses[index];
+                final verseKey = '${verse['surahNumber']}:${verse['verseNumber']}';
+                final isMemorized = _memorizedVerses.contains(verseKey);
+                final surahName = quran.getSurahName(verse['surahNumber']);
+                final isFirstVerseOfSurah = verse['verseNumber'] == 1;
+                final isCurrentVersePlaying =
+                    _currentlyPlayingSurah == verse['surahNumber'] &&
+                        _currentlyPlayingVerse == verse['verseNumber'];
+
                 return Container(
                   margin: EdgeInsets.all(10.h),
                   decoration: BoxDecoration(
@@ -464,6 +477,19 @@ class _QuranMemorizerSurahDetailScreenState
                                 Expanded(
                                   child: Column(
                                     children: [
+                                      if (isFirstVerseOfSurah)
+                                        Padding(
+                                          padding: EdgeInsets.only(bottom: 8.h),
+                                          child: CustomText(
+                                            title: surahName,
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.bold,
+                                            textAlign: TextAlign.center,
+                                            textColor: themeController.isDarkMode.value
+                                                ? AppColors.white
+                                                : AppColors.black,
+                                          ),
+                                        ),
                                       Stack(
                                         alignment: Alignment.center,
                                         children: [
@@ -475,31 +501,36 @@ class _QuranMemorizerSurahDetailScreenState
                                           ),
                                           Positioned(
                                             child: CustomText(
-                                              title: verseNumber.toString(),
+                                              title: verse['verseNumber'].toString(),
                                               fontSize: 12.sp,
-                                              textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
+                                              textColor: themeController.isDarkMode.value
+                                                  ? AppColors.white
+                                                  : AppColors.black,
                                             ),
                                           ),
                                         ],
                                       ),
                                       AppSizedBox.space10h,
                                       Obx(() => CustomText(
-                                        title: quran.getVerse(widget.surahNumber, verseNumber),
-                                        textColor: _memorizedVerses.contains('${widget.surahNumber}:${verseNumber}')
+                                        title: verse['text'],
+                                        textColor: isMemorized
                                             ? AppColors.green
-                                            : (themeController.isDarkMode.value ? AppColors.white : AppColors.black),
+                                            : (themeController.isDarkMode.value
+                                            ? AppColors.white
+                                            : AppColors.black),
                                         textStyle: GoogleFonts.amiri(height: 2),
                                         textAlign: TextAlign.center,
-                                        fontSize: _arabicFontSize.value.sp,)),
+                                        fontSize: _arabicFontSize.value.sp,
+                                      )),
                                       Obx(() {
                                         if (_showTranslation.value) {
                                           return Column(
                                             children: [
                                               AppSizedBox.space10h,
                                               CustomText(
-                                                title: quran.getVerseTranslation(widget.surahNumber, verseNumber, translation: quran.Translation.enSaheeh) ?? "Translation not available",
+                                                title: verse['translation'],
                                                 fontSize: _translationFontSize.value.sp,
-                                                textColor: _memorizedVerses.contains('${widget.surahNumber}:${verseNumber}')
+                                                textColor: isMemorized
                                                     ? AppColors.green
                                                     : (themeController.isDarkMode.value
                                                     ? AppColors.white
@@ -516,9 +547,9 @@ class _QuranMemorizerSurahDetailScreenState
                                 ),
                                 IconButton(
                                   icon: Icon(Icons.arrow_right, size: 33.h),
-                                  onPressed: _currentPage < _totalVerses - 1 ? _goToNextPage : null,
+                                  onPressed: _currentPage < _verses.length - 1 ? _goToNextPage : null,
                                   iconSize: 40,
-                                  color: _currentPage < _totalVerses - 1
+                                  color: _currentPage < _verses.length - 1
                                       ? (themeController.isDarkMode.value ? AppColors.white : AppColors.black)
                                       : Colors.grey,
                                 ),
@@ -527,9 +558,9 @@ class _QuranMemorizerSurahDetailScreenState
                           ),
                         ),
                         AnimatedGradientBorder(
-                          borderSize: (_isPlaying && _currentlyPlayingVerse == verseNumber) ? 3.r : 0.0,
-                          glowSize: (_isPlaying && _currentlyPlayingVerse == verseNumber) ? 8.r : 0.0,
-                          gradientColors: (_isPlaying && _currentlyPlayingVerse == verseNumber)
+                          borderSize: (_isPlaying && _currentlyPlayingVerse == verse['verseNumber']) ? 3.r : 0.0,
+                          glowSize: (_isPlaying && _currentlyPlayingVerse == verse['verseNumber']) ? 8.r : 0.0,
+                          gradientColors: (_isPlaying && _currentlyPlayingVerse == verse['verseNumber'])
                               ? const [
                             Color(0xFFFFD700),
                             Color(0xFFFFA500),
@@ -540,13 +571,13 @@ class _QuranMemorizerSurahDetailScreenState
                               : [AppColors.transparent], // Use transparent when not playing
                           borderRadius: BorderRadius.circular(30.r + 8.r),
                           child: InkWell(
-                            onTap: () => _playVerseAudio(verseNumber),
+                            onTap: () => _playVerseAudio(verse['verseNumber'],index ),
                             borderRadius: BorderRadius.circular(30.r),
                             child: CircleAvatar(
                               radius: 30.r,
                               backgroundColor: AppColors.primary,
                               child: Icon(
-                                (_isPlaying && _currentlyPlayingVerse == verseNumber)
+                                (_isPlaying && _currentlyPlayingVerse == verse['verseNumber'])
                                     ? Icons.pause
                                     : Icons.play_arrow,
                                 color: AppColors.white,
@@ -572,23 +603,19 @@ class _QuranMemorizerSurahDetailScreenState
             padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
             child: Container(
               margin: EdgeInsets.only(bottom: 10.h),
-              child: Obx(() => IconButton(
-                icon: _memorizedVerses.contains('${widget.surahNumber}:${_currentPage + 1}')
-                    ? Icon(LineIcons.checkCircle, color: AppColors.green, size: 40.sp)
-                    : Icon(LineIcons.checkCircle, color: AppColors.grey, size: 40.sp),
-                onPressed: () {
-                  _toggleMemorized(_currentPage + 1);
-                  if (_isSurahFullyMemorized) {
-                    CustomSnackbar.show(
-                      title: "Ma Sha Allah",
-                      subtitle: "You have memorized Surah ${quran.getSurahName(widget.surahNumber)}!",
-                      icon: Icon(LineIcons.checkCircle, color: AppColors.white),
-                      backgroundColor: AppColors.green,
-                    );
-                  }
-                },
-                iconSize: 40.sp,
-              )),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Obx(() => IconButton(
+                    icon: _memorizedVerses.contains(
+                        '${_verses[_currentPage]['surahNumber']}:${_verses[_currentPage]['verseNumber']}')
+                        ? Icon(LineIcons.checkCircle, color: AppColors.green)
+                        : Icon(LineIcons.checkCircle, color: AppColors.grey),
+                    onPressed: () => _toggleMemorized(_currentPage),
+                    iconSize: 40,
+                  )),
+                ],
+              ),
             ),
           ),
         ],

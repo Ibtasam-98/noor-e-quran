@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:noor_e_quran/app/controllers/app_theme_switch_controller.dart';
 import 'package:noor_e_quran/app/modules/home/views/app_home_base_screen.dart';
 import 'package:noor_e_quran/app/controllers/flying_bird_animation_controller.dart';
+import 'package:noor_e_quran/app/modules/memorizer/views/quran_memorization_visualization_screen.dart';
+import 'package:noor_e_quran/app/modules/memorizer/views/quran_memorizer_juzz_detail_screen.dart';
 import 'package:noor_e_quran/app/modules/memorizer/views/quran_memorizer_surah_detail_screen.dart';
 import 'package:noor_e_quran/app/widgets/custom_text.dart';
 import '../../../config/app_colors.dart';
@@ -30,12 +32,9 @@ class _QuranMemorizerMainScreenState extends State<QuranMemorizerMainScreen> wit
   final String _lastAccessedTimeKey = 'lastAccessedTime';
   final String _lastAccessedSurahNumberKey = 'lastAccessedSurahNumber';
   final String _surahNameKey = 'surahName';
-  final FlyingBirdAnimationController _hifzBirdController =
-  Get.find<FlyingBirdAnimationController>();
-  final AppHomeScreenController appHomeScreencontroller =
-  Get.find<AppHomeScreenController>();
-  final AppThemeSwitchController appThemeSwitchController =
-  Get.find<AppThemeSwitchController>();
+  final FlyingBirdAnimationController _hifzBirdController = Get.find<FlyingBirdAnimationController>();
+  final AppHomeScreenController appHomeScreencontroller = Get.find<AppHomeScreenController>();
+  final AppThemeSwitchController appThemeSwitchController = Get.find<AppThemeSwitchController>();
 
   late TabController _tabController;
 
@@ -79,34 +78,43 @@ class _QuranMemorizerMainScreenState extends State<QuranMemorizerMainScreen> wit
     return memorizedVerses.length;
   }
 
-  int _getTotalMemorizedSurahs() {
-    Set<int> memorizedSurahs = {};
-    final memorizedVerses = _storage.read(_memorizedVersesKey) ?? <String>[];
-    for (var verseKey in memorizedVerses) {
-      try {
-        final parts = verseKey.split(':');
-        final savedSurahNumber = int.parse(parts[0]);
-        final verseCount = quran.getVerseCount(savedSurahNumber);
-        final memorizedCount = _getMemorizedVersesCount(savedSurahNumber);
-        if (memorizedCount == verseCount) {
-          memorizedSurahs.add(savedSurahNumber);
-        }
-      } catch (e) {
-        debugPrint("Error parsing verse key: $verseKey. Error: $e");
-      }
-    }
-    return memorizedSurahs.length;
+  int _getTotalVersesInQuran() {
+    return 6236;
   }
+
+
+  int _getTotalJuzVersesMemorized() {
+    final memorizedVerses = _storage.read(_memorizedVersesKey) ?? <String>[];
+    int count = 0;
+    for (int i = 1; i <= 30; i++) {
+      final juzData = quran.getSurahAndVersesFromJuz(i);
+      juzData.forEach((surahNumber, verseRange) {
+        for (int verseNumber = verseRange[0]; verseNumber <= verseRange[1]; verseNumber++) {
+          if (memorizedVerses.contains('$surahNumber:$verseNumber')) {
+            count++;
+          }
+        }
+      });
+    }
+    return count;
+  }
+
+  int _getTotalJuzVerses() {
+    int count = 0;
+    for (int i = 1; i <= 30; i++) {
+      final juzData = quran.getSurahAndVersesFromJuz(i);
+      juzData.forEach((surahNumber, verseRange) {
+        count += (verseRange[1] - verseRange[0] + 1);
+      });
+    }
+    return count;
+  }
+
 
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = appThemeSwitchController.isDarkMode.value;
-    final textColor = isDarkMode ? AppColors.white : AppColors.black;
 
-    final totalVersesInQuran = 6236; // Total verses in the Quran
-    final totalSurahsInQuran = 114;
-    final memorizedVersesCount = _getTotalMemorizedVerses();
-    final memorizedSurahsCount = _getTotalMemorizedSurahs();
 
     return AppHomeBaseScreen(
       titleFirstPart: "Noor e",
@@ -118,78 +126,62 @@ class _QuranMemorizerMainScreenState extends State<QuranMemorizerMainScreen> wit
           mainAxisSize: MainAxisSize.min,
           children: [
             HomeScreenHeader(birdController: _hifzBirdController),
-            Obx(() => CustomText(
-              title: "Progress",
-              textColor:
-              appHomeScreencontroller.themeController.isDarkMode.value
-                  ? AppColors.white
-                  : AppColors.black,
-              fontSize: 14.sp,
-              fontFamily: 'grenda',
-              textAlign: TextAlign.start,
-              maxLines: 1,
-            ),
-            ),
-            AppSizedBox.space10h,
-            GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 10.h,
-              crossAxisSpacing: 10.w,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildMemorizationCard(
-                    title: "Verses Memorized",
-                    memorizedCount: memorizedVersesCount,
-                    totalCount: totalVersesInQuran,
-                    textColor: textColor,
-                    isDarkMode: isDarkMode,
-                    cardColor: AppColors.primary.withOpacity(0.29)
-                ),
-                _buildMemorizationCard(
-                    title: "Surahs Memorized",
-                    memorizedCount: memorizedSurahsCount,
-                    totalCount: totalSurahsInQuran,
-                    textColor: textColor,
-                    isDarkMode: isDarkMode,
-                    cardColor: AppColors.primary.withOpacity(0.1)
+                Obx(() => CustomText(
+                  title: "Holy Quran Memorize",
+                  textColor: appHomeScreencontroller.themeController.isDarkMode.value
+                      ? AppColors.white
+                      : AppColors.black,
+                  fontSize: 14.sp,
+                  fontFamily: 'grenda',
+                  textAlign: TextAlign.start,
+                  maxLines: 1,
+                )),
+                Expanded(
+                  child: InkWell(
+                    onTap: (){Get.to(MemorizationProgressScreen());},
+                    child: CustomText(
+                      title: "View Progress",
+                      textColor: AppColors.primary,
+                      fontSize: 12.sp,
+                      fontFamily: 'quicksand',
+                      textAlign: TextAlign.end,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ],
             ),
+
             AppSizedBox.space10h,
-
-            Container(
-              height: 40.h,
-
-              child: TabBar(
-                controller: _tabController,
-                dividerColor: Colors.transparent,
-                indicatorSize: TabBarIndicatorSize.tab,
-                indicatorColor: AppColors.primary,
-                labelColor: isDarkMode ? AppColors.white : AppColors.black,
-                unselectedLabelColor: textColor,
-                labelStyle: GoogleFonts.quicksand(fontSize: 14.sp),
-                indicator: BoxDecoration(
-                  border: Border.all(color: AppColors.primary, width: 1),
-                  borderRadius: BorderRadius.circular(50.r),
-                ),
-                tabs: const [
-                  Tab(text: 'All Surahs'),
-                  Tab(text: 'All Juz'),
-                ],
+            Obx(() => TabBar(
+              controller: _tabController,
+              dividerColor: Colors.transparent,
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicatorColor: AppColors.primary,
+              labelColor: AppColors.primary,
+              unselectedLabelColor: appThemeSwitchController.isDarkMode.value
+                  ? AppColors.white.withOpacity(0.7)
+                  : AppColors.black.withOpacity(0.7),
+              labelStyle: GoogleFonts.quicksand(fontSize: 14.sp),
+              indicator: BoxDecoration(
+                border: Border.all(color: AppColors.primary, width: 1),
+                borderRadius: BorderRadius.circular(50.r),
               ),
-            ),
+              tabs: const [
+                Tab(text: 'Surahs'),
+                Tab(text: 'Juz'),
+              ],
+            )),
             AppSizedBox.space10h,
-
-            // Add TabBarView here
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.5,
+            Container(
+              height: MediaQuery.of(context).size.height * 0.55,
               child: TabBarView(
                 controller: _tabController,
                 children: [
-
                   _buildAllSurahsList(isDarkMode),
-
                   _buildAllJuzList(isDarkMode),
                 ],
               ),
@@ -203,7 +195,7 @@ class _QuranMemorizerMainScreenState extends State<QuranMemorizerMainScreen> wit
   Widget _buildAllSurahsList(bool isDarkMode) {
     return ListView.builder(
       shrinkWrap: true,
-      physics: AlwaysScrollableScrollPhysics(),
+      physics: const AlwaysScrollableScrollPhysics(),
       itemCount: quran.totalSurahCount,
       itemBuilder: (context, index) {
         int surahNumber = index + 1;
@@ -229,35 +221,32 @@ class _QuranMemorizerMainScreenState extends State<QuranMemorizerMainScreen> wit
                   : AppColors.primary.withOpacity(0.1),
             ),
             child: Padding(
-              padding: EdgeInsets.only(left:5.h,right: 5.h,top: 12.h,bottom: 12.h),
+              padding: EdgeInsets.only(left: 5.h, right: 5.h, top: 12.h, bottom: 12.h),
               child: Row(
                 children: [
-                  SizedBox(
-                    width: 80.w,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        SizedBox(
-                          height: 30.h,
-                          width: 30.h,
-                          child: CircularProgressIndicator(
-                            value: memorizedPercentage,
-                            strokeWidth: 4.0,
-                            backgroundColor: AppColors.grey.withOpacity(0.2),
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
-                          ),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        height: 30.h,
+                        width: 30.h,
+                        child: CircularProgressIndicator(
+                          value: memorizedPercentage,
+                          strokeWidth: 4.0,
+                          backgroundColor: AppColors.grey.withOpacity(0.2),
+                          valueColor: const AlwaysStoppedAnimation<Color>(Colors.orange),
                         ),
-                        Positioned(
-                          child: Obx(() => CustomText(
-                            title: "$memorizedCount/$totalVerses",
-                            fontSize: 8.sp,
-                            textColor: appThemeSwitchController.isDarkMode.value
-                                ? AppColors.white
-                                : AppColors.black,
-                          )),
-                        ),
-                      ],
-                    ),
+                      ),
+                      Positioned(
+                        child: Obx(() => CustomText(
+                          title: "$memorizedCount/$totalVerses",
+                          fontSize: 8.sp,
+                          textColor: appThemeSwitchController.isDarkMode.value
+                              ? AppColors.white
+                              : AppColors.black,
+                        )),
+                      ),
+                    ],
                   ),
                   AppSizedBox.space10w,
                   Expanded(
@@ -318,79 +307,138 @@ class _QuranMemorizerMainScreenState extends State<QuranMemorizerMainScreen> wit
 
   Widget _buildAllJuzList(bool isDarkMode) {
     return ListView.builder(
-      shrinkWrap: true,
-      physics: const ClampingScrollPhysics(),
-      itemCount: 30, // 30 Juz in Quran
-      itemBuilder: (context, index) {
-        int juzNumber = index + 1;
+        shrinkWrap: true,
+        physics: const ClampingScrollPhysics(),
+    itemCount: 30, // 30 Juz in Quran
+    itemBuilder: (context, index) {
+    int juzNumber = index + 1;
+    Map<int, List<int>> juzData = quran.getSurahAndVersesFromJuz(juzNumber);
 
-        // Get the surahs in this juz (you'll need to implement this logic)
-        // This is a placeholder - you'll need to implement the actual logic
-        // to determine which surahs are in which juz
-        String surahsInJuz = "Surah ${juzNumber * 3} to ${juzNumber * 3 + 2}"; // Example
+    // Calculate memorization progress for this Juz
+    final memorizedVerses = _storage.read(_memorizedVersesKey) ?? <String>[];
+    int memorizedCount = 0;
+    int totalVerses = 0;
 
-        return Container(
-          margin: EdgeInsets.only(bottom: 5.h, top: 5.h),
-          padding: EdgeInsets.all(16.h),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.r),
-            color: (index % 2 == 1)
-                ? AppColors.primary.withOpacity(0.29)
-                : AppColors.primary.withOpacity(0.1),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 40.w,
-                height: 40.h,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: CustomText(
-                    title: juzNumber.toString(),
-                    fontSize: 16.sp,
-                    textColor: AppColors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              AppSizedBox.space10w,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomText(
-                      title: "Juz $juzNumber",
-                      fontSize: 16.sp,
-                      textColor: isDarkMode ? AppColors.white : AppColors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    CustomText(
-                      title: surahsInJuz,
-                      fontSize: 12.sp,
-                      textColor: AppColors.primary,
-                    ),
-                  ],
-                ),
-              ),
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 20.sp,
-                color: AppColors.primary,
-              ),
-            ],
-          ),
-        );
+    juzData.forEach((surahNumber, verseRange) {
+    final startVerse = verseRange[0];
+    final endVerse = verseRange[1];
+    totalVerses += (endVerse - startVerse + 1);
+
+    for (int verseNumber = startVerse; verseNumber <= endVerse; verseNumber++) {
+    if (memorizedVerses.contains('$surahNumber:$verseNumber')) {
+    memorizedCount++;
+    }
+    }
+    });
+
+    final memorizationPercentage = totalVerses > 0 ? memorizedCount / totalVerses : 0.0;
+    final lastAccessedTime = _storage.read<String?>('${_lastAccessedTimeKey}Juz$juzNumber');
+
+    String surahsInJuz = "";
+    if (juzData.isNotEmpty) {
+    List<int> surahNumbers = juzData.keys.toList()..sort();
+    if (surahNumbers.length == 1) {
+    surahsInJuz = "Surah ${surahNumbers.first}";
+    } else if (surahNumbers.length > 1) {
+      surahsInJuz = "Surah ${surahNumbers.first} - Surah ${surahNumbers.last}";
+    }
+    } else {
+      surahsInJuz = "No surahs found";
+    }
+
+    return InkWell(
+      onTap: () {
+        Get.to(() => QuranMemorizerJuzDetailScreen(juzNumber: juzNumber));
       },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 5.h, top: 5.h, left: 8.w, right: 8.w),
+        padding: EdgeInsets.all(17.h),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.r),
+          color: (index % 2 == 1)
+              ? AppColors.primary.withOpacity(0.29)
+              : AppColors.primary.withOpacity(0.1),
+        ),
+        child: Row(
+          children: [
+           Stack(
+             alignment: Alignment.center,
+             children: [
+               CircularProgressIndicator(
+                 value: memorizationPercentage,
+                 backgroundColor: AppColors.grey.withOpacity(0.2),
+                 valueColor: const AlwaysStoppedAnimation<Color>(Colors.orange),
+               ),
+               Positioned(
+                 child: Obx(() => CustomText(
+                   title: "$memorizedCount/$totalVerses",
+                   fontSize: 8.sp,
+                   textColor: appThemeSwitchController.isDarkMode.value
+                       ? AppColors.white
+                       : AppColors.black,
+                 )),
+               ),
+             ],
+           ),
+
+            AppSizedBox.space10w,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Obx(() => CustomText(
+                    title: 'Juz $juzNumber',
+                    fontSize: 15.sp,
+                    textColor: appThemeSwitchController.isDarkMode.value
+                        ? AppColors.white
+                        : AppColors.black,
+                    fontWeight: FontWeight.w500,
+                    textOverflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    textAlign: TextAlign.start,
+                  )),
+                  CustomText(
+                    title: surahsInJuz,
+                    fontSize: 12.sp,
+                    textColor: AppColors.primary,
+                    textOverflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                  if (lastAccessedTime != null)
+                    Obx(() => CustomText(
+                      title: "Last Accessed: ${DateFormat('yyyy-MM-dd HH:mm').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(lastAccessedTime))}",
+                      fontSize: 10.sp,
+                      textColor: appThemeSwitchController.isDarkMode.value
+                          ? AppColors.lightGrey
+                          : AppColors.grey,
+                      textAlign: TextAlign.start,
+                      textOverflow: TextOverflow.ellipsis,
+                      fontWeight: FontWeight.w500,
+                      maxLines: 1,
+                    )),
+                ],
+              ),
+            ),
+            Obx(() => Icon(
+              Icons.arrow_forward_ios,
+              size: 12.sp,
+              color: appThemeSwitchController.isDarkMode.value
+                  ? AppColors.white
+                  : AppColors.black,
+            )),
+          ],
+        ),
+      ),
+    );
+    },
     );
   }
 
   Widget _buildMemorizationCard({
-    required String title,
-    required int memorizedCount,
-    required int totalCount,
+    String? title,
+    int? memorizedCount,
+    int? totalCount,
+    double? percentage,
     required Color textColor,
     required bool isDarkMode,
     required Color cardColor,
@@ -404,25 +452,41 @@ class _QuranMemorizerMainScreenState extends State<QuranMemorizerMainScreen> wit
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CustomText(
-            title: title,
-            fontSize: 14.sp,
-            textColor: textColor,
-            fontWeight: FontWeight.w500,
-          ),
+          if (title != null)
+            Obx(() => CustomText(
+              title: title,
+              fontSize: 14.sp,
+              textColor: appThemeSwitchController.isDarkMode.value ? AppColors.white : AppColors.black,
+              fontWeight: FontWeight.w500,
+            )),
           AppSizedBox.space10h,
-          CustomText(
-            title: "$memorizedCount/$totalCount",
-            fontSize: 20.sp,
-            textColor: AppColors.primary,
-            fontWeight: FontWeight.bold,
-          ),
+          if (memorizedCount != null && totalCount != null)
+            CustomText(
+              title: "$memorizedCount/$totalCount",
+              fontSize: 20.sp,
+              textColor: AppColors.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          if (percentage != null)
+            CustomText(
+              title: "${(percentage * 100).toStringAsFixed(1)}%",
+              fontSize: 20.sp,
+              textColor: AppColors.primary,
+              fontWeight: FontWeight.bold,
+            ),
           AppSizedBox.space10h,
-          CircularProgressIndicator(
-            value: totalCount > 0 ? memorizedCount / totalCount : 0,
-            backgroundColor: Colors.grey.withOpacity(0.3),
-            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
-          ),
+          if (percentage != null)
+            CircularProgressIndicator(
+              value: percentage,
+              backgroundColor: Colors.grey.withOpacity(0.3),
+              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+            ),
+          if (memorizedCount != null && totalCount != null)
+            CircularProgressIndicator(
+              value: totalCount > 0 ? memorizedCount / totalCount : 0,
+              backgroundColor: Colors.grey.withOpacity(0.3),
+              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+            ),
         ],
       ),
     );

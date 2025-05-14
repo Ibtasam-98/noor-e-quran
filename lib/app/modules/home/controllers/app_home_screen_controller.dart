@@ -6,6 +6,7 @@ import 'package:noor_e_quran/app/modules/home/controllers/view_all_prayer_screen
 import '../../../config/app_contants.dart';
 import '../../../controllers/user_location_premission_controller.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
+import '../../duas/views/dua_main_screen.dart';
 import '../../prayer/views/prayer_main_screen.dart';
 import '../../tasbeeh/views/tasbeeh_counter_screen.dart';
 import '../views/hijri_calender_screen.dart';
@@ -89,7 +90,7 @@ class AppHomeScreenController extends GetxController with GetSingleTickerProvide
   }
 
   final List<Map<String, dynamic>> menuItems = [
-    {"title": "Daily", "subtitle": "Daily Duas", "destination": () => const Placeholder()},
+    {"title": "Daily", "subtitle": "Daily Duas", "destination": () =>  DuaMainScreen()},
     {"title": "Tasbeeh", "subtitle": "Zikr Counter", "destination": () => TasbeehCounterScreen()},
     {"title": "Prayers", "subtitle": "Salat Guide", "destination": () => PrayerMainScreen()},
     {"title": "Islamic", "subtitle": "Hijri Calendar", "destination": () => HijriCalendarScreen()},

@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import 'app_home_screen_controller.dart';
+import '../../home/controllers/app_home_screen_controller.dart';
 
 class ExportPrayerTimeController extends GetxController {
   final AppHomeScreenController homeController = Get.find(); // To access location data and time formatting

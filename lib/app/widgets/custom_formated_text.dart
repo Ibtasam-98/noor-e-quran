@@ -1,6 +1,15 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
+
+
+bool get is24HourFormat {
+  if (Get.context != null) {
+    return MediaQuery.of(Get.context!).alwaysUse24HourFormat;
+  }
+  return true;
+}
 
 
 String formatTime(String timeStr, bool is24HourFormat) {
@@ -36,3 +45,4 @@ String truncateString(String text, int maxLines, TextStyle style, BuildContext c
     return text;
   }
 }
+

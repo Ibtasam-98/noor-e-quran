@@ -35,12 +35,6 @@ class MemorizationProgressScreen extends StatelessWidget {
     return count;
   }
 
-  double _getMemorizationPercentage(int surahNumber) {
-    final memorizedCount = _getMemorizedVersesCount(surahNumber);
-    final totalVerses = quran.getVerseCount(surahNumber);
-    return totalVerses > 0 ? (memorizedCount / totalVerses) : 0.0;
-  }
-
   int _getTotalMemorizedVerses() {
     final memorizedVerses = _storage.read(_memorizedVersesKey) ?? <String>[];
     return memorizedVerses.length;

@@ -281,6 +281,7 @@ class _QuranMemorizerSurahDetailScreenState
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: SwitchListTile(
+                  inactiveTrackColor: AppColors.white,
                   trackOutlineColor: MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
                       if (states.contains(MaterialState.selected)) {

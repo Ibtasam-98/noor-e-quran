@@ -177,7 +177,7 @@ class HadithDetailScreen extends StatelessWidget {
                         data: cleanText("${bookFirstName}"),
                         style: {
                           "body": Style(
-                            fontSize: FontSize(20.sp),
+                            fontSize: FontSize(18.sp),
                             color: AppColors.primary,
                             textAlign: TextAlign.left,
                             fontFamily: 'quicksand',

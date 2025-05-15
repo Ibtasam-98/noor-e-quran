@@ -437,6 +437,16 @@ class HadithCollectionScreen extends StatelessWidget {
             ),
           ),
           AppSizedBox.space10h,
+          Obx(()=>CustomText(
+            title: "Hadith Collections",
+            textColor: themeController.isDarkMode.value? AppColors.white : AppColors.black,
+            fontSize: 16.sp,
+            fontFamily: 'grenda',
+            maxLines: 1,
+            textAlign: TextAlign.start,
+            textOverflow: TextOverflow.ellipsis,
+          ),),
+          AppSizedBox.space10h,
           Column(
             children: [
               SingleChildScrollView(

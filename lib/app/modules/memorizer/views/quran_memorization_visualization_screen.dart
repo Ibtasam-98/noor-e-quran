@@ -1,127 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:noor_e_quran/app/widgets/custom_text.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../config/app_colors.dart';
-import 'package:quran/quran.dart' as quran;
 import '../../../config/app_sizedbox.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
+import '../controllers/quran_memorization_progress_controller.dart';
 
 class MemorizationProgressScreen extends StatelessWidget {
-  final GetStorage _storage = GetStorage();
-  final String _memorizedVersesKey = 'memorizedVerses';
-  final AppThemeSwitchController appThemeSwitchController = Get.find<AppThemeSwitchController>();
-
   MemorizationProgressScreen({super.key});
 
-  int _getMemorizedVersesCount(int surahNumber) {
-    final memorizedVerses = _storage.read(_memorizedVersesKey) ?? <String>[];
-    int count = 0;
-    for (var verseKey in memorizedVerses) {
-      try {
-        final parts = verseKey.split(':');
-        final savedSurahNumber = int.parse(parts[0]);
-        if (savedSurahNumber == surahNumber) {
-          count++;
-        }
-      } catch (e) {
-        debugPrint("Error parsing verse key: $verseKey. Error: $e");
-      }
-    }
-    return count;
-  }
-
-  int _getTotalMemorizedVerses() {
-    final memorizedVerses = _storage.read(_memorizedVersesKey) ?? <String>[];
-    return memorizedVerses.length;
-  }
-
-  int _getTotalVersesInQuran() {
-    return 6236;
-  }
-
-  double _getOverallMemorizationPercentage() {
-    final totalMemorized = _getTotalMemorizedVerses();
-    final totalVerses = _getTotalVersesInQuran();
-    return totalVerses > 0 ? (totalMemorized / totalVerses) : 0.0;
-  }
-
-  int _getTotalMemorizedSurahs() {
-    Set<int> memorizedSurahs = {};
-    final memorizedVerses = _storage.read(_memorizedVersesKey) ?? <String>[];
-    for (var verseKey in memorizedVerses) {
-      try {
-        final parts = verseKey.split(':');
-        final savedSurahNumber = int.parse(parts[0]);
-        final verseCount = quran.getVerseCount(savedSurahNumber);
-        final memorizedCount = _getMemorizedVersesCount(savedSurahNumber);
-        if (memorizedCount == verseCount) {
-          memorizedSurahs.add(savedSurahNumber);
-        }
-      } catch (e) {
-        debugPrint("Error parsing verse key: $verseKey. Error: $e");
-      }
-    }
-    return memorizedSurahs.length;
-  }
-
-  int _getTotalJuzVersesMemorized() {
-    final memorizedVerses = _storage.read(_memorizedVersesKey) ?? <String>[];
-    int count = 0;
-    for (int i = 1; i <= 30; i++) {
-      final juzData = quran.getSurahAndVersesFromJuz(i);
-      juzData.forEach((surahNumber, verseRange) {
-        for (int verseNumber = verseRange[0]; verseNumber <= verseRange[1]; verseNumber++) {
-          if (memorizedVerses.contains('$surahNumber:$verseNumber')) {
-            count++;
-          }
-        }
-      });
-    }
-    return count;
-  }
-
-  int _getTotalJuzVerses() {
-    int count = 0;
-    for (int i = 1; i <= 30; i++) {
-      final juzData = quran.getSurahAndVersesFromJuz(i);
-      juzData.forEach((surahNumber, verseRange) {
-        count += (verseRange[1] - verseRange[0] + 1);
-      });
-    }
-    return count;
-  }
-
-  double _getJuzMemorizationPercentage() {
-    final memorizedCount = _getTotalJuzVersesMemorized();
-    final totalCount = _getTotalJuzVerses();
-    return totalCount > 0 ? (memorizedCount / totalCount) : 0.0;
-  }
-
+  final QuranMemorizationProgressController controller = Get.put(QuranMemorizationProgressController());
+  final AppThemeSwitchController appThemeSwitchController = Get.find<AppThemeSwitchController>();
 
   @override
   Widget build(BuildContext context) {
-    final totalVersesInQuran = _getTotalVersesInQuran();
+    final totalVersesInQuran = controller.getTotalVersesInQuran();
     final totalSurahsInQuran = 114;
-    final memorizedVersesCount = _getTotalMemorizedVerses();
-    final memorizedSurahsCount = _getTotalMemorizedSurahs();
-    final juzMemorizationPercentage = _getJuzMemorizationPercentage();
-    final overallPercentage = _getOverallMemorizationPercentage();
+    final memorizedVersesCount = controller.getTotalMemorizedVerses();
+    final memorizedSurahsCount = controller.getTotalMemorizedSurahs();
 
-    // Data for the summary bar chart
+    // Get raw percentages (0-100 range)
+    final overallPercentage = controller.getOverallMemorizationPercentage();
+    final surahsPercentage = (memorizedSurahsCount / totalSurahsInQuran) * 100;
+    final versesPercentage = (memorizedVersesCount / totalVersesInQuran) * 100;
+    final juzPercentage = controller.getJuzMemorizationPercentage();
+
+    // Data for chart - use raw percentages divided by 100 (0-1 range)
     List<ChartData> summaryData = [
-      ChartData('Overall', overallPercentage),
-      ChartData('Surahs', memorizedSurahsCount / totalSurahsInQuran.toDouble()),
-      ChartData('Verses', memorizedVersesCount / totalVersesInQuran.toDouble()),
-      ChartData('Juz', juzMemorizationPercentage),
+      ChartData('Overall', overallPercentage / 100),
+      ChartData('Surahs', surahsPercentage / 100),
+      ChartData('Verses', versesPercentage / 100),
+      ChartData('Juz', juzPercentage / 100),
     ];
 
     return Scaffold(
-      backgroundColor:  appThemeSwitchController.isDarkMode.value ? AppColors.black : AppColors.white,
+      backgroundColor: appThemeSwitchController.isDarkMode.value ? AppColors.black : AppColors.white,
       appBar: AppBar(
         surfaceTintColor: AppColors.transparent,
         foregroundColor: AppColors.transparent,
@@ -140,17 +57,16 @@ class MemorizationProgressScreen extends StatelessWidget {
                 ? AppColors.white
                 : AppColors.black,
           ),
-          onPressed: () {
-            Get.back();
-          },
+          onPressed: () => Get.back(),
         ),
-        backgroundColor:  appThemeSwitchController.isDarkMode.value ? AppColors.black : AppColors.white,
+        backgroundColor: appThemeSwitchController.isDarkMode.value ? AppColors.black : AppColors.white,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(left:10.w,right: 10.w),
+        padding: EdgeInsets.symmetric(horizontal: 10.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Progress Summary Section
             CustomText(
               title: "Progress Summary",
               textColor: appThemeSwitchController.isDarkMode.value
@@ -162,6 +78,8 @@ class MemorizationProgressScreen extends StatelessWidget {
               maxLines: 1,
             ),
             AppSizedBox.space10h,
+
+            // Progress Cards Grid
             GridView.count(
               crossAxisCount: 2,
               shrinkWrap: true,
@@ -175,7 +93,6 @@ class MemorizationProgressScreen extends StatelessWidget {
                   textColor: appThemeSwitchController.isDarkMode.value ? AppColors.white : AppColors.black,
                   isDarkMode: appThemeSwitchController.isDarkMode.value,
                   cardColor: AppColors.primary.withOpacity(0.29),
-                  isPercentage: true,
                 ),
                 _buildMemorizationCard(
                   title: "Verses Memorized",
@@ -184,7 +101,6 @@ class MemorizationProgressScreen extends StatelessWidget {
                   textColor: appThemeSwitchController.isDarkMode.value ? AppColors.white : AppColors.black,
                   isDarkMode: appThemeSwitchController.isDarkMode.value,
                   cardColor: AppColors.primary.withOpacity(0.1),
-                  isPercentage: false,
                 ),
                 _buildMemorizationCard(
                   title: "Surahs Memorized",
@@ -193,19 +109,18 @@ class MemorizationProgressScreen extends StatelessWidget {
                   textColor: appThemeSwitchController.isDarkMode.value ? AppColors.white : AppColors.black,
                   isDarkMode: appThemeSwitchController.isDarkMode.value,
                   cardColor: AppColors.primary.withOpacity(0.1),
-                  isPercentage: false,
                 ),
                 _buildMemorizationCard(
                   title: "Juz Progress",
-                  percentage: juzMemorizationPercentage,
+                  percentage: juzPercentage,
                   textColor: appThemeSwitchController.isDarkMode.value ? AppColors.white : AppColors.black,
                   isDarkMode: appThemeSwitchController.isDarkMode.value,
                   cardColor: AppColors.primary.withOpacity(0.29),
-                  isPercentage: true,
                 ),
               ],
             ),
-            // Summary Bar Chart
+
+            // Progress Visualization Section
             CustomText(
               title: "Progress Visualization",
               textColor: appThemeSwitchController.isDarkMode.value ? AppColors.white : AppColors.black,
@@ -215,10 +130,12 @@ class MemorizationProgressScreen extends StatelessWidget {
               maxLines: 1,
             ),
             AppSizedBox.space10h,
+
+            // Chart Container
             Container(
-              decoration: BoxDecoration( // Use the decoration property
+              decoration: BoxDecoration(
                 color: AppColors.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(15.r), // Add your desired border radius
+                borderRadius: BorderRadius.circular(15.r),
               ),
               child: Padding(
                 padding: EdgeInsets.all(10.w),
@@ -227,6 +144,7 @@ class MemorizationProgressScreen extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10.r),
                       child: SizedBox(
+                        height: 200.h,
                         child: SfCartesianChart(
                           borderColor: AppColors.primary,
                           backgroundColor: AppColors.primary.withOpacity(0.29),
@@ -238,9 +156,11 @@ class MemorizationProgressScreen extends StatelessWidget {
                           ),
                           primaryYAxis: NumericAxis(
                             minimum: 0,
-                            maximum: 1,
-                            interval: 0.2,
-                            numberFormat: NumberFormat.percentPattern(),
+                            maximum: 0.1, // Show up to 10%
+                            interval: 0.01, // 1% intervals
+                            numberFormat: NumberFormat.decimalPercentPattern(
+                              decimalDigits: 2,
+                            ),
                             labelStyle: GoogleFonts.quicksand(
                               fontSize: 10.sp,
                               color: appThemeSwitchController.isDarkMode.value ? AppColors.white : AppColors.black,
@@ -259,6 +179,11 @@ class MemorizationProgressScreen extends StatelessWidget {
                                   color: appThemeSwitchController.isDarkMode.value ? AppColors.white : AppColors.black,
                                 ),
                                 labelPosition: ChartDataLabelPosition.outside,
+                                builder: (dynamic data, dynamic point, dynamic series, int pointIndex, int seriesIndex) {
+                                  final rawValue = point.y * 100;
+                                  final displayValue = rawValue < 0.1 ? '<0.1%' : '${rawValue.toStringAsFixed(1)}%';
+                                  return Text(displayValue);
+                                },
                               ),
                               color: AppColors.primary,
                             )
@@ -285,7 +210,6 @@ class MemorizationProgressScreen extends StatelessWidget {
     required Color textColor,
     required bool isDarkMode,
     required Color cardColor,
-    bool isPercentage = false,
   }) {
     return Container(
       padding: EdgeInsets.all(16.0.w),
@@ -304,26 +228,29 @@ class MemorizationProgressScreen extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           AppSizedBox.space10h,
-          if (!isPercentage && memorizedCount != null && totalCount != null)
+          if (percentage != null)
+            CustomText(
+              title: percentage < 0.1 ? "<0.1%" : "${percentage.toStringAsFixed(1)}%",
+              fontSize: 16.sp,
+              textColor: AppColors.primary,
+            )
+          else if (memorizedCount != null && totalCount != null)
             CustomText(
               title: "$memorizedCount/$totalCount",
               fontSize: 16.sp,
               textColor: AppColors.primary,
-
-            ),
-          if (isPercentage && percentage != null)
-            CustomText(
-              title: "${(percentage * 100).toStringAsFixed(1)}%",
-              fontSize: 16.sp,
-              textColor: AppColors.primary,
-
             ),
           AppSizedBox.space10h,
           SizedBox(
+            height: 40.h,
+            width: 40.w,
             child: CircularProgressIndicator(
-              value: isPercentage && percentage != null
-                  ? percentage
-                  : (!isPercentage && memorizedCount != null && totalCount != null && totalCount > 0 ? memorizedCount / totalCount : 0),
+              strokeWidth: 4.w,
+              value: percentage != null
+                  ? (percentage / 100).clamp(0.0, 1.0)
+                  : (memorizedCount != null && totalCount != null && totalCount > 0
+                  ? (memorizedCount / totalCount).clamp(0.0, 1.0)
+                  : 0),
               backgroundColor: Colors.grey.withOpacity(0.3),
               valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
             ),

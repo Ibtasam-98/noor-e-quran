@@ -228,7 +228,7 @@ class PrayerRecordMonthly extends StatelessWidget {
           surfaceTintColor: Colors.transparent,
           leading: InkWell(
             onTap: () => Get.back(),
-            child: Icon(Icons.arrow_back, color: iconColor),
+            child: Icon(Icons.west, color: iconColor),
           ),
           centerTitle: false,
           title: CustomText(

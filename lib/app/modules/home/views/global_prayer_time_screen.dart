@@ -242,6 +242,7 @@ class GlobalPrayerTimeScreen extends StatelessWidget {
               title: method['name'],
               fontSize: 16.sp,
               textColor: AppColors.black,
+              textAlign: TextAlign.start,
             ),
           ),
         );

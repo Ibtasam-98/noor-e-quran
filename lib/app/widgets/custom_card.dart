@@ -18,8 +18,10 @@ class CustomCard extends StatelessWidget {
   final bool addPadding;
   final int? titleMaxLines;
   final int? subtitleMaxLines;
-  final double titleFontSize; // Added
-  final double subtitleFontSize; // Added
+  final double titleFontSize;
+  final double subtitleFontSize;
+  final TextAlign? titleAlign;
+  final TextAlign? subtitleAlign; // Added subtitleAlign
 
   const CustomCard({
     super.key,
@@ -33,8 +35,10 @@ class CustomCard extends StatelessWidget {
     this.addPadding = true,
     this.titleMaxLines,
     this.subtitleMaxLines,
-    this.titleFontSize = 16.0, // Default value
-    this.subtitleFontSize = 14.0, // Default value
+    this.titleFontSize = 16.0,
+    this.subtitleFontSize = 14.0,
+    this.titleAlign = TextAlign.start,
+    this.subtitleAlign = TextAlign.start, // Default value is start
   });
 
   @override
@@ -80,20 +84,21 @@ class CustomCard extends StatelessWidget {
                       CustomText(
                         textColor: AppColors.white,
                         title: title!,
-                        textAlign: TextAlign.start,
+                        textAlign: titleAlign ?? TextAlign.start,
                         fontFamily: 'grenda',
                         textStyle: titleStyle,
                         maxLines: titleMaxLines,
-                        fontSize: titleFontSize.sp, // Added fontSize
+                        fontSize: titleFontSize.sp,
                       ),
                     if (subtitle != null)
                       CustomText(
                         textColor: AppColors.white.withOpacity(0.7),
                         title: subtitle!,
-                        textAlign: TextAlign.start,
-                        textStyle: subtitleStyle ?? const TextStyle(fontStyle: FontStyle.italic),
+                        textAlign: subtitleAlign ?? TextAlign.start, // Use the provided alignment
+                        textStyle: subtitleStyle ??
+                            const TextStyle(fontStyle: FontStyle.italic),
                         maxLines: subtitleMaxLines,
-                        fontSize: subtitleFontSize.sp, // Added fontSize
+                        fontSize: subtitleFontSize.sp,
                       ),
                   ],
                 ),
@@ -132,7 +137,8 @@ class CustomCard extends StatelessWidget {
                     textOverflow: TextOverflow.ellipsis,
                     textStyle: titleStyle,
                     maxLines: titleMaxLines ?? 1,
-                    fontSize: titleFontSize.sp, // Added fontSize
+                    fontSize: titleFontSize.sp,
+                    textAlign: titleAlign ?? TextAlign.start,
                   ),
                 if (subtitle != null)
                   CustomText(
@@ -146,7 +152,8 @@ class CustomCard extends StatelessWidget {
                             fontStyle: FontStyle.italic,
                           ),
                         ),
-                    fontSize: subtitleFontSize.sp, // Added fontSize
+                    fontSize: subtitleFontSize.sp,
+                    textAlign: subtitleAlign ?? TextAlign.start, // Use the provided alignment
                   ),
               ],
             ),
@@ -156,3 +163,4 @@ class CustomCard extends StatelessWidget {
     }
   }
 }
+

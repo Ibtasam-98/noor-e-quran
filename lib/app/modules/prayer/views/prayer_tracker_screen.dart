@@ -401,7 +401,7 @@ class _PrayerTrackerScreenState extends State<PrayerTrackerScreen> {
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.primary,
-                borderRadius: BorderRadius.circular(10.r),
+                borderRadius: BorderRadius.circular(30.r),
                 gradient: LinearGradient(
                   colors: [
                     AppColors.primary,

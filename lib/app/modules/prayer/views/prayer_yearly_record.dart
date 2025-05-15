@@ -157,7 +157,7 @@ class _PrayerRecordYearDetailState extends State<PrayerRecordYearDetail> {
             Get.back();
           },
           child: Icon(
-            Icons.arrow_back,
+            Icons.west,
             color: themeController.isDarkMode.value ?  AppColors.white : AppColors.black,
           ),
         ),
@@ -249,7 +249,15 @@ class _PrayerRecordYearDetailState extends State<PrayerRecordYearDetail> {
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.primary,
-                borderRadius: BorderRadius.circular(10.r),
+                borderRadius: BorderRadius.circular(30.r),
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.primary,
+                    AppColors.secondry.withOpacity(0.9),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

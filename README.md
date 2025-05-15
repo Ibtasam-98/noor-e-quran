@@ -1,6 +1,6 @@
 # noor_e_quran
 
-Your all-in-one Islamic companion app featuring the Holy Quran, Hadith, prayer times, and more.
+Your all in one Islamic companion app featuring the Holy Quran, Hadith, prayer times, and more.
 
 ## Noor e Quran App
 

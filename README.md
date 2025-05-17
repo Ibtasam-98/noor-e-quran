@@ -1,35 +1,69 @@
-# Noor-e-Quran
+# Noor-e-Quran – نورِ قرآن
 
-Your all in one Islamic companion app featuring the Holy Quran, Hadith, prayer times, and more.
+**Your All-in-One Islamic Companion App**  
+Featuring the Holy Quran, Hadith, prayer times, and more.
 
-**(Noor e Quran)**
-Illuminate your spiritual journey with نورِ قرآن (Noor e Quran), the all-in-one Islamic app designed to enrich your understanding and practice of Islam. Seamlessly navigate through the Holy Quran, explore Hadith collections, stay punctual with prayer times, and much more. Embrace the light of guidance in your daily life with a user friendly interface and a wealth of authentic Islamic knowledge.
+---
 
-**Key Features:**
+## About the App
 
-* **Full Quran:** Access the complete Arabic text of the Holy Quran with clear script for easy recitation.
-* **Quran Translations:** Read the Quran in multiple languages, enhancing your comprehension of the divine message.
-* **Quran Tafsir:** Delve into the interpretations and explanations of the Quranic verses for a deeper understanding.
-* **Audio Recitation:** Listen to the beautiful recitation of the Quran by renowned Qaris (available in multiple voices).
-* **Bookmarks & Notes:** Personalize your Quran reading experience by adding bookmarks and notes to verses.
-* **Verse of the Day:** Receive daily inspirational verses from the Quran to reflect upon.
-* **Tajweed Rules & Guide:** Learn and apply the rules of Tajweed for accurate Quran recitation.
-* **Surah & Juz Index:** Easily navigate through the chapters (Surahs) and sections (Juz) of the Quran.
-* **Hadith Collections:** Explore a vast library of authentic Hadith books, including Sahih Bukhari, Muslim, Tirmidhi, and more.
-* **Hadith of the Day:** Benefit from daily insightful Hadith to strengthen your understanding of the Prophet's teachings.
-* **99 Names of Allah (Asma-ul-Husna):** Learn and reflect on the beautiful names and attributes of Allah.
-* **Six Kalimas:** Recite and understand the fundamental declarations of faith in Islam.
-* **Text & Translation:** Read the Kalimas with their translations for better comprehension.
-* **Audio Recitation:** Listen to the accurate audio recitation of the Six Kalimas.
-* **Accurate Prayer Times:** Get precise daily prayer (Salah) timings based on your current location.
-* **Qibla Direction Finder:** Easily locate the direction of the Kaaba in Mecca to face during your prayers.
-* **Shahadah:** Understand and recite the declaration of faith, the first pillar of Islam.
-* **Darood e Ibrahimi:** Learn and recite this significant prayer for Prophet Muhammad (peace be upon him).
-* **Ramadan Calendar & Timings:** Stay updated with Sehri (pre-dawn meal) and Iftar (evening meal) timings during the holy month of Ramadan.
-* **Sehri & Iftar Duas:** Access authentic supplications (Duas) for breaking and starting your fast.
-* **Fasting Rules & Guidelines:** Understand the principles and regulations of fasting (Sawm) in Islam.
-* **Step-by-Step Guide:** Learn the detailed procedures for performing Hajj and Umrah pilgrimages.
-* **Checklist for Hajj & Umrah:** Utilize a comprehensive checklist to ensure you are well-prepared for your pilgrimage.
-* **Tasbeeh Counter:** Engage in Dhikr (remembrance of Allah) with a convenient digital Tasbeeh counter.
-* **Dhikr:** Access a collection of beneficial supplications and phrases for the remembrance of Allah.
+**Noor-e-Quran** (نورِ قرآن) is a beautifully designed, comprehensive Islamic app created to illuminate your spiritual journey. Seamlessly navigate the **Holy Quran**, explore **authentic Hadith**, track your **daily prayers**, and stay connected with the core teachings of Islam — all in one place.
 
+With a user-friendly interface and a wealth of accurate Islamic knowledge, Noor-e-Quran is your go-to digital companion for daily worship, study, and reflection.
+
+---
+
+## Key Features
+
+### 📖 Holy Quran
+- **Full Quran:** Complete Arabic text in clear Uthmani script for easy recitation.
+- **Quran Translations:** Read in multiple languages to deepen your understanding.
+- **Quran Tafsir:** Explore verse-by-verse explanations for better comprehension.
+- **Audio Recitation:** Listen to recitations by world-renowned Qaris (multiple voices).
+- **Verse of the Day:** Receive daily inspirational verses to reflect upon.
+- **Bookmarks & Notes:** Save and personalize important verses.
+- **Tajweed Rules & Guide:** Learn proper pronunciation with comprehensive Tajweed lessons.
+- **Surah & Juz Index:** Easily navigate chapters and sections.
+
+### Quran Memorization Tool
+- **Visual Progress Tracking:** Monitor your memorization with visual feedback.
+- **Repetition & Loop Mode:** Repeat specific verses to enhance retention.
+- **Structured Learning:** Memorize by Surah, Juz, or custom selection.
+
+### Hadith
+- **Authentic Collections:** Explore Sahih Bukhari, Muslim, Tirmidhi, and more.
+- **Hadith of the Day:** Benefit from daily insightful Hadith to enrich your faith.
+
+### Islamic Fundamentals
+- **99 Names of Allah (Asma-ul-Husna):** Learn and reflect on Allah’s names and attributes.
+- **Six Kalimas:** Recite and understand all Six Kalimas with translation and audio.
+- **Shahadah:** Read and recite the testimony of faith with meaning.
+- **Darood e Ibrahimi:** Study and recite this essential Salawat upon the Prophet ﷺ.
+- **Dhikr & Duas:** Access powerful supplications and phrases for remembrance.
+- **Tasbeeh Counter:** Perform Dhikr with a digital Tasbeeh at your fingertips.
+
+### Prayer Tools
+- **Accurate Prayer Times:** Auto-adjusted based on your current location.
+- **Qibla Direction Finder:** Find the direction of the Kaaba from anywhere.
+
+### Ramadan Features
+- **Ramadan Calendar:** Track daily Sehri and Iftar timings.
+- **Sehri & Iftar Duas:** Read and listen to authentic fasting supplications.
+- **Fasting Guidelines:** Learn the rules and etiquettes of Sawm (fasting).
+
+### Hajj & Umrah
+- **Step-by-Step Guide:** Comprehensive instructions for Hajj and Umrah.
+- **Preparation Checklist:** Stay organized with a practical pilgrimage checklist.
+
+### Live Makkah & Madinah Streams
+- **Live Video Transmission:** Watch real time broadcasts directly from:
+  - **Masjid al-Haram (Kaaba, Makkah)**
+  - **Masjid an-Nabawi (Madinah)**
+- Stay spiritually connected with the holiest places in Islam, no matter where you are.
+
+---
+
+## Support & Duas
+
+May this project be a source of **Sadaqah Jariyah**.  
+*جزاك اللهُ خيرًا* for your support and prayers.

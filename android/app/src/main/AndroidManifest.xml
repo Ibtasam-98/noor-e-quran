@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.READ_CALENDAR" />
 
     <application
-        android:label="noor_e_quran"
+        android:label="Noor e Quran"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"> <activity

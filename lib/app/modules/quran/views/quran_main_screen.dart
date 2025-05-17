@@ -153,6 +153,7 @@ class QuranMainScreen extends StatelessWidget {
               }),
             ),
             AppSizedBox.space10h,
+            AppSizedBox.space10h,
             if (quranMainScreenController.lastAccessedSurahs.isNotEmpty) ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -5,6 +5,7 @@ import 'package:quran/quran.dart' as quran;
 
 class QuranSajdahListController extends GetxController {
   final ScrollController scrollController = ScrollController();
+
   final scrollProgress = 0.0.obs;
   final sajdahVerses = <Map<String, dynamic>>[].obs;
 
@@ -21,6 +22,8 @@ class QuranSajdahListController extends GetxController {
     scrollController.dispose();
     super.onClose();
   }
+
+
 
   void updateScrollProgress() {
     if (scrollController.hasClients) {

@@ -15,9 +15,12 @@ import '../../../widgets/custom_text.dart';
 class JuzDetailScreen extends StatelessWidget {
   final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
 
+
   final int juzNumber;
 
   JuzDetailScreen({required this.juzNumber});
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -134,3 +137,4 @@ class JuzDetailScreen extends StatelessWidget {
     );
   }
 }
+

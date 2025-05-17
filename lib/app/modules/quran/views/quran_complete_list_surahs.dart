@@ -16,6 +16,7 @@ import '../controllers/navigate_explore_surah_controller.dart';
 
 class QuranCompleteListSurahs extends StatelessWidget {
   final NavigteExploreSurahsController navigteExploreSurahsController = Get.put(NavigteExploreSurahsController());
+
   final AppThemeSwitchController themeController = Get.find();
 
   @override

@@ -10,6 +10,7 @@ class QuranNotesController extends GetxController {
   final GetStorage _storage = GetStorage();
   final TextEditingController noteController = TextEditingController();
   final TextEditingController searchController = TextEditingController();
+
   RxInt selectedSurah = 1.obs;
   RxInt selectedAyah = 1.obs;
   RxList<Map<String, dynamic>> notes = <Map<String, dynamic>>[].obs;
@@ -29,6 +30,8 @@ class QuranNotesController extends GetxController {
     searchController.dispose();
     super.onClose();
   }
+
+
 
   void onSearchChanged() {
     final query = searchController.text.toLowerCase();

@@ -8,14 +8,13 @@ import 'package:quran/quran.dart' as quran;
 import '../../../config/app_colors.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
 import '../../../widgets/custom_text.dart';
-import '../../home/controllers/app_home_screen_controller.dart';
 import '../controllers/quran_main_screen_controller.dart';
-
+import '../controllers/quran_surah_tab_controller.dart';
 
 class QuranSurahTab extends StatelessWidget {
+  final AppThemeSwitchController themeController = Get.find<AppThemeSwitchController>();
+  final QuranSurahTabController controller = Get.put(QuranSurahTabController());
 
-  final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
-  final GetStorage _box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class QuranSurahTab extends StatelessWidget {
       itemBuilder: (context, index) {
         int surahNumber = index + 1;
         return Container(
-          margin: EdgeInsets.only(bottom: 5, top: 5.h,left: 5.w,right: 5.w),
+          margin: EdgeInsets.only(bottom: 5, top: 5.h, left: 5.w, right: 5.w),
           padding: EdgeInsets.all(10.h),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.r),
@@ -79,35 +78,11 @@ class QuranSurahTab extends StatelessWidget {
               textColor: AppColors.primary,
             ),
             onTap: () {
-              addSurahToLastAccessed(surahNumber);
-              Get.to(() => QuranSurahDetailScreen(surahNumber: surahNumber));
+              controller.navigateToSurahDetailScreen(surahNumber);
             },
           ),
         );
       },
     );
   }
-
-  void addSurahToLastAccessed(int surahNumber) {
-    final QuranMainScreenController quranMainScreenController = Get.find<QuranMainScreenController>();
-    final now = DateTime.now().toIso8601String();
-    final newSurah = {
-      'surahNumber': surahNumber,
-      'accessTime': now,
-    };
-
-    final existingIndex = quranMainScreenController.lastAccessedSurahs.indexWhere(
-          (element) => element['surahNumber'] == surahNumber,
-    );
-
-    if (existingIndex != -1) {
-      quranMainScreenController.lastAccessedSurahs[existingIndex] = newSurah;
-    } else {
-      quranMainScreenController.lastAccessedSurahs.add(newSurah);
-    }
-
-    GetStorage().write('lastAccessedSurahs', quranMainScreenController.lastAccessedSurahs); // Use GetStorage() directly
-    quranMainScreenController.update();
-  }
-
 }

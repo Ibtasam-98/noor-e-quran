@@ -12,6 +12,7 @@ import 'quran_juz_detail_screen.dart';
 class QuranJuzTab extends StatelessWidget {
   final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
 
+
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = themeController.isDarkMode.value;

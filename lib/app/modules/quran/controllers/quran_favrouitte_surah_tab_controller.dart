@@ -7,6 +7,7 @@ import '../../../widgets/custom_snackbar.dart';
 
 
 class QuranFavrouiteSurahTabController extends GetxController {
+
   final GetStorage _storage = GetStorage();
   RxList<int> savedSurahs = <int>[].obs;
 
@@ -15,6 +16,8 @@ class QuranFavrouiteSurahTabController extends GetxController {
     super.onInit();
     _loadSavedSurahs();
   }
+
+
 
   void _loadSavedSurahs() {
     savedSurahs.value = (_storage.read('favoriteSurahs') as List?)?.cast<int>() ?? [];

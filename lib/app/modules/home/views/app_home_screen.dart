@@ -4,9 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:noor_e_quran/app/config/app_colors.dart';
 import 'package:noor_e_quran/app/config/app_sizedbox.dart';
+import 'package:noor_e_quran/app/controllers/app_theme_switch_controller.dart';
 import 'package:noor_e_quran/app/modules/home/views/app_home_base_screen.dart';
+import 'package:noor_e_quran/app/modules/home/views/names_of_allah_screen.dart';
 import 'package:noor_e_quran/app/modules/home/views/qibla_direction_screen.dart';
 import 'package:noor_e_quran/app/modules/home/views/view_all_feature_screen.dart';
 import 'package:noor_e_quran/app/modules/home/views/view_all_prayer_screen.dart';
@@ -17,11 +20,15 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../config/app_contants.dart';
 import '../../../controllers/flying_bird_animation_controller.dart';
 import '../../../controllers/user_location_premission_controller.dart';
+import '../../../models/name_of_allah_model.dart';
 import '../../../widgets/custom_frame.dart';
+import '../../common/views/dua_detail_screen.dart';
 import '../controllers/app_home_screen_controller.dart';
+import '../controllers/name_of_allah_controller.dart';
 import '../controllers/view_all_prayer_screen_controller.dart';
 import 'app_home_screen_header.dart';
 import 'donation_organization_profile.dart';
+import 'makkah_live_transmission_screen.dart';
 
 class AppHomeScreen extends StatelessWidget {
   AppHomeScreen({super.key});
@@ -30,6 +37,8 @@ class AppHomeScreen extends StatelessWidget {
   final UserPermissionController locationController = Get.find<UserPermissionController>();
   final NamazController namazController = Get.find<NamazController>();
   final FlyingBirdAnimationController _homeBirdController = Get.put(FlyingBirdAnimationController(), tag: 'home_bird');
+  final AppThemeSwitchController appThemeSwitchController = Get.put(AppThemeSwitchController());
+
 
 
   @override
@@ -70,7 +79,7 @@ class AppHomeScreen extends StatelessWidget {
           _buildSectionHeader("Qibla Direction", showViewAll: false),
           AppSizedBox.space10h,
           InkWell(
-            onTap: () => Get.to(QiblaDirectionScreen(city: locationController.cityName.toString())),
+            // onTap: () => Get.to(QiblaScreen(city: locationController.cityName.toString())),
             child: CustomCard(
               title: "Locate the Kaaba",
               subtitle: "Ensuring Correct Prayer Direction",
@@ -108,26 +117,207 @@ class AppHomeScreen extends StatelessWidget {
             showViewAll: false
           ),
           AppSizedBox.space15h,
-          InkWell(
-            onTap: () => Get.to(QiblaDirectionScreen(city: locationController.cityName.toString())),
-            child: CustomCard(
-              title: "أَشْهَدُ أَنْ لَا إِلَـٰهَ إِلَّا اللَّـٰهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّـٰهِ",
-              subtitle: "I bear witness that there is none worthy of worship except Allah, the One alone, without partner, and I bear witness that Muhammad is His servant and Messenger",
-              imageUrl: controller.themeController.isDarkMode.value
-                  ? "assets/images/shahadat_bg_dark.jpg"
-                  : "assets/images/shahadat_bg_light.jpg",
-              mergeWithGradientImage: true,
-              titleFontSize: 22.sp,
-              titleAlign: TextAlign.end,
-              subtitleFontSize: 12.sp,
-              subtitleAlign: TextAlign.start,
-            ),
+          CustomCard(
+            title: "أَشْهَدُ أَنْ لَا إِلَـٰهَ إِلَّا اللَّـٰهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّـٰهِ",
+            subtitle: "I bear witness that there is none worthy of worship except Allah, the One alone, without partner, and I bear witness that Muhammad is His servant and Messenger",
+            imageUrl: controller.themeController.isDarkMode.value
+                ? "assets/images/shahadat_bg_dark.jpg"
+                : "assets/images/shahadat_bg_light.jpg",
+            mergeWithGradientImage: true,
+            titleFontSize: 22.sp,
+            titleAlign: TextAlign.end,
+            subtitleFontSize: 12.sp,
+            subtitleAlign: TextAlign.start,
           ),
+          AppSizedBox.space15h,
+          // _buildNamesOfAllah(),
+          _buildSectionHeader("Divine Names", showViewAll: true, onViewAll: (){Get.to(NameOfAllahScreen());}),
+          AppSizedBox.space15h,
+          _buildNamesOfAllah(context),
+          AppSizedBox.space15h,
+          _buildSectionHeader("Live Transmission", showViewAll: false,),
+          AppSizedBox.space15h,
+          _buildLiveStreamsRow(),
           AppSizedBox.space15h,
         ],
       ),
     );
   }
+
+  final List<Map<String, dynamic>> _liveStreams = [
+    {
+      'title': 'Makkah',
+      'image': 'assets/images/makkah_live_bg.jpg',
+      'videoId': '2Gub8-cSH9c',
+    },
+    {
+      'title': 'Madinah',
+      'image': 'assets/images/masjid_nabvi.jpg',
+      'videoId': 'BviEnfIS70c',
+    },
+  ];
+
+  Widget _buildLiveStreamsRow() {
+    return Row(
+      children: [
+        for (var stream in _liveStreams) ...[
+          Expanded(child: _buildLiveStreamCard(stream)),
+          if (stream != _liveStreams.last) AppSizedBox.space10w,
+        ],
+      ],
+    );
+  }
+
+
+  Widget _buildLiveStreamCard(Map<String, dynamic> stream) {
+    return InkWell(
+      onTap: () => Get.to(() => LiveTransmissionScreen(
+        videoId: stream['videoId'],
+        title: stream['title'],
+      )),
+      child: Container(
+        height: 180.h,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.r),
+          image: DecorationImage(
+            image: AssetImage(stream['image']),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12.r),
+                gradient: LinearGradient(
+                  end: Alignment.bottomLeft,
+                  colors: [AppColors.transparent, AppColors.black.withOpacity(0.9)],
+                ),
+              ),
+            ),
+            Center(
+              child: Container(
+                padding: EdgeInsets.all(12.r),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primary.withOpacity(0.7),
+                ),
+                child: Icon(Icons.play_arrow, size: 30.sp, color: AppColors.white),
+              ),
+            ),
+            Positioned(
+              bottom: 10.h,
+              left: 10.w,
+              right: 10.w,
+              child: CustomText(
+                title: stream['title'],
+                textColor: AppColors.white,
+                fontSize: 16.sp,
+                textAlign: TextAlign.start,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+Widget _buildNamesOfAllah(BuildContext context) {
+    return  GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
+        childAspectRatio: 1,
+        crossAxisSpacing: 12,
+      ),
+      itemCount: controller.randomNames.length,
+      itemBuilder: (context, index) {
+        final menuItem = controller.randomNames[index];
+        final name = menuItem; // Changed from NameOfAllah name to menuItem
+        return Obx(() => InkWell(
+          onTap: (){
+            Get.to(DuaDetailCommonScreen(
+              arabicDua: name.arabicName,
+              audioUrl: "",
+              duaTranslation: name.paragraph,
+              duaUrduTranslation: "",
+              engFirstTitle: name.englishName,
+              showAudiotWidgets: false,
+              engSecondTitle: "",
+              latinTitle: "",
+              isComingFromAllahNameScreen: true,
+            ));
+          },
+          highlightColor: AppColors.transparent,
+          splashColor: AppColors.transparent,
+          child: Container(
+            margin: EdgeInsets.only(bottom: 10.h),
+            decoration: BoxDecoration(
+              color: controller.themeController.isDarkMode.value
+                  ? AppColors.black
+                  : AppColors.white,
+              borderRadius: BorderRadius.circular(10.r),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 2,
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  CustomFrame(
+                    leftImageAsset: "assets/frames/topLeftFrame.png",
+                    rightImageAsset: "assets/frames/topRightFrame.png",
+                    imageHeight: 30.h,
+                    imageWidth: 30.w,
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomText(
+                          title: name.arabicName, // changed from nam to name.arabicName
+                          fontSize: 22.sp,
+                          textColor: controller.themeController.isDarkMode.value
+                              ? AppColors.white
+                              : AppColors.black,
+                          fontFamily: 'grenda',
+                          maxLines: 2,
+                        ),
+                        CustomText(
+                          title: name.englishName, //changed from menuItem['subtitle']! to name.englishName
+                          fontSize: 12.sp,
+                          textColor: AppColors.primary,
+                          fontWeight: FontWeight.w500,
+                          maxLines: 2,
+                        ),
+                      ],
+                    ),
+                  ),
+                  CustomFrame(
+                    leftImageAsset: "assets/frames/bottomLeftFrame.png",
+                    rightImageAsset: "assets/frames/bottomRightFrame.png",
+                    imageHeight: 30.h,
+                    imageWidth: 30.w,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ));
+      },
+    );
+  }
+
+
+
+
 
   Widget _buildSectionHeader(String title, {VoidCallback? onViewAll, bool showViewAll = true}) {
     return Row(
@@ -608,7 +798,7 @@ class AppHomeScreen extends StatelessWidget {
                         children: [
                           CustomText(
                             title: surah.arabicName,
-                            fontSize: 45.sp,
+                            fontSize: 40.sp,
                             textColor: AppColors.primary,
                           ),
                           CustomText(

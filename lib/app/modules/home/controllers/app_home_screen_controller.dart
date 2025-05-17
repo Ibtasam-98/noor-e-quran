@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,8 @@ import 'package:quran/quran.dart' as quran;
 import '../../../config/app_contants.dart';
 import '../../../controllers/user_location_premission_controller.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
+import '../../../models/name_of_allah_model.dart';
+import '../../../models/name_of_allah_model.dart' as NamesOfAllahData;
 import '../../../models/surah_model.dart';
 import '../../duas/views/dua_main_screen.dart';
 import '../../prayer/views/prayer_main_screen.dart';
@@ -19,6 +22,9 @@ class AppHomeScreenController extends GetxController with GetSingleTickerProvide
   final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
   final UserPermissionController locationController = Get.put(UserPermissionController());
   final NamazController namazController = Get.put(NamazController());
+  final RxList<NameOfAllah> names = <NameOfAllah>[].obs;
+  final RxList<NameOfAllah> randomNames = <NameOfAllah>[].obs;
+
   var city = "Locating...".obs;
   final isLoading = false.obs;
   bool isIconOpen = false;
@@ -38,6 +44,8 @@ class AppHomeScreenController extends GetxController with GetSingleTickerProvide
   @override
   void onInit() {
     super.onInit();
+    loadNames();
+
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
@@ -191,6 +199,16 @@ class AppHomeScreenController extends GetxController with GetSingleTickerProvide
     quranMainScreenController.update();
   }
 
+  void loadNames() {
+    final decoded = jsonDecode(NamesOfAllahData.jsonData) as List;
+    names.value = decoded.map((item) => NameOfAllah.fromJson(item)).toList();
+    getRandomNames(4);
+  }
+
+  void getRandomNames(int count) {
+    names.shuffle();
+    randomNames.value = names.take(count).toList();
+  }
 
 
 }

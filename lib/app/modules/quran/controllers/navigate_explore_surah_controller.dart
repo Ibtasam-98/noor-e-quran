@@ -7,6 +7,7 @@ import 'package:noor_e_quran/app/config/app_sizedbox.dart';
 import 'package:noor_e_quran/app/widgets/custom_text.dart';
 
 class NavigteExploreSurahsController extends GetxController with SingleGetTickerProviderMixin {
+
   late TabController tabController;
 
   @override
@@ -20,6 +21,7 @@ class NavigteExploreSurahsController extends GetxController with SingleGetTicker
     tabController.dispose();
     super.onClose();
   }
+
 
   void showQuranInfoSheet(BuildContext context) {
     showModalBottomSheet(

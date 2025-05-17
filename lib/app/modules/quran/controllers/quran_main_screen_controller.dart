@@ -18,6 +18,7 @@ class QuranMainScreenController extends GetxController with GetSingleTickerProvi
   final AppThemeSwitchController themeController = Get.put(AppThemeSwitchController());
   final UserPermissionController locationController = Get.put(UserPermissionController());
 
+
   List<Map<String, dynamic>> lastAccessedSurahs = [];
   final GetStorage _box = GetStorage();
 
@@ -31,6 +32,8 @@ class QuranMainScreenController extends GetxController with GetSingleTickerProvi
     loadLastAccessedSurahs();
     startRandomVerseTimer();
   }
+
+
 
   @override
   void onClose() {

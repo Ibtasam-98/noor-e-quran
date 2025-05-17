@@ -22,6 +22,7 @@ class QuranPdfViewer extends StatefulWidget {
 }
 
 class _QuranPdfViewerState extends State<QuranPdfViewer> {
+
   String? pdfPath;
   bool isLoading = true;
   int totalPages = 0;
@@ -38,6 +39,8 @@ class _QuranPdfViewerState extends State<QuranPdfViewer> {
     super.initState();
     loadPdf();
   }
+
+
 
   Future<void> loadPdf() async {
     final cachedPdfPath = box.read('quranPdfPath');

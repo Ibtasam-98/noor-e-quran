@@ -45,6 +45,10 @@ dependencies:
   latlong2:
   google_maps_flutter:
   ripple_wave:
+  marquee:
+  youtube_player_flutter:
+#  webview_flutter:
+
 
   # Storage Packages
   shared_preferences: ^2.3.5
@@ -63,6 +67,8 @@ dependencies:
   open_file: ^3.5.10
   whatsapp_unilink:
   add_2_calendar: ^3.0.1
+  pull_to_refresh:
+
 
   # Data Packages (Quran & Islamic)
   quran:

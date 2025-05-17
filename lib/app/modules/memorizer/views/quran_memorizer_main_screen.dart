@@ -17,6 +17,7 @@ import '../../home/views/app_home_screen_header.dart';
 import 'package:quran/quran.dart' as quran;
 import '../controllers/quran_memorizer_main_screen_controller.dart';
 
+
 class QuranMemorizerMainScreen extends StatelessWidget {
   final Map<String, dynamic>? userData;
 
@@ -147,8 +148,7 @@ class QuranMemorizerMainScreen extends StatelessWidget {
         );
       },
     );
-  }
-  }
+  }}
 
   Widget _buildCompletedSurahsList(QuranMemorizerController controller, AppThemeSwitchController themeController) {
     final completedSurahs = controller.getCompletedSurahs();

@@ -245,7 +245,7 @@ class _QuranSurahDetailScreenState extends State<QuranSurahDetailScreen>  with S
                     : 'assets/images/heart.svg',
                 height: 18.h, // You can scale the SVG image like an icon
                 width: 18.w, // You can also use this to control the width
-                color: AppColors.white
+                color: themeController.isDarkMode.value ? AppColors.black : AppColors.black
             ),
           ),
           AppSizedBox.space5w,

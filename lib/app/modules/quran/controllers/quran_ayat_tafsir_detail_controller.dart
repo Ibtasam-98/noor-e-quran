@@ -1,10 +1,11 @@
-
-// controllers/ayat_tafsir_controller.dart
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class AyatTafsirController extends GetxController {
+
+
+
   final int surahNumber;
   final int ayahNumber;
   final String? surahName, ayat, surahArabicName;
@@ -22,6 +23,7 @@ class AyatTafsirController extends GetxController {
 
   var availableTafsir = <String>[].obs;
   var availableLanguages = <String>[].obs;
+
 
   final List<Map<String, dynamic>> tafsirData = [
     {"author": "Saddi", "name": "Tafseer Al Saddi", "language": "Arabic", "slug": "ar-tafseer-al-saddi"},

@@ -1,8 +1,15 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart'; // For getApplicationDocumentsDirectory
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:glowy_borders/glowy_borders.dart';
+import 'package:icons_flutter/icons_flutter.dart';
 import 'package:noor_e_quran/app/widgets/custom_snackbar.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get_storage/get_storage.dart';
@@ -10,7 +17,6 @@ import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:vibration/vibration.dart';
 import 'package:audioplayers/audioplayers.dart';
-
 import '../../../config/app_colors.dart';
 import '../../../config/app_sizedbox.dart';
 import '../../../controllers/app_theme_switch_controller.dart';
@@ -76,6 +82,7 @@ class _QuranMemorizerSurahDetailScreenState
     _translationFontSize.value =
         (_storage.read<double?>(_translationFontSizeKey) ?? 20.0).clamp(
             16.0, 60.0);
+
 
     _loadMemorizedVerses();
     _saveLastAccessedSurah();
@@ -378,6 +385,7 @@ class _QuranMemorizerSurahDetailScreenState
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -425,144 +433,160 @@ class _QuranMemorizerSurahDetailScreenState
               },
               itemBuilder: (context, index) {
                 final verseNumber = index + 1;
-                return Container(
-                  margin: EdgeInsets.all(10.h),
-                  decoration: BoxDecoration(
-                    color: themeController.isDarkMode.value ? AppColors.black : AppColors.white,
-                    borderRadius: BorderRadius.circular(10.r),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primary.withOpacity(0.1),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                      ),
-                    ],
-                  ),
-                  height: MediaQuery.of(context).size.height,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.w),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomFrame(
-                          leftImageAsset: "assets/frames/topLeftFrame.png",
-                          rightImageAsset: "assets/frames/topRightFrame.png",
-                          imageHeight: 60.h,
-                          imageWidth: 60.w,
+                return InkWell(
+                  highlightColor: AppColors.transparent,
+                  splashColor: AppColors.transparent,
+
+                  onTap: (){
+                    _toggleMemorized(_currentPage + 1);
+                    if (_isSurahFullyMemorized) {
+                      CustomSnackbar.show(
+                        title: "Ma Sha Allah",
+                        subtitle: "You have memorized Surah ${quran.getSurahName(widget.surahNumber)}!",
+                        icon: Icon(LineIcons.checkCircle, color: AppColors.white),
+                        backgroundColor: AppColors.green,
+                      );
+                    }
+                  },
+                  child: Container(
+                    margin: EdgeInsets.all(10.h),
+                    decoration: BoxDecoration(
+                      color: themeController.isDarkMode.value ? AppColors.black : AppColors.white,
+                      borderRadius: BorderRadius.circular(10.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 2,
                         ),
-                        Flexible(
-                          child: SingleChildScrollView(
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.arrow_left, size: 33.h),
-                                  onPressed: _currentPage > 0 ? _goToPreviousPage : null,
-                                  iconSize: 40,
-                                  color: _currentPage > 0
-                                      ? (themeController.isDarkMode.value ? AppColors.white : AppColors.black)
-                                      : Colors.grey,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Image.asset(
-                                            "assets/images/ayat_marker.png",
-                                            width: 36.w,
-                                            height: 36.h,
-                                            fit: BoxFit.contain,
-                                          ),
-                                          Positioned(
-                                            child: CustomText(
-                                              title: verseNumber.toString(),
-                                              fontSize: 12.sp,
-                                              textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      AppSizedBox.space10h,
-                                      Obx(() => CustomText(
-                                        title: quran.getVerse(widget.surahNumber, verseNumber),
-                                        textColor: _memorizedVerses.contains('${widget.surahNumber}:${verseNumber}')
-                                            ? AppColors.green
-                                            : (themeController.isDarkMode.value ? AppColors.white : AppColors.black),
-                                        textStyle: GoogleFonts.amiri(height: 2),
-                                        textAlign: TextAlign.center,
-                                        fontSize: _arabicFontSize.value.sp,)),
-                                      Obx(() {
-                                        if (_showTranslation.value) {
-                                          return Column(
-                                            children: [
-                                              AppSizedBox.space10h,
-                                              CustomText(
-                                                title: quran.getVerseTranslation(widget.surahNumber, verseNumber, translation: quran.Translation.enSaheeh) ?? "Translation not available",
-                                                fontSize: _translationFontSize.value.sp,
-                                                textColor: _memorizedVerses.contains('${widget.surahNumber}:${verseNumber}')
-                                                    ? AppColors.green
-                                                    : (themeController.isDarkMode.value
-                                                    ? AppColors.white
-                                                    : AppColors.black),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ],
-                                          );
-                                        }
-                                        return SizedBox.shrink();
-                                      }),
-                                    ],
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.arrow_right, size: 33.h),
-                                  onPressed: _currentPage < _totalVerses - 1 ? _goToNextPage : null,
-                                  iconSize: 40,
-                                  color: _currentPage < _totalVerses - 1
-                                      ? (themeController.isDarkMode.value ? AppColors.white : AppColors.black)
-                                      : Colors.grey,
-                                ),
-                              ],
-                            ),
+                      ],
+                    ),
+                    height: MediaQuery.of(context).size.height,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.w),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomFrame(
+                            leftImageAsset: "assets/frames/topLeftFrame.png",
+                            rightImageAsset: "assets/frames/topRightFrame.png",
+                            imageHeight: 60.h,
+                            imageWidth: 60.w,
                           ),
-                        ),
-                        AnimatedGradientBorder(
-                          borderSize: (_isPlaying && _currentlyPlayingVerse == verseNumber) ? 3.r : 0.0,
-                          glowSize: (_isPlaying && _currentlyPlayingVerse == verseNumber) ? 8.r : 0.0,
-                          gradientColors: (_isPlaying && _currentlyPlayingVerse == verseNumber)
-                              ? const [
-                            Color(0xFFFFD700),
-                            Color(0xFFFFA500),
-                            Color(0xFFF4E2D8),
-                            Color(0xFFE09F3E),
-                            Color(0xFFB65D25),
-                          ]
-                              : [AppColors.transparent], // Use transparent when not playing
-                          borderRadius: BorderRadius.circular(30.r + 8.r),
-                          child: InkWell(
-                            onTap: () => _playVerseAudio(verseNumber),
-                            borderRadius: BorderRadius.circular(30.r),
-                            child: CircleAvatar(
-                              radius: 30.r,
-                              backgroundColor: AppColors.primary,
-                              child: Icon(
-                                (_isPlaying && _currentlyPlayingVerse == verseNumber)
-                                    ? Icons.pause
-                                    : Icons.play_arrow,
-                                color: AppColors.white,
-                                size: 30.sp,
+                          Flexible(
+                            child: SingleChildScrollView(
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.arrow_left, size: 33.h),
+                                    onPressed: _currentPage > 0 ? _goToPreviousPage : null,
+                                    iconSize: 40,
+                                    color: _currentPage > 0
+                                        ? (themeController.isDarkMode.value ? AppColors.white : AppColors.black)
+                                        : Colors.grey,
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      children: [
+                                        Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            Image.asset(
+                                              "assets/images/ayat_marker.png",
+                                              width: 36.w,
+                                              height: 36.h,
+                                              fit: BoxFit.contain,
+                                            ),
+                                            Positioned(
+                                              child: CustomText(
+                                                title: verseNumber.toString(),
+                                                fontSize: 12.sp,
+                                                textColor: themeController.isDarkMode.value ? AppColors.white : AppColors.black,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        AppSizedBox.space10h,
+                                        Obx(() => CustomText(
+                                          title: quran.getVerse(widget.surahNumber, verseNumber),
+                                          textColor: _memorizedVerses.contains('${widget.surahNumber}:${verseNumber}')
+                                              ? AppColors.green
+                                              : (themeController.isDarkMode.value ? AppColors.white : AppColors.black),
+                                          textStyle: GoogleFonts.amiri(height: 2),
+                                          textAlign: TextAlign.center,
+                                          fontSize: _arabicFontSize.value.sp,)),
+                                        Obx(() {
+                                          if (_showTranslation.value) {
+                                            return Column(
+                                              children: [
+                                                AppSizedBox.space10h,
+                                                CustomText(
+                                                  title: quran.getVerseTranslation(widget.surahNumber, verseNumber, translation: quran.Translation.enSaheeh) ?? "Translation not available",
+                                                  fontSize: _translationFontSize.value.sp,
+                                                  textColor: _memorizedVerses.contains('${widget.surahNumber}:${verseNumber}')
+                                                      ? AppColors.green
+                                                      : (themeController.isDarkMode.value
+                                                      ? AppColors.white
+                                                      : AppColors.black),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ],
+                                            );
+                                          }
+                                          return SizedBox.shrink();
+                                        }),
+                                      ],
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.arrow_right, size: 33.h),
+                                    onPressed: _currentPage < _totalVerses - 1 ? _goToNextPage : null,
+                                    iconSize: 40,
+                                    color: _currentPage < _totalVerses - 1
+                                        ? (themeController.isDarkMode.value ? AppColors.white : AppColors.black)
+                                        : Colors.grey,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ),
-                        CustomFrame(
-                          leftImageAsset: "assets/frames/bottomLeftFrame.png",
-                          rightImageAsset: "assets/frames/bottomRightFrame.png",
-                          imageHeight: 60.h,
-                          imageWidth: 60.w,
-                        ),
-                      ],
+                          AnimatedGradientBorder(
+                            borderSize: (_isPlaying && _currentlyPlayingVerse == verseNumber) ? 3.r : 0.0,
+                            glowSize: (_isPlaying && _currentlyPlayingVerse == verseNumber) ? 8.r : 0.0,
+                            gradientColors: (_isPlaying && _currentlyPlayingVerse == verseNumber)
+                                ? const [
+                              Color(0xFFFFD700),
+                              Color(0xFFFFA500),
+                              Color(0xFFF4E2D8),
+                              Color(0xFFE09F3E),
+                              Color(0xFFB65D25),
+                            ]
+                                : [AppColors.transparent], // Use transparent when not playing
+                            borderRadius: BorderRadius.circular(30.r + 8.r),
+                            child: InkWell(
+                              onTap: () => _playVerseAudio(verseNumber),
+                              borderRadius: BorderRadius.circular(30.r),
+                              child: CircleAvatar(
+                                radius: 30.r,
+                                backgroundColor: AppColors.primary,
+                                child: Icon(
+                                  (_isPlaying && _currentlyPlayingVerse == verseNumber)
+                                      ? Icons.pause
+                                      : Icons.play_arrow,
+                                  color: AppColors.white,
+                                  size: 30.sp,
+                                ),
+                              ),
+                            ),
+                          ),
+                          CustomFrame(
+                            leftImageAsset: "assets/frames/bottomLeftFrame.png",
+                            rightImageAsset: "assets/frames/bottomRightFrame.png",
+                            imageHeight: 60.h,
+                            imageWidth: 60.w,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -572,11 +596,12 @@ class _QuranMemorizerSurahDetailScreenState
           Padding(
             padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
             child: Container(
+              alignment: Alignment.center,
               margin: EdgeInsets.only(bottom: 10.h),
               child: Obx(() => IconButton(
                 icon: _memorizedVerses.contains('${widget.surahNumber}:${_currentPage + 1}')
-                    ? Icon(LineIcons.checkCircle, color: AppColors.green, size: 40.sp)
-                    : Icon(LineIcons.checkCircle, color: AppColors.grey, size: 40.sp),
+                    ? Icon(LineIcons.checkCircle, color: AppColors.green, size: 30.sp)
+                    : Icon(LineIcons.checkCircle, color: AppColors.grey, size: 30.sp),
                 onPressed: () {
                   _toggleMemorized(_currentPage + 1);
                   if (_isSurahFullyMemorized) {

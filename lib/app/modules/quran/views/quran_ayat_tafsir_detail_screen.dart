@@ -12,6 +12,7 @@ import '../../../widgets/custom_text.dart';
 import '../controllers/quran_ayat_tafsir_detail_controller.dart';
 
 class QuranAyatTafsirDetailScreen extends StatefulWidget {
+
   final int surahNumber;
   final int ayahNumber;
   final String surahName, ayat, surahArabicName;
@@ -30,6 +31,7 @@ class QuranAyatTafsirDetailScreen extends StatefulWidget {
 }
 
 class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScreen> {
+
   late AyatTafsirController controller;
   late AppThemeSwitchController themeController;
 
@@ -41,10 +43,8 @@ class _QuranAyatTafsirDetailScreenState extends State<QuranAyatTafsirDetailScree
       ayahNumber: widget.ayahNumber,
     ));
     themeController = Get.put(AppThemeSwitchController());
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _showFilterBottomSheet(context);
-    // });
   }
+
 
   @override
   Widget build(BuildContext context) {

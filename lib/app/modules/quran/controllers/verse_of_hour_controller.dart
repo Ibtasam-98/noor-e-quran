@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:quran/quran.dart' as quran;
 
 class VerseOfHourController extends GetxController {
+
   late AudioPlayer audioPlayer;
   RxBool isPlaying = false.obs;
   String? audioUrl;
@@ -22,7 +23,6 @@ class VerseOfHourController extends GetxController {
     super.onInit();
     audioPlayer = AudioPlayer();
     fetchAudio();
-
     audioPlayer.onDurationChanged.listen((Duration d) {
       audioDuration = d;
     });
@@ -41,6 +41,7 @@ class VerseOfHourController extends GetxController {
     });
 
   }
+
 
   Future<void> fetchAudio() async {
     try {

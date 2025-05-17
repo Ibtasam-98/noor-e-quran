@@ -16,7 +16,7 @@ import '../../../controllers/app_theme_switch_controller.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_formated_text.dart';
 import '../../../widgets/custom_snackbar.dart';
-import '../../../widgets/custom_text.dart'; // Import just_audio
+import '../../../widgets/custom_text.dart';
 
 class QuranSurahAyatDetailsScreen extends StatefulWidget {
   final String arabicText;
@@ -62,6 +62,8 @@ class _QuranSurahAyatDetailsScreenState extends State<QuranSurahAyatDetailsScree
     super.initState();
     _initAudioPlayer();
   }
+
+
 
   Future<void> _initAudioPlayer() async {
     try {

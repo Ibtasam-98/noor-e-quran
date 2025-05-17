@@ -1,11 +1,11 @@
-# 🌙 Noor-e-Quran – نورِ قرآن
+# Noor-e-Quran – نورِ قرآن
 
 **Your All-in-One Islamic Companion App**  
 Featuring the Holy Quran, Hadith, prayer times, and more.
 
 ---
 
-## 🕌 About the App
+## About the App
 
 **Noor-e-Quran** (نورِ قرآن) is a beautifully designed, comprehensive Islamic app created to illuminate your spiritual journey. Seamlessly navigate the **Holy Quran**, explore **authentic Hadith**, track your **daily prayers**, and stay connected with the core teachings of Islam — all in one place.
 
@@ -54,6 +54,12 @@ With a user-friendly interface and a wealth of accurate Islamic knowledge, Noor-
 ### Hajj & Umrah
 - **Step-by-Step Guide:** Comprehensive instructions for Hajj and Umrah.
 - **Preparation Checklist:** Stay organized with a practical pilgrimage checklist.
+
+### Live Makkah & Madinah Streams
+- **Live Video Transmission:** Watch real time broadcasts directly from:
+  - **Masjid al-Haram (Kaaba, Makkah)**
+  - **Masjid an-Nabawi (Madinah)**
+- Stay spiritually connected with the holiest places in Islam, no matter where you are.
 
 ---
 
